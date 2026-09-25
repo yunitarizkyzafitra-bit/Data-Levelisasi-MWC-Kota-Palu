@@ -19,9 +19,7 @@
                 size: A4 portrait;
                 margin: 10mm;
             }
-            html, body { 
-                height: auto !important;
-                overflow: visible !important;
+            body { 
                 background: white !important; 
                 color: black !important; 
                 font-size: 10pt;
@@ -33,8 +31,6 @@
                 padding: 0 !important; 
                 overflow: visible !important; 
                 width: 100% !important; 
-                height: auto !important;
-                display: block !important;
             }
             .print-header { 
                 display: block !important; 
@@ -49,7 +45,6 @@
                 border: 1px solid #ccc !important; 
                 box-shadow: none !important; 
                 margin-bottom: 20px !important; 
-                display: block !important;
             }
         }
         .print-header { display: none; }
@@ -313,7 +308,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxL0scIgNu0jgrJhbfKgRq1SM7fb0mbB7JiQdDOOvblHoL2UWpR9XLK1xsrE5WkVMdfIA/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyRdN77zPnmlrFlOqJrvz3tciFO685C413Q2BZgI3qsBwFkN-cdb4Sb-DPBYoyEOPSvAg/exec";
 
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
@@ -471,7 +466,7 @@
             });
         }
 
-        async function triggerEditFromDashboard(mwcName) {
+        async function triggerEditFromDashboard(mwcName, specificRowIndex = null) {
             const { value: pin } = await Swal.fire({
                 title: `Autentikasi Keamanan`,
                 text: `Masukkan PIN Akses untuk ${mwcName}:`,
@@ -496,15 +491,21 @@
             document.getElementById('formMwcName').innerText = mwcName;
             document.getElementById('input_nama_mwc').value = mwcName;
 
-            let rowData = cachedSpreadsheetData.find(item => item["Nama MWC"] === mwcName) || {};
-            populateFormWithData(rowData);
+            let rowData = {};
+            if (specificRowIndex) {
+                rowData = cachedSpreadsheetData.find(item => String(item["rowIndex"]) === String(specificRowIndex)) || {};
+            } else {
+                rowData = cachedSpreadsheetData.find(item => item["Nama MWC"] === mwcName) || {};
+            }
 
+            populateFormWithData(rowData);
             switchTab('input');
+
             Swal.fire({
                 toast: true,
                 position: 'top-end',
                 icon: 'success',
-                title: 'Data berhasil ditarik ke form pengisian.',
+                title: 'Data berhasil ditarik ke form untuk disunting.',
                 showConfirmButton: false,
                 timer: 3000
             });
@@ -617,13 +618,13 @@
                         </div>
 
                         <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
-                            <strong class="text-[#f59e0b] block mb-1 text-amber-800"><i class="fa-solid fa-pen-to-square mr-1"></i> 2. Tombol "Edit Data Ini"</strong>
+                            <strong class="text-[#f59e0b] block mb-1 text-amber-800"><i class="fa-solid fa-pen-to-square mr-1"></i> 2. Tombol "Edit Data Ini" & "Edit Log Ini"</strong>
                             Berfungsi untuk memperbarui informasi secara langsung. Ketika ditekan dan autentikasi PIN berhasil, sistem secara otomatis menarik data historis sebelumnya ke dalam formulir pengisian, menghindarkan duplikasi dan memastikan pembaruan baris data tersimpan secara akurat.
                         </div>
 
                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                            <strong class="text-gray-800 block mb-1"><i class="fa-solid fa-print mr-1"></i> 3. Pencetakan Dokumen PDF</strong>
-                            Telah disetel menggunakan pemecah halaman otomatis yang mencegah pemotongan data di tengah jalan, memastikan seluruh 25 item indikator tercetak dengan utuh dan elegan di setiap halaman fisik.
+                            <strong class="text-gray-800 block mb-1"><i class="fa-solid fa-print mr-1"></i> 3. Pencetakan Dokumen PDF Multi-Halaman</strong>
+                            Telah disetel menggunakan aturan tata letak yang mengizinkan dokumen mengalir secara alami ke halaman berikutnya tanpa terpotong di tengah baris, memastikan seluruh data tercetak dengan rapi dan utuh.
                         </div>
                     </div>
                 `,
@@ -661,7 +662,12 @@
                                 <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">Log Baris #${row["rowIndex"] || '-'}</span>
                                 <h4 class="text-base font-bold mt-1">${row["Nama MWC"]}</h4>
                             </div>
-                            <span class="text-[11px] text-emerald-100">${timeFormatted}</span>
+                            <div class="flex items-center gap-3">
+                                <span class="text-[11px] text-emerald-100 hidden sm:inline">${timeFormatted}</span>
+                                <button onclick="triggerEditFromDashboard('${row["Nama MWC"]}', '${row["rowIndex"]}')" class="px-3 py-1.5 bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-black text-xs rounded-lg shadow transition flex items-center gap-1">
+                                    <i class="fa-solid fa-pen-to-square"></i> Edit Log Ini
+                                </button>
+                            </div>
                         </div>
                     `;
 
