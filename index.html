@@ -13,16 +13,17 @@
         .bg-custom-amber { background-color: #f59e0b; }
         .bg-custom-base { background-color: #fafafa; }
         
-        /* PENGATURAN CETAK PDF / PRINT PROFESIONAL AGAR TIDAK TERPOTONG */
+        /* PENGATURAN CETAK PDF AGAR MULTI-HALAMAN OTOMATIS & TIDAK TERPOTONG */
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 15mm;
+                margin: 10mm;
             }
             body { 
                 background: white !important; 
                 color: black !important; 
-                font-size: 11pt;
+                font-size: 10pt;
+                zoom: 95%;
             }
             aside, header, .no-print { 
                 display: none !important; 
@@ -35,14 +36,14 @@
             .print-header { 
                 display: block !important; 
                 text-align: center; 
-                margin-bottom: 20px; 
+                margin-bottom: 15px; 
                 border-bottom: 2px solid #000;
-                padding-bottom: 10px;
+                padding-bottom: 8px;
             }
             .mwc-vertical-card { 
                 break-inside: avoid !important; 
                 page-break-inside: avoid !important; 
-                border: 1px solid #ddd !important; 
+                border: 1px solid #ccc !important; 
                 box-shadow: none !important; 
                 margin-bottom: 20px !important; 
             }
@@ -78,23 +79,23 @@
                 </button>
 
                 <p class="text-[10px] font-bold text-[#f59e0b] uppercase tracking-wider px-3 mb-2">Pilih Wilayah MWC:</p>
-                <button onclick="selectMWC('MWC Palu Utara'); toggleSidebar();" class="mwc-btn w-full text-left px-4 py-2.5 rounded-xl transition flex items-center justify-between text-sm font-medium text-gray-200 hover:bg-[#0a7c6e]" data-mwc="MWC Palu Utara">
+                <button onclick="selectMWCWithAuth('MWC Palu Utara'); toggleSidebar();" class="w-full text-left px-4 py-2.5 rounded-xl transition flex items-center justify-between text-sm font-medium text-gray-200 hover:bg-[#0a7c6e]">
                     <span class="flex items-center gap-2.5"><i class="fa-solid fa-location-dot text-[#f59e0b] text-xs"></i> Palu Utara</span>
                     <i class="fa-solid fa-chevron-right text-[10px] text-[#f59e0b]"></i>
                 </button>
-                <button onclick="selectMWC('MWC Mantikulore'); toggleSidebar();" class="mwc-btn w-full text-left px-4 py-2.5 rounded-xl transition flex items-center justify-between text-sm font-medium text-gray-200 hover:bg-[#0a7c6e]" data-mwc="MWC Mantikulore">
+                <button onclick="selectMWCWithAuth('MWC Mantikulore'); toggleSidebar();" class="w-full text-left px-4 py-2.5 rounded-xl transition flex items-center justify-between text-sm font-medium text-gray-200 hover:bg-[#0a7c6e]">
                     <span class="flex items-center gap-2.5"><i class="fa-solid fa-location-dot text-[#f59e0b] text-xs"></i> Mantikulore</span>
                     <i class="fa-solid fa-chevron-right text-[10px] text-[#f59e0b]"></i>
                 </button>
-                <button onclick="selectMWC('MWC Palu Selatan'); toggleSidebar();" class="mwc-btn w-full text-left px-4 py-2.5 rounded-xl transition flex items-center justify-between text-sm font-medium text-gray-200 hover:bg-[#0a7c6e]" data-mwc="MWC Palu Selatan">
+                <button onclick="selectMWCWithAuth('MWC Palu Selatan'); toggleSidebar();" class="w-full text-left px-4 py-2.5 rounded-xl transition flex items-center justify-between text-sm font-medium text-gray-200 hover:bg-[#0a7c6e]">
                     <span class="flex items-center gap-2.5"><i class="fa-solid fa-location-dot text-[#f59e0b] text-xs"></i> Palu Selatan</span>
                     <i class="fa-solid fa-chevron-right text-[10px] text-[#f59e0b]"></i>
                 </button>
-                <button onclick="selectMWC('MWC Tatanga'); toggleSidebar();" class="mwc-btn w-full text-left px-4 py-2.5 rounded-xl transition flex items-center justify-between text-sm font-medium text-gray-200 hover:bg-[#0a7c6e]" data-mwc="MWC Tatanga">
+                <button onclick="selectMWCWithAuth('MWC Tatanga'); toggleSidebar();" class="w-full text-left px-4 py-2.5 rounded-xl transition flex items-center justify-between text-sm font-medium text-gray-200 hover:bg-[#0a7c6e]">
                     <span class="flex items-center gap-2.5"><i class="fa-solid fa-location-dot text-[#f59e0b] text-xs"></i> Tatanga</span>
                     <i class="fa-solid fa-chevron-right text-[10px] text-[#f59e0b]"></i>
                 </button>
-                <button onclick="selectMWC('MWC Ulujadi'); toggleSidebar();" class="mwc-btn w-full text-left px-4 py-2.5 rounded-xl transition flex items-center justify-between text-sm font-medium text-gray-200 hover:bg-[#0a7c6e]" data-mwc="MWC Ulujadi">
+                <button onclick="selectMWCWithAuth('MWC Ulujadi'); toggleSidebar();" class="w-full text-left px-4 py-2.5 rounded-xl transition flex items-center justify-between text-sm font-medium text-gray-200 hover:bg-[#0a7c6e]">
                     <span class="flex items-center gap-2.5"><i class="fa-solid fa-location-dot text-[#f59e0b] text-xs"></i> Ulujadi</span>
                     <i class="fa-solid fa-chevron-right text-[10px] text-[#f59e0b]"></i>
                 </button>
@@ -107,11 +108,11 @@
                 <div class="flex items-center gap-3">
                     <button onclick="toggleSidebar()" class="md:hidden text-[#0a7c6e] text-xl px-2 py-1"><i class="fa-solid fa-bars"></i></button>
                     <h2 id="currentTitle" class="text-sm sm:text-base font-bold text-gray-800 flex items-center gap-2">
-                        <i class="fa-solid fa-table-cells text-[#0a7c6e]"></i> Matrix Transparansi Data Levelisasi MWC
+                        <i class="fa-solid fa-table-cells text-[#0a7c6e]"></i> Matrix Transparansi Data Levelisasi MWC (25 Item Lengkap)
                     </h2>
                 </div>
                 <div id="actionTabs" class="hidden gap-2">
-                    <button onclick="switchTab('input')" id="tabInputBtn" class="px-3 sm:px-4 py-2 bg-[#0a7c6e] text-white rounded-lg text-xs font-semibold shadow">Input Data</button>
+                    <button onclick="switchTab('input')" id="tabInputBtn" class="px-3 sm:px-4 py-2 bg-[#0a7c6e] text-white rounded-lg text-xs font-semibold shadow">Formulir Data</button>
                     <button onclick="switchTab('view')" id="tabViewBtn" class="px-3 sm:px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-xs font-semibold shadow">Log Aktivitas</button>
                 </div>
             </header>
@@ -124,20 +125,20 @@
                     <p class="text-xs text-gray-500 mt-1">Dicetak pada: <span id="printDateStr"></span></p>
                 </div>
 
-                <!-- 1. MATRIX DASHBOARD -->
+                <!-- 1. DASHBOARD UTAMA -->
                 <div id="matrixSection" class="space-y-6">
                     <div class="bg-gradient-to-r from-[#0a7c6e] to-[#086358] text-white rounded-2xl p-6 shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
                         <div>
                             <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-black px-2.5 py-1 rounded-full uppercase">Unit UCR MWD Palu</span>
                             <h3 class="text-xl sm:text-2xl font-black mt-2">Matrix Aktivitas Keseluruhan MWC</h3>
-                            <p class="text-emerald-100 text-xs sm:text-sm mt-1">Kelola data, cetak PDF per halaman rapi, atau ekspor rekap profesional ke Excel.</p>
+                            <p class="text-emerald-100 text-xs sm:text-sm mt-1">Seluruh 25 indikator ditampilkan secara utuh. Gunakan tombol edit untuk memperbarui data langsung.</p>
                         </div>
                         <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
                             <button onclick="showSelectPrintModal()" class="flex-1 md:flex-none px-4 py-2.5 bg-[#ff6b35] hover:bg-[#e05a2b] text-white font-extrabold text-xs sm:text-sm rounded-xl shadow transition flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-file-pdf"></i> Cetak PDF MWC
+                                <i class="fa-solid fa-file-pdf"></i> Cetak PDF Utuh
                             </button>
                             <button onclick="exportToExcelPro()" class="flex-1 md:flex-none px-4 py-2.5 bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-extrabold text-xs sm:text-sm rounded-xl shadow transition flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-file-excel"></i> Cetak Excel Profesional
+                                <i class="fa-solid fa-file-excel"></i> Ekspor Excel Pro
                             </button>
                             <button onclick="loadMatrixData(true)" class="px-3 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition" title="Muat Ulang">
                                 <i class="fa-solid fa-arrows-rotate"></i>
@@ -148,16 +149,16 @@
                     <div id="verticalMatrixContainer" class="space-y-6">
                         <div class="text-center py-10 bg-white rounded-2xl shadow-sm border border-gray-200">
                             <i class="fa-solid fa-spinner fa-spin text-3xl text-[#0a7c6e]"></i>
-                            <p class="text-gray-500 mt-2 text-sm">Memuat data dari Google Spreadsheet...</p>
+                            <p class="text-gray-500 mt-2 text-sm">Memuat rekap data lengkap dari server...</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- 2. FORM INPUT / EDIT -->
+                <!-- 2. FORMULIR INPUT / EDIT -->
                 <div id="inputSection" class="hidden bg-white shadow-xl rounded-2xl p-6 sm:p-8 border border-gray-200 mb-10">
                     <div class="flex items-center justify-between mb-6 border-b pb-4">
                         <h3 class="text-lg sm:text-xl font-bold text-[#0a7c6e] flex items-center gap-2">
-                            <i class="fa-solid fa-file-pen"></i> Form Input: <span id="formMwcName" class="text-[#ff6b35]"></span>
+                            <i class="fa-solid fa-file-pen"></i> Form Pengisian: <span id="formMwcName" class="text-[#ff6b35]"></span>
                         </h3>
                     </div>
 
@@ -282,7 +283,7 @@
                         </div>
 
                         <button type="submit" id="submitBtn" class="w-full bg-[#0a7c6e] hover:bg-[#086358] text-white font-bold py-3 rounded-xl shadow-lg transition text-sm">
-                            <i class="fa-solid fa-paper-plane mr-2"></i> Kirim & Simpan Perubahan Data
+                            <i class="fa-solid fa-paper-plane mr-2"></i> Kirim & Perbarui Data MWC
                         </button>
                     </form>
                 </div>
@@ -292,10 +293,10 @@
                     <div class="bg-white shadow-sm rounded-2xl p-6 border border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
                         <div>
                             <h3 class="text-lg sm:text-xl font-bold text-[#0a7c6e]">Log Aktivitas: <span id="viewMwcName" class="text-[#ff6b35]"></span></h3>
-                            <p class="text-xs text-gray-500 mt-0.5">Pilih tombol 'Edit Data Ini' untuk memperbarui baris data lama secara langsung.</p>
+                            <p class="text-xs text-gray-500 mt-0.5">Riwayat pembaruan data wilayah.</p>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button onclick="prepareNewInput()" class="px-4 py-2 bg-[#0a7c6e] text-white rounded-lg text-xs font-semibold shadow"><i class="fa-solid fa-plus mr-1"></i> Input Baru</button>
+                            <button onclick="switchTab('input')" class="px-4 py-2 bg-[#0a7c6e] text-white rounded-lg text-xs font-semibold shadow"><i class="fa-solid fa-plus mr-1"></i> Form Baru</button>
                             <button onclick="loadMatrixData(true)" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-xs font-semibold shadow"><i class="fa-solid fa-rotate mr-1"></i> Muat Ulang</button>
                         </div>
                     </div>
@@ -337,11 +338,11 @@
             document.getElementById('inputSection').classList.add('hidden');
             document.getElementById('viewSection').classList.add('hidden');
             document.getElementById('actionTabs').classList.add('hidden');
-            document.getElementById('currentTitle').innerHTML = `<i class="fa-solid fa-table-cells text-[#0a7c6e] mr-2"></i> Matrix Transparansi Data Levelisasi MWC`;
+            document.getElementById('currentTitle').innerHTML = `<i class="fa-solid fa-table-cells text-[#0a7c6e] mr-2"></i> Matrix Transparansi Data Levelisasi MWC (25 Item Lengkap)`;
             loadMatrixData(false);
         }
 
-        async function selectMWC(mwcName) {
+        async function selectMWCWithAuth(mwcName) {
             const { value: pin } = await Swal.fire({
                 title: `Autentikasi Keamanan`,
                 text: `Masukkan PIN Akses untuk ${mwcName}:`,
@@ -363,8 +364,11 @@
             document.getElementById('formMwcName').innerText = mwcName;
             document.getElementById('input_nama_mwc').value = mwcName;
 
-            switchTab('view');
-            loadMWCHistory();
+            // Otomatis tarik data terakhir ke form jika ada
+            let latestRow = cachedSpreadsheetData.find(item => item["Nama MWC"] === mwcName);
+            populateFormWithData(latestRow);
+
+            switchTab('input');
         }
 
         function switchTab(tab) {
@@ -383,13 +387,6 @@
             }
         }
 
-        function prepareNewInput() {
-            document.getElementById('levelisasiForm').reset();
-            document.getElementById('input_nama_mwc').value = selectedMWCName;
-            document.getElementById('edit_row_index').value = "";
-            switchTab('input');
-        }
-
         async function loadMatrixData(forceRefresh = false) {
             const container = document.getElementById('verticalMatrixContainer');
             const now = Date.now();
@@ -399,7 +396,7 @@
                 return;
             }
 
-            container.innerHTML = `<div class="text-center py-10 bg-white rounded-2xl shadow-sm border"><i class="fa-solid fa-spinner fa-spin text-3xl text-[#0a7c6e]"></i><p class="text-gray-500 mt-2 text-sm">Memuat data...</p></div>`;
+            container.innerHTML = `<div class="text-center py-10 bg-white rounded-2xl shadow-sm border"><i class="fa-solid fa-spinner fa-spin text-3xl text-[#0a7c6e]"></i><p class="text-gray-500 mt-2 text-sm">Memuat rekap data...</p></div>`;
 
             try {
                 let response = await fetch(SCRIPT_URL);
@@ -407,7 +404,7 @@
                 lastFetchTime = Date.now();
                 renderMatrixCards(cachedSpreadsheetData);
             } catch (err) {
-                container.innerHTML = `<div class="bg-red-50 text-red-600 p-6 rounded-2xl text-center text-sm">Gagal memuat data matriks.</div>`;
+                container.innerHTML = `<div class="bg-red-50 text-red-600 p-6 rounded-2xl text-center text-sm">Gagal memuat rekap data server.</div>`;
             }
         }
 
@@ -443,13 +440,14 @@
                             <button onclick="printSpecificMWC('${mwcName}')" class="px-3 py-2 bg-[#ff6b35] text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5">
                                 <i class="fa-solid fa-file-pdf"></i> Print MWC Ini
                             </button>
-                            <button onclick="selectMWC('${mwcName}')" class="px-3 py-2 bg-white text-[#0a7c6e] font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-lock-open"></i> Log/Edit
+                            <button onclick="triggerEditFromDashboard('${mwcName}')" class="px-3.5 py-2 bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-black text-xs rounded-xl shadow transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit Data Ini
                             </button>
                         </div>
                     </div>
                 `;
 
+                // Render SEMUA 25 item indikator secara lengkap
                 let bodyHtml = `<div class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">`;
                 if (rowData) {
                     for (const [key, value] of Object.entries(rowData)) {
@@ -463,7 +461,7 @@
                         }
                     }
                 } else {
-                    bodyHtml += `<div class="col-span-full text-center py-6 text-gray-400 italic">Belum ada data input untuk wilayah ini.</div>`;
+                    bodyHtml += `<div class="col-span-full text-center py-6 text-gray-400 italic">Belum ada data terekam untuk wilayah ini. Silakan klik Edit Data Ini untuk mengisi.</div>`;
                 }
                 bodyHtml += `</div>`;
                 card.innerHTML = headerHtml + bodyHtml;
@@ -471,27 +469,99 @@
             });
         }
 
+        // FUNGSI UTAMA: MENARIK DATA OTOMATIS KE FORM SAAT TOMBOL EDIT DIKLAT DI DASHBOARD
+        async function triggerEditFromDashboard(mwcName) {
+            const { value: pin } = await Swal.fire({
+                title: `Autentikasi Keamanan`,
+                text: `Masukkan PIN Akses untuk ${mwcName}:`,
+                input: 'password',
+                inputPlaceholder: 'Masukkan PIN',
+                confirmButtonColor: '#0a7c6e',
+                allowOutsideClick: false
+            });
+
+            if (!pin || pin.trim() !== MWC_PIN_LIST[mwcName]) {
+                Swal.fire('Akses Ditolak', 'PIN Keamanan salah!', 'error');
+                return;
+            }
+
+            if (cachedSpreadsheetData.length === 0) {
+                await loadMatrixData(true);
+            }
+
+            selectedMWCName = mwcName;
+            document.getElementById('actionTabs').classList.remove('hidden');
+            document.getElementById('currentTitle').innerText = `Wilayah: ${mwcName}`;
+            document.getElementById('formMwcName').innerText = mwcName;
+            document.getElementById('input_nama_mwc').value = mwcName;
+
+            let rowData = cachedSpreadsheetData.find(item => item["Nama MWC"] === mwcName) || {};
+            populateFormWithData(rowData);
+
+            switchTab('input');
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: 'Data berhasil ditarik ke form pengisian.',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }
+
+        function populateFormWithData(rowData) {
+            document.getElementById('edit_row_index').value = rowData["rowIndex"] || "";
+            document.getElementById('p_aktif').value = rowData["1. Jumlah Pengurus Aktif"] || 0;
+            document.getElementById('p_kurang_aktif').value = rowData["2. Jumlah Pengurus Kurang Aktif"] || 0;
+            document.getElementById('layanan_sosial').value = rowData["3. Layanan Sosial & Kesehatan (Klinik)"] || "Tidak";
+            document.getElementById('jml_daiyah').value = rowData["4. Jumlah Daiyah"] || 0;
+            document.getElementById('kader_tarif').value = rowData["5. Jumlah Kader Ta'rif"] || 0;
+            document.getElementById('kader_takwin').value = rowData["6. Jumlah Kader Takwin"] || 0;
+            document.getElementById('kader_tanfidz').value = rowData["7. Jumlah Kader Tanfidz"] || 0;
+            document.getElementById('jml_nakes').value = rowData["8. Jumlah Tenaga Kesehatan"] || 0;
+            document.getElementById('alumni_stiba').value = rowData["9. Jumlah Alumni Stiba"] || 0;
+            document.getElementById('jml_muhaffidzah').value = rowData["10. Jumlah Muhaffidzah"] || 0;
+            document.getElementById('jml_mt').value = rowData["11. Jumlah Majelis Taklim (MT)"] || 0;
+            document.getElementById('jml_dirosa').value = rowData["12. Jumlah Dirosa"] || 0;
+            document.getElementById('status_kantor').value = rowData["13. Status Kantor / PDM / Sekretariat"] || "";
+            document.getElementById('unit_usaha').value = rowData["14. Memiliki Unit Usaha MWC"] || "";
+            document.getElementById('media_online').value = rowData["15. Memiliki Media Dakwah Online"] || "Tidak";
+            document.getElementById('jenis_media').value = rowData["16. Jenis Media Dakwah"] || "";
+            document.getElementById('hardware').value = rowData["17. Hardware Memadai"] || "Tidak";
+            document.getElementById('m_tarif').value = rowData["18. Jumlah Murabbiyah Ta'rif 1 & 2"] || 0;
+            document.getElementById('m_takwin').value = rowData["19. Jumlah Murabbiyah Takwin"] || 0;
+            document.getElementById('donatur').value = rowData["20. Jumlah Donatur"] || 0;
+            document.getElementById('trainer_murabbiyah').value = rowData["Trainer Diklat Murabbiyah"] || 0;
+            document.getElementById('kader_dirosa').value = rowData["21. Kader Mengikuti Pelatihan Dirosa"] || 0;
+            document.getElementById('mudarrisah').value = rowData["22. Pengajar Qur'an (Mudarrisah)"] || 0;
+            document.getElementById('diklat_manajemen').value = rowData["23. Diklat Manajemen Pengurus"] || 0;
+            document.getElementById('diklat_kepemimpinan').value = rowData["24. Diklat Kepemimpinan"] || 0;
+            document.getElementById('tim_sosial').value = rowData["25. Tim Tanggap Sosial"] || 0;
+        }
+
         async function showSelectPrintModal() {
             if (!cachedSpreadsheetData.length) await loadMatrixData(true);
 
             const { value: chosenMWC } = await Swal.fire({
-                title: 'Pilih Wilayah MWC untuk Dicetak',
+                title: 'Cetak PDF Laporan Lengkap',
                 input: 'select',
                 inputOptions: {
+                    "SEMUA MWC": "Cetak Semua MWC (Utuh Multi-Halaman)",
                     "MWC Palu Utara": "MWC Palu Utara",
                     "MWC Mantikulore": "MWC Mantikulore",
                     "MWC Palu Selatan": "MWC Palu Selatan",
                     "MWC Tatanga": "MWC Tatanga",
-                    "MWC Ulujadi": "MWC Ulujadi",
-                    "SEMUA MWC": "Cetak Semua MWC (Utuh per Halaman)"
+                    "MWC Ulujadi": "MWC Ulujadi"
                 },
                 showCancelButton: true,
                 confirmButtonColor: '#0a7c6e',
-                confirmButtonText: 'Cetak PDF'
+                confirmButtonText: 'Cetak Sekarang'
             });
 
             if (chosenMWC) {
                 if (chosenMWC === "SEMUA MWC") {
+                    const cards = document.querySelectorAll('.mwc-vertical-card');
+                    cards.forEach(c => c.style.setProperty('display', 'block', 'important'));
                     window.print();
                 } else {
                     printSpecificMWC(chosenMWC);
@@ -515,7 +585,6 @@
             }, 1000);
         }
 
-        // FUNGSI EKSPOR EXCEL PROFESIONAL
         function exportToExcelPro() {
             if (!cachedSpreadsheetData || cachedSpreadsheetData.length === 0) {
                 Swal.fire('Data Kosong', 'Belum ada data untuk diekspor.', 'warning');
@@ -524,28 +593,41 @@
 
             const cleanData = cachedSpreadsheetData.map(({ rowIndex, ...rest }) => rest);
             const worksheet = XLSX.utils.json_to_sheet(cleanData);
-            
-            // Atur lebar kolom otomatis agar rapi & profesional
             const colWidths = Object.keys(cleanData[0] || {}).map(() => ({ wch: 25 }));
             worksheet['!cols'] = colWidths;
 
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Rekap Levelisasi MWC");
-
-            XLSX.writeFile(workbook, "Rekap_Levelisasi_MWC_Kota_Palu_Profesional.xlsx");
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Rekap 25 Item MWC");
+            XLSX.writeFile(workbook, "Rekap_Levelisasi_25_Item_MWC_Pro.xlsx");
             
-            Swal.fire({
-                title: 'Berhasil Diekspor!',
-                text: 'File Excel profesional berhasil diunduh.',
-                icon: 'success',
-                confirmButtonColor: '#0a7c6e'
-            });
+            Swal.fire('Berhasil!', 'File Excel profesional berhasil diunduh.', 'success');
         }
 
+        // PETUNJUK PENGISIAN OLEH AHLI BAHASA
         function showGuideModal() {
             Swal.fire({
-                title: '<span class="text-[#0a7c6e]">Petunjuk Pengisian & Edit Data</span>',
-                html: `<p class="text-xs text-gray-600 text-left">Gunakan menu log aktivitas untuk memperbarui data secara langsung tanpa duplikasi baris. Fitur cetak PDF kini aman dari potongan halaman.</p>`,
+                title: '<span class="text-[#0a7c6e] font-black text-lg">Petunjuk Penggunaan & Navigasi Aplikasi</span>',
+                html: `
+                    <div class="text-left text-xs text-gray-700 space-y-3 leading-relaxed max-h-[60vh] overflow-y-auto px-1">
+                        <p>Selamat datang di pusat kendali <b>Matrix Transparansi Levelisasi MWC</b> Unit UCR Muslimah Wahdah Islamiyah Kota Palu. Panduan ringkas ini dirancang untuk mempermudah pemahaman Anda terhadap seluruh fitur:</p>
+                        
+                        <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200">
+                            <strong class="text-[#0a7c6e] block mb-1"><i class="fa-solid fa-chart-pie mr-1"></i> 1. Matrix Transparansi (Dashboard Utama)</strong>
+                            Menyajikan ikhtisar komprehensif dari 25 indikator data setiap wilayah MWC secara transparan. Anda dapat memantau perkembangan, mencetak laporan lengkap dalam format PDF multi-halaman yang rapi, maupun mengekspor data ke lembar kerja Excel profesional.
+                        </div>
+
+                        <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
+                            <strong class="text-[#f59e0b] block mb-1 text-amber-800"><i class="fa-solid fa-pen-to-square mr-1"></i> 2. Tombol "Edit Data Ini"</strong>
+                            Berfungsi untuk memperbarui informasi secara langsung. Ketika ditekan dan autentikasi PIN berhasil, sistem secara otomatis menarik data historis sebelumnya ke dalam formulir pengisian, menghindarkan duplikasi dan memastikan pembaruan baris data tersimpan secara akurat.
+                        </div>
+
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <strong class="text-gray-800 block mb-1"><i class="fa-solid fa-print mr-1"></i> 3. Pencetakan Dokumen PDF</strong>
+                            Telah disetel menggunakan pemecah halaman otomatis yang mencegah pemotongan data di tengah jalan, memastikan seluruh 25 item indikator tercetak dengan utuh dan elegan di setiap halaman fisik.
+                        </div>
+                    </div>
+                `,
+                confirmButtonText: 'Saya Mengerti',
                 confirmButtonColor: '#0a7c6e'
             });
         }
@@ -579,12 +661,7 @@
                                 <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">Log Baris #${row["rowIndex"]}</span>
                                 <h4 class="text-base font-bold mt-1">${row["Nama MWC"]}</h4>
                             </div>
-                            <div class="flex items-center gap-3">
-                                <span class="text-[11px] text-emerald-100 hidden sm:inline">${timeFormatted}</span>
-                                <button onclick='editLogData(${JSON.stringify(row)})' class="px-3 py-1.5 bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-bold text-xs rounded-lg shadow flex items-center gap-1.5">
-                                    <i class="fa-solid fa-pen-to-square"></i> Edit Data Ini
-                                </button>
-                            </div>
+                            <span class="text-[11px] text-emerald-100">${timeFormatted}</span>
                         </div>
                     `;
 
@@ -606,44 +683,6 @@
             } catch (err) {
                 container.innerHTML = `<div class="text-red-500 p-6 text-center text-xs">Gagal mengambil log aktivitas.</div>`;
             }
-        }
-
-        function editLogData(rowData) {
-            switchTab('input');
-            document.getElementById('edit_row_index').value = rowData["rowIndex"] || "";
-            document.getElementById('p_aktif').value = rowData["1. Jumlah Pengurus Aktif"] || 0;
-            document.getElementById('p_kurang_aktif').value = rowData["2. Jumlah Pengurus Kurang Aktif"] || 0;
-            document.getElementById('layanan_sosial').value = rowData["3. Layanan Sosial & Kesehatan (Klinik)"] || "Tidak";
-            document.getElementById('jml_daiyah').value = rowData["4. Jumlah Daiyah"] || 0;
-            document.getElementById('kader_tarif').value = rowData["5. Jumlah Kader Ta'rif"] || 0;
-            document.getElementById('kader_takwin').value = rowData["6. Jumlah Kader Takwin"] || 0;
-            document.getElementById('kader_tanfidz').value = rowData["7. Jumlah Kader Tanfidz"] || 0;
-            document.getElementById('jml_nakes').value = rowData["8. Jumlah Tenaga Kesehatan"] || 0;
-            document.getElementById('alumni_stiba').value = rowData["9. Jumlah Alumni Stiba"] || 0;
-            document.getElementById('jml_muhaffidzah').value = rowData["10. Jumlah Muhaffidzah"] || 0;
-            document.getElementById('jml_mt').value = rowData["11. Jumlah Majelis Taklim (MT)"] || 0;
-            document.getElementById('jml_dirosa').value = rowData["12. Jumlah Dirosa"] || 0;
-            document.getElementById('status_kantor').value = rowData["13. Status Kantor / PDM / Sekretariat"] || "";
-            document.getElementById('unit_usaha').value = rowData["14. Memiliki Unit Usaha MWC"] || "";
-            document.getElementById('media_online').value = rowData["15. Memiliki Media Dakwah Online"] || "Tidak";
-            document.getElementById('jenis_media').value = rowData["16. Jenis Media Dakwah"] || "";
-            document.getElementById('hardware').value = rowData["17. Hardware Memadai"] || "Tidak";
-            document.getElementById('m_tarif').value = rowData["18. Jumlah Murabbiyah Ta'rif 1 & 2"] || 0;
-            document.getElementById('m_takwin').value = rowData["19. Jumlah Murabbiyah Takwin"] || 0;
-            document.getElementById('donatur').value = rowData["20. Jumlah Donatur"] || 0;
-            document.getElementById('trainer_murabbiyah').value = rowData["Trainer Diklat Murabbiyah"] || 0;
-            document.getElementById('kader_dirosa').value = rowData["21. Kader Mengikuti Pelatihan Dirosa"] || 0;
-            document.getElementById('mudarrisah').value = rowData["22. Pengajar Qur'an (Mudarrisah)"] || 0;
-            document.getElementById('diklat_manajemen').value = rowData["23. Diklat Manajemen Pengurus"] || 0;
-            document.getElementById('diklat_kepemimpinan').value = rowData["24. Diklat Kepemimpinan"] || 0;
-            document.getElementById('tim_sosial').value = rowData["25. Tim Tanggap Sosial"] || 0;
-
-            Swal.fire({
-                title: 'Mode Edit Baris Aktif',
-                text: `Memuat Baris #${rowData["rowIndex"]}. Klik 'Kirim & Simpan Perubahan Data' untuk memperbarui data di Google Sheets.`,
-                icon: 'info',
-                confirmButtonColor: '#0a7c6e'
-            });
         }
 
         document.getElementById('levelisasiForm').addEventListener('submit', function(e) {
@@ -692,23 +731,21 @@
             .then(() => {
                 Swal.fire({
                     title: 'Berhasil Diperbarui!',
-                    text: `Data untuk ${selectedMWCName} berhasil diperbarui secara langsung di database pusat.`,
+                    text: `Data untuk ${selectedMWCName} berhasil diperbarui di server pusat.`,
                     icon: 'success',
                     confirmButtonColor: '#0a7c6e'
                 });
                 
                 cachedSpreadsheetData = [];
                 lastFetchTime = 0;
-                document.getElementById('levelisasiForm').reset();
-                switchTab('view');
-                loadMatrixData(true);
+                showMatrixDashboard();
             })
             .catch(() => {
                 Swal.fire('Gagal!', 'Terjadi kesalahan koneksi jaringan.', 'error');
             })
             .finally(() => {
                 btn.disabled = false;
-                btn.innerHTML = `<i class="fa-solid fa-paper-plane mr-2"></i> Kirim & Simpan Perubahan Data`;
+                btn.innerHTML = `<i class="fa-solid fa-paper-plane mr-2"></i> Kirim & Perbarui Data MWC`;
             });
         });
     </script>
