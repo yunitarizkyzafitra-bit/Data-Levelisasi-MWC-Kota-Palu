@@ -21,17 +21,16 @@
             aside, header, .no-print { display: none !important; }
             main { padding: 0 !important; overflow: visible !important; width: 100% !important; }
             .print-header { display: block !important; text-align: center; margin-bottom: 20px; }
-            .mwc-vertical-card { break-inside: avoid; page-break-inside: avoid; border: 1px solid #ccc !important; box-shadow: none !important; margin-bottom: 20px; display: block !important; }
+            .mwc-vertical-card { break-inside: avoid; page-break-inside: avoid; border: 1px solid #ccc !important; box-shadow: none !important; margin-bottom: 20px; }
         }
         .print-header { display: none; }
     </style>
 </head>
 <body class="bg-custom-base font-sans antialiased text-gray-800">
 
-    <!-- Wrapper Responsif untuk Multi-Platform -->
     <div class="flex flex-col md:flex-row h-screen overflow-hidden">
         
-        <!-- SIDEBAR (Mobile Drawer & Desktop Sidebar) -->
+        <!-- SIDEBAR -->
         <aside id="sidebar" class="w-full md:w-72 bg-[#086358] text-white flex flex-col shadow-2xl z-30 border-r border-[#064f45] absolute md:relative inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
             <div class="p-4 bg-[#0a7c6e] border-b border-[#086358] flex items-center justify-between md:justify-start gap-3">
                 <div class="flex items-center gap-3">
@@ -43,7 +42,6 @@
                         <p class="text-[11px] text-white font-bold flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#ff6b35] inline-block animate-pulse"></span> MWD PALU</p>
                     </div>
                 </div>
-                <!-- Tombol Tutup Sidebar di HP -->
                 <button onclick="toggleSidebar()" class="md:hidden text-white text-lg px-2"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
@@ -80,7 +78,7 @@
             </nav>
 
             <div class="p-3 bg-[#0a7c6e] text-center text-[11px] text-[#f59e0b] border-t border-[#086358]">
-                <i class="fa-solid fa-shield-halved text-[#f59e0b]"></i> Multi-Device Supported (iOS, Android, Mac, Laptop)
+                <i class="fa-solid fa-shield-halved text-[#f59e0b]"></i> Multi-Device Supported (Optimized)
             </div>
         </aside>
 
@@ -88,7 +86,6 @@
         <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-[#fafafa]">
             <header class="bg-white shadow-sm py-4 px-4 sm:px-8 flex justify-between items-center border-b border-gray-200 sticky top-0 z-20">
                 <div class="flex items-center gap-3">
-                    <!-- Tombol Hamburger Menu untuk HP -->
                     <button onclick="toggleSidebar()" class="md:hidden text-[#0a7c6e] text-xl px-2 py-1 focus:outline-none"><i class="fa-solid fa-bars"></i></button>
                     <h2 id="currentTitle" class="text-sm sm:text-base font-bold text-gray-800 flex items-center gap-2 truncate">
                         <i class="fa-solid fa-table-cells text-[#0a7c6e]"></i> Matrix Transparansi Data Levelisasi MWC
@@ -114,7 +111,7 @@
                         <div>
                             <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider">Unit UCR MWD Palu</span>
                             <h3 class="text-xl sm:text-2xl font-black mt-2">Matrix Aktivitas Keseluruhan MWC</h3>
-                            <p class="text-emerald-100 text-xs sm:text-sm mt-1">Pilih MWC yang ingin dicetak PDF, unduh rekap Excel, atau baca petunjuk pengisian.</p>
+                            <p class="text-emerald-100 text-xs sm:text-sm mt-1">Pilih MWC untuk cetak PDF, unduh rekap Excel, atau muat ulang data kilat.</p>
                         </div>
                         <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
                             <button onclick="showSelectPrintModal()" class="flex-1 md:flex-none px-4 py-2.5 bg-[#ff6b35] hover:bg-[#e05a2b] text-white font-extrabold text-xs sm:text-sm rounded-xl shadow transition flex items-center justify-center gap-2">
@@ -123,7 +120,7 @@
                             <button onclick="exportToExcel()" class="flex-1 md:flex-none px-4 py-2.5 bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-extrabold text-xs sm:text-sm rounded-xl shadow transition flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-file-excel"></i> Cetak Excel (.xlsx)
                             </button>
-                            <button onclick="loadMatrixData()" class="px-3 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition">
+                            <button onclick="loadMatrixData(true)" class="px-3 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition" title="Muat Ulang Paksa">
                                 <i class="fa-solid fa-arrows-rotate"></i>
                             </button>
                         </div>
@@ -137,7 +134,7 @@
                     </div>
                 </div>
 
-                <!-- 2. FORM INPUT -->
+                <!-- 2. FORM INPUT / EDIT -->
                 <div id="inputSection" class="hidden bg-white shadow-xl rounded-2xl p-6 sm:p-8 border border-gray-200 mb-10">
                     <div class="flex items-center justify-between mb-6 border-b pb-4">
                         <h3 class="text-lg sm:text-xl font-bold text-[#0a7c6e] flex items-center gap-2">
@@ -148,6 +145,7 @@
 
                     <form id="levelisasiForm" class="space-y-6">
                         <input type="hidden" id="input_nama_mwc">
+                        <input type="hidden" id="edit_row_index" value="">
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                             <div>
@@ -279,8 +277,8 @@
                             <p class="text-xs text-gray-500 mt-0.5">Sesi input terekam transparan. Anda dapat melakukan edit data langsung.</p>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button onclick="switchTab('input')" class="px-4 py-2 bg-[#0a7c6e] text-white rounded-lg text-xs font-semibold shadow hover:bg-[#086358] transition"><i class="fa-solid fa-plus mr-1"></i> Input Baru</button>
-                            <button onclick="loadMWCHistory()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-xs font-semibold shadow hover:bg-gray-200 transition"><i class="fa-solid fa-rotate mr-1"></i> Muat Ulang</button>
+                            <button onclick="prepareNewInput()" class="px-4 py-2 bg-[#0a7c6e] text-white rounded-lg text-xs font-semibold shadow hover:bg-[#086358] transition"><i class="fa-solid fa-plus mr-1"></i> Input Baru</button>
+                            <button onclick="loadMatrixData(true)" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-xs font-semibold shadow hover:bg-gray-200 transition"><i class="fa-solid fa-rotate mr-1"></i> Muat Ulang</button>
                         </div>
                     </div>
                     <div id="historyContainer" class="space-y-6"></div>
@@ -292,7 +290,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqPE_ru22w8eCAlx1ua5JVlA-5UFvPld9AW-8pF2mpcu8cV6N0ZQQ5Zt61pe17-ICCIQ/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4qv9j8XpnSh_nKe8YhLBZhNDwe-ZbYQaId849ofQzmAXDZKENjXFywmWkTnqCYJi3JQ/exec";
 
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
@@ -304,6 +302,7 @@
 
         let selectedMWCName = "";
         let cachedSpreadsheetData = [];
+        let lastFetchTime = 0;
 
         window.onload = function() {
             showMatrixDashboard();
@@ -323,7 +322,7 @@
             document.getElementById('currentTitle').innerHTML = `<i class="fa-solid fa-table-cells text-[#0a7c6e] mr-2"></i> Matrix Transparansi Data Levelisasi MWC`;
 
             document.querySelectorAll('.mwc-btn').forEach(btn => btn.classList.remove('bg-[#0a7c6e]', 'text-white'));
-            loadMatrixData();
+            loadMatrixData(false);
         }
 
         async function selectMWC(mwcName) {
@@ -374,85 +373,107 @@
                 document.getElementById('tabViewBtn').className = "px-3 sm:px-4 py-2 bg-[#0a7c6e] text-white rounded-lg text-xs font-semibold shadow";
                 document.getElementById('tabInputBtn').className = "px-3 sm:px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-xs font-semibold shadow hover:bg-gray-200";
                 document.getElementById('viewMwcName').innerText = selectedMWCName;
+                loadMWCHistory();
             }
         }
 
-        async function loadMatrixData() {
+        function prepareNewInput() {
+            document.getElementById('levelisasiForm').reset();
+            document.getElementById('input_nama_mwc').value = selectedMWCName;
+            document.getElementById('edit_row_index').value = ""; // Kosongkan indeks agar menjadi data baru
+            switchTab('input');
+        }
+
+        async function loadMatrixData(forceRefresh = false) {
             const container = document.getElementById('verticalMatrixContainer');
+            const now = Date.now();
+
+            // Gunakan Cache jika data sudah ada dan belum 30 detik (mengatasi lemot/loading berulang)
+            if (!forceRefresh && cachedSpreadsheetData.length > 0 && (now - lastFetchTime < 30000)) {
+                renderMatrixCards(cachedSpreadsheetData);
+                return;
+            }
+
             container.innerHTML = `<div class="text-center py-10 bg-white rounded-2xl shadow-sm border border-gray-200"><i class="fa-solid fa-spinner fa-spin text-3xl text-[#0a7c6e]"></i><p class="text-gray-500 mt-2 text-sm">Memuat data dari Google Spreadsheet...</p></div>`;
 
             try {
                 let response = await fetch(SCRIPT_URL);
                 let data = await response.json();
                 cachedSpreadsheetData = data;
+                lastFetchTime = Date.now();
 
-                if(data.length === 0) {
-                    container.innerHTML = `<div class="bg-white p-8 rounded-2xl text-center text-gray-500 text-sm shadow-sm">Belum ada data terekam di Spreadsheet.</div>`;
-                    return;
-                }
-
-                let latestPerMWC = {};
-                data.forEach(row => {
-                    let mwc = row["Nama MWC"];
-                    if(mwc) { latestPerMWC[mwc] = row; }
-                });
-
-                container.innerHTML = "";
-                const mwcList = ["MWC Palu Utara", "MWC Mantikulore", "MWC Palu Selatan", "MWC Tatanga", "MWC Ulujadi"];
-
-                mwcList.forEach(mwcName => {
-                    let rowData = latestPerMWC[mwcName];
-                    let card = document.createElement('div');
-                    card.className = "mwc-vertical-card bg-white shadow-xl rounded-2xl border border-gray-200 overflow-hidden mb-6";
-
-                    let headerHtml = `
-                        <div class="bg-gradient-to-r from-[#0a7c6e] to-[#086358] text-white p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                            <div>
-                                <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Wilayah MWC</span>
-                                <h4 class="text-xl font-black mt-1">${mwcName}</h4>
-                            </div>
-                            <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                                <button onclick="printSpecificMWC('${mwcName}')" class="no-print px-3 py-2 bg-[#ff6b35] hover:bg-[#e05a2b] text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5">
-                                    <i class="fa-solid fa-file-pdf"></i> Print PDF MWC Ini
-                                </button>
-                                <button onclick="selectMWC('${mwcName}')" class="no-print px-3 py-2 bg-white text-[#0a7c6e] hover:bg-emerald-50 font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5">
-                                    <i class="fa-solid fa-lock-open"></i> Log/Edit
-                                </button>
-                            </div>
-                        </div>
-                    `;
-
-                    let bodyHtml = `<div class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">`;
-
-                    if (rowData) {
-                        for (const [key, value] of Object.entries(rowData)) {
-                            if (key !== "Timestamp" && key !== "Nama MWC") {
-                                bodyHtml += `
-                                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                                        <span class="text-gray-500 font-semibold mb-1">${key}</span>
-                                        <span class="font-black text-[#0a7c6e] text-sm">${value !== "" ? value : "-"}</span>
-                                    </div>
-                                `;
-                            }
-                        }
-                    } else {
-                        bodyHtml += `<div class="col-span-full text-center py-6 text-gray-400 italic">Belum ada data input untuk wilayah ini. Silakan klik tombol akses di atas untuk mengisi.</div>`;
-                    }
-
-                    bodyHtml += `</div>`;
-                    card.innerHTML = headerHtml + bodyHtml;
-                    container.appendChild(card);
-                });
-
+                renderMatrixCards(data);
             } catch (err) {
                 container.innerHTML = `<div class="bg-red-50 text-red-600 p-6 rounded-2xl text-center text-sm">Gagal memuat data matriks. Periksa koneksi internet Anda.</div>`;
                 console.error(err);
             }
         }
 
+        function renderMatrixCards(data) {
+            const container = document.getElementById('verticalMatrixContainer');
+            if(data.length === 0) {
+                container.innerHTML = `<div class="bg-white p-8 rounded-2xl text-center text-gray-500 text-sm shadow-sm">Belum ada data terekam di Spreadsheet.</div>`;
+                return;
+            }
+
+            let latestPerMWC = {};
+            data.forEach(row => {
+                let mwc = row["Nama MWC"];
+                if(mwc) { latestPerMWC[mwc] = row; }
+            });
+
+            container.innerHTML = "";
+            const mwcList = ["MWC Palu Utara", "MWC Mantikulore", "MWC Palu Selatan", "MWC Tatanga", "MWC Ulujadi"];
+
+            mwcList.forEach(mwcName => {
+                let rowData = latestPerMWC[mwcName];
+                let card = document.createElement('div');
+                card.className = "mwc-vertical-card bg-white shadow-xl rounded-2xl border border-gray-200 overflow-hidden mb-6";
+                card.setAttribute('data-mwc', mwcName);
+
+                let headerHtml = `
+                    <div class="bg-gradient-to-r from-[#0a7c6e] to-[#086358] text-white p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                        <div>
+                            <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Wilayah MWC</span>
+                            <h4 class="text-xl font-black mt-1">${mwcName}</h4>
+                        </div>
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                            <button onclick="printSpecificMWC('${mwcName}')" class="no-print px-3 py-2 bg-[#ff6b35] hover:bg-[#e05a2b] text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-file-pdf"></i> Print PDF MWC Ini
+                            </button>
+                            <button onclick="selectMWC('${mwcName}')" class="no-print px-3 py-2 bg-white text-[#0a7c6e] hover:bg-emerald-50 font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-lock-open"></i> Log/Edit
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                let bodyHtml = `<div class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">`;
+
+                if (rowData) {
+                    for (const [key, value] of Object.entries(rowData)) {
+                        if (key !== "Timestamp" && key !== "Nama MWC" && key !== "rowIndex") {
+                            bodyHtml += `
+                                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                                    <span class="text-gray-500 font-semibold mb-1">${key}</span>
+                                    <span class="font-black text-[#0a7c6e] text-sm">${value !== "" ? value : "-"}</span>
+                                </div>
+                            `;
+                        }
+                    }
+                } else {
+                    bodyHtml += `<div class="col-span-full text-center py-6 text-gray-400 italic">Belum ada data input untuk wilayah ini. Silakan klik tombol akses di atas untuk mengisi.</div>`;
+                }
+
+                bodyHtml += `</div>`;
+                card.innerHTML = headerHtml + bodyHtml;
+                container.appendChild(card);
+            });
+        }
+
         async function showSelectPrintModal() {
             if (!cachedSpreadsheetData || cachedSpreadsheetData.length === 0) {
-                await loadMatrixData();
+                await loadMatrixData(true);
             }
 
             const mwcOptions = {
@@ -488,23 +509,32 @@
         function printSpecificMWC(mwcName) {
             const cards = document.querySelectorAll('.mwc-vertical-card');
             if (cards.length === 0) {
-                Swal.fire('Perhatian', 'Data MWC belum dimuat di layar. Silakan muat ulang matriks terlebih dahulu.', 'warning');
+                Swal.fire('Perhatian', 'Data MWC belum dimuat di layar. Silakan tunggu sebentar.', 'warning');
                 return;
             }
 
+            let found = false;
             cards.forEach(card => {
-                if (card.innerText.includes(mwcName)) {
-                    card.style.display = 'block';
+                const cardMWC = card.getAttribute('data-mwc');
+                if (cardMWC && cardMWC.toLowerCase() === mwcName.toLowerCase()) {
+                    card.style.setProperty('display', 'block', 'important');
+                    found = true;
                 } else {
-                    card.style.display = 'none';
+                    card.style.setProperty('display', 'none', 'important');
                 }
             });
+
+            if (!found) {
+                Swal.fire('Data Kosong', `Belum ada kartu data untuk ${mwcName}.`, 'warning');
+                cards.forEach(card => card.style.setProperty('display', 'block', 'important'));
+                return;
+            }
             
             window.print();
             
             setTimeout(() => {
-                cards.forEach(card => card.style.display = 'block');
-            }, 1000);
+                cards.forEach(card => card.style.setProperty('display', 'block', 'important'));
+            }, 1500);
         }
 
         function exportToExcel() {
@@ -513,7 +543,9 @@
                 return;
             }
 
-            const worksheet = XLSX.utils.json_to_sheet(cachedSpreadsheetData);
+            // Hapus rowIndex sebelum ekspor agar bersih
+            const cleanData = cachedSpreadsheetData.map(({ rowIndex, ...rest }) => rest);
+            const worksheet = XLSX.utils.json_to_sheet(cleanData);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Data_Levelisasi_MWC");
 
@@ -532,14 +564,11 @@
                 title: '<span class="text-[#0a7c6e]"><i class="fa-solid fa-book-open mr-2"></i> Petunjuk Pengisian Data</span>',
                 html: `
                     <div class="text-left text-xs sm:text-sm space-y-3 max-h-96 overflow-y-auto px-2">
-                        <p class="font-semibold text-gray-700">Selamat datang di panduan pengisian instrumen levelisasi MWC Muslimah Wahdah Islamiyah Kota Palu:</p>
+                        <p class="font-semibold text-gray-700">Selamat datang di panduan pengisian instrumen levelisasi MWC:</p>
                         <ul class="list-disc pl-5 space-y-2 text-gray-600">
-                            <li><strong>Autentikasi PIN:</strong> Setiap wilayah MWC memiliki PIN unik tersendiri untuk menjamin kerahasiaan dan keamanan data.</li>
-                            <li><strong>Pengurus Aktif & Kurang Aktif (Poin 1-2):</strong> Masukkan data riil jumlah pengurus harian MWC yang aktif berpartisipasi dalam program kerja.</li>
-                            <li><strong>Layanan Sosial & Kesehatan (Poin 3):</strong> Pilih 'Ya' jika MWC memiliki klinik, posyandu binaan, atau layanan sosial tetap.</li>
-                            <li><strong>Kader Ta’rif, Takwin, Tanfidz (Poin 5-7):</strong> Hitung jumlah kader berdasarkan jenjang pembinaan tarbiyah yang telah diikuti.</li>
-                            <li><strong>Sarana Prasarana & Media Dakwah (Poin 13-17):</strong> Tuliskan status kepemilikan kantor (sewa/milik sendiri), unit usaha, jenis media sosial yang aktif digunakan, serta kelengkapan hardware.</li>
-                            <li><strong>Riwayat & Edit Data:</strong> Anda dapat memeriksa sesi pengisian sebelumnya melalui menu 'Log Aktivitas' dan memperbarui data kapan saja menggunakan tombol <strong>Edit Data</strong>.</li>
+                            <li><strong>Autentikasi PIN:</strong> Setiap wilayah MWC memiliki PIN unik untuk keamanan data.</li>
+                            <li><strong>Edit Data Langsung:</strong> Melalui menu 'Log Aktivitas', Anda dapat mengklik 'Edit Data' untuk memperbarui data lama tanpa membuat duplikasi baris baru.</li>
+                            <li><strong>Cetak PDF Cerdas:</strong> Gunakan tombol cetak khusus wilayah agar hasil print tidak pernah kosong/blank.</li>
                         </ul>
                     </div>
                 `,
@@ -553,9 +582,12 @@
             container.innerHTML = `<div class="text-center py-10"><i class="fa-solid fa-spinner fa-spin text-2xl text-[#0a7c6e]"></i><p class="text-xs text-gray-500 mt-2">Memuat log aktivitas...</p></div>`;
 
             try {
-                let response = await fetch(SCRIPT_URL);
-                let data = await response.json();
-                let filtered = data.filter(item => item["Nama MWC"] === selectedMWCName);
+                if (cachedSpreadsheetData.length === 0) {
+                    let response = await fetch(SCRIPT_URL);
+                    cachedSpreadsheetData = await response.json();
+                }
+
+                let filtered = cachedSpreadsheetData.filter(item => item["Nama MWC"] === selectedMWCName);
 
                 if(filtered.length === 0) {
                     container.innerHTML = `<div class="bg-white p-8 rounded-2xl text-center text-gray-400 text-xs shadow-sm border border-gray-200">Belum ada log aktivitas untuk ${selectedMWCName}. Silakan klik tombol 'Input Baru'.</div>`;
@@ -564,7 +596,7 @@
 
                 container.innerHTML = "";
                 filtered.reverse().forEach((row, index) => {
-                    let timeFormatted = new Date(row["Timestamp"]).toLocaleString('id-ID');
+                    let timeFormatted = row["Timestamp"] ? new Date(row["Timestamp"]).toLocaleString('id-ID') : "Waktu tidak tercatat";
                     
                     let card = document.createElement('div');
                     card.className = "bg-white shadow-xl rounded-2xl border border-gray-200 overflow-hidden transition hover:shadow-2xl mb-6";
@@ -572,13 +604,13 @@
                     let cardHeader = `
                         <div class="bg-gradient-to-r from-[#0a7c6e] to-[#086358] text-white p-4 sm:p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                             <div>
-                                <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Sesi Log #${filtered.length - index}</span>
+                                <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Log Baris #${row["rowIndex"]}</span>
                                 <h4 class="text-base sm:text-lg font-bold mt-1">${row["Nama MWC"]}</h4>
                             </div>
                             <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
                                 <p class="text-[11px] text-emerald-100 hidden sm:inline"><i class="fa-regular fa-clock mr-1"></i> ${timeFormatted}</p>
                                 <button onclick='editLogData(${JSON.stringify(row)})' class="px-3 py-1.5 bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-bold text-xs rounded-lg shadow transition flex items-center gap-1.5">
-                                    <i class="fa-solid fa-pen-to-square"></i> Edit Data
+                                    <i class="fa-solid fa-pen-to-square"></i> Edit Data Ini
                                 </button>
                             </div>
                         </div>
@@ -587,7 +619,7 @@
                     let gridContent = `<div class="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">`;
 
                     for (const [key, value] of Object.entries(row)) {
-                        if(key !== "Timestamp" && key !== "Nama MWC") {
+                        if(key !== "Timestamp" && key !== "Nama MWC" && key !== "rowIndex") {
                             gridContent += `
                                 <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
                                     <span class="text-gray-500 font-semibold mb-1">${key}</span>
@@ -608,6 +640,7 @@
 
         function editLogData(rowData) {
             switchTab('input');
+            document.getElementById('edit_row_index').value = rowData["rowIndex"] || "";
             document.getElementById('p_aktif').value = rowData["1. Jumlah Pengurus Aktif"] || 0;
             document.getElementById('p_kurang_aktif').value = rowData["2. Jumlah Pengurus Kurang Aktif"] || 0;
             document.getElementById('layanan_sosial').value = rowData["3. Layanan Sosial & Kesehatan (Klinik)"] || "Tidak";
@@ -636,8 +669,8 @@
             document.getElementById('tim_sosial').value = rowData["25. Tim Tanggap Sosial"] || 0;
 
             Swal.fire({
-                title: 'Mode Edit Aktif',
-                text: `Form telah diisi dengan data log terpilih. Perbarui nilai lalu klik 'Kirim & Simpan' untuk memperbarui ke Spreadsheet.`,
+                title: 'Mode Edit Baris Aktif',
+                text: `Form memuat data log Baris #${rowData["rowIndex"]}. Klik 'Kirim & Simpan' untuk memperbarui data secara langsung.`,
                 icon: 'info',
                 confirmButtonColor: '#0a7c6e'
             });
@@ -650,6 +683,7 @@
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Menyimpan...`;
 
             const formData = {
+                rowIndex: document.getElementById('edit_row_index').value,
                 nama_mwc: selectedMWCName,
                 p_aktif: document.getElementById('p_aktif').value,
                 p_kurang_aktif: document.getElementById('p_kurang_aktif').value,
@@ -692,10 +726,16 @@
                     icon: 'success',
                     confirmButtonColor: '#0a7c6e'
                 });
+                
+                // Kosongkan cache agar data terbaru langsung terambil
+                cachedSpreadsheetData = [];
+                lastFetchTime = 0;
+
                 document.getElementById('levelisasiForm').reset();
                 document.getElementById('input_nama_mwc').value = selectedMWCName;
+                document.getElementById('edit_row_index').value = "";
                 switchTab('view');
-                loadMWCHistory();
+                loadMatrixData(true);
             })
             .catch(error => {
                 Swal.fire('Gagal!', 'Terjadi kesalahan jaringan.', 'error');
