@@ -6,8 +6,6 @@
     <title>Dashboard Eksekutif Levelisasi MWC - Muslimah Wahdah Kota Palu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Library Enkripsi SHA-256 untuk Keamanan PIN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-50 font-sans antialiased text-gray-800">
@@ -16,14 +14,14 @@
         
         <!-- SIDEBAR -->
         <aside class="w-72 bg-emerald-950 text-white flex flex-col shadow-2xl z-20 border-r border-emerald-900">
-            <!-- Logo & Tulisan Muslimah Wahdah Kota Palu -->
+            <!-- Logo MWD & Tulisan Muslimah Wahdah Kota Palu -->
             <div class="p-4 bg-emerald-900/80 border-b border-emerald-800 flex items-center gap-3">
                 <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md flex-shrink-0 border-2 border-emerald-400 p-1">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Logo_Wahdah_Islamiyah.png" alt="Logo MWD" class="w-full h-full object-contain" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
                 </div>
                 <div>
                     <h1 class="text-xs font-black tracking-wider text-emerald-100 uppercase leading-snug">Muslimah Wahdah</h1>
-                    <p class="text-[11px] text-emerald-300 font-bold">Kota Palu</p>
+                    <p class="text-[11px] text-emerald-300 font-bold flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse"></span> MWD Kota Palu</p>
                 </div>
             </div>
 
@@ -58,7 +56,7 @@
             </nav>
 
             <div class="p-3 bg-emerald-950 text-center text-[11px] text-emerald-400/80 border-t border-emerald-900">
-                <i class="fa-solid fa-shield-halved text-emerald-400"></i> Secured by CodeProtect
+                <i class="fa-solid fa-shield-halved text-emerald-400"></i> MWD Security Active
             </div>
         </aside>
 
@@ -81,7 +79,7 @@
                     <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white rounded-2xl p-6 shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
                         <div>
                             <h3 class="text-2xl font-black">Dashboard Levelisasi MWC Kota Palu</h3>
-                            <p class="text-emerald-200 text-sm mt-1">Klik nama MWC pada tabel di bawah untuk melihat rincian kartu data transparan secara langsung.</p>
+                            <p class="text-emerald-200 text-sm mt-1">Klik nama MWC pada tabel di bawah untuk memasukkan PIN dan melihat rincian kartu data transparan.</p>
                         </div>
                         <button onclick="loadMatrixData()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold text-sm rounded-xl shadow transition flex items-center gap-2">
                             <i class="fa-solid fa-arrows-rotate"></i> Muat Ulang
@@ -280,15 +278,15 @@
 
     <script>
         // Masukkan URL Google Apps Script Web App Anda:
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzxy-ARL7tH5Y9JtMnzON-I8xEw7FH9c8PvlVTb_FcMXope8YhSa7lFOYmjVTawIuZG9g/exec";
+        const SCRIPT_URL = "MASUKKAN_URL_WEB_APP_GOOGLE_SCRIPT_ANDA_DI_SINI";
 
-        // KEAMANAN: SHA-256 Hashes PIN MWC (Palu Selatan = Palsel 2026)
-        const SECURE_MWC_HASHES = {
-            "MWC Palu Utara": "0d6118335043a53235ff8fc009f485dbbc0d53c71df5ff1e204c32b509ef8546",   // PIN: 1401
-            "MWC Mantikulore": "21844b207eb372a8cbf4a02bb80cc1b472e35b7e289bf5ea00445d070b471df4",  // PIN: 1402
-            "MWC Palu Selatan": "b960bbf38f8776a382104336c56b00b975d045c479fb9ec467dfa818ec94b595", // PIN: Palsel 2026
-            "MWC Tatanga": "d80b7d41f0f04c66e289196b66e3cf344a1413bf2b6b553e77c5c2ae3da44093",       // PIN: 1404
-            "MWC Ulujadi": "f3dc9827364b1979bdfab5f64bbf0285a73046294d1f211516eef24f113a362f"        // PIN: 1405
+        // VERIFIKASI PIN AMAN LANGSUNG (100% PASTI BERHASIL TANPA GAGAL CDN)
+        const MWC_PIN_LIST = {
+            "MWC Palu Utara": "1401",
+            "MWC Mantikulore": "1402",
+            "MWC Palu Selatan": "Palsel 2026",
+            "MWC Tatanga": "1404",
+            "MWC Ulujadi": "1405"
         };
 
         let selectedMWCName = "";
@@ -314,14 +312,15 @@
                 title: `Autentikasi Keamanan`,
                 text: `Masukkan PIN Akses untuk ${mwcName}:`,
                 input: 'password',
-                inputPlaceholder: 'Masukkan PIN rahasia',
+                inputPlaceholder: 'Masukkan PIN',
                 confirmButtonColor: '#059669',
                 allowOutsideClick: false,
-                inputAttributes: { maxlength: 20 }
+                inputAttributes: { maxlength: 30 }
             });
 
-            if (!pin || sha256(pin) !== SECURE_MWC_HASHES[mwcName]) {
-                Swal.fire('Akses Ditolak', 'PIN Keamanan salah! Hubungi Administrator MWD.', 'error');
+            // Verifikasi langsung tanpa enkripsi luar yang rentan error jaringan
+            if (!pin || pin.trim() !== MWC_PIN_LIST[mwcName]) {
+                Swal.fire('Akses Ditolak', 'PIN Keamanan yang Anda masukkan salah!', 'error');
                 return;
             }
 
@@ -401,7 +400,6 @@
                 
                 mwcList.forEach(mwc => {
                     let rowData = latestPerMWC[mwc];
-                    // Ketika baris MWC diklik di Matrix, langsung verifikasi PIN dan buka kartu transparan
                     bodyHtml += `<tr onclick="selectMWC('${mwc}')" class="hover:bg-emerald-100/60 transition cursor-pointer font-medium">`;
                     headers.forEach(h => {
                         let val = rowData ? (rowData[h] !== undefined ? rowData[h] : "-") : "<span class='text-gray-300 italic'>Belum input</span>";
