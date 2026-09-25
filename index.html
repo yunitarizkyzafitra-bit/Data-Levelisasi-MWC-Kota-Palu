@@ -21,14 +21,14 @@
             aside, header, .no-print { display: none !important; }
             main { padding: 0 !important; overflow: visible !important; width: 100% !important; }
             .print-header { display: block !important; text-align: center; margin-bottom: 20px; }
-            .mwc-vertical-card { break-inside: avoid; page-break-inside: avoid; border: 1px solid #ccc !important; box-shadow: none !important; margin-bottom: 20px; }
+            .mwc-vertical-card { break-inside: avoid; page-break-inside: avoid; border: 1px solid #ccc !important; box-shadow: none !important; margin-bottom: 20px; display: block !important; }
         }
         .print-header { display: none; }
     </style>
 </head>
 <body class="bg-custom-base font-sans antialiased text-gray-800">
 
-    <!-- Wrapper Responsif untuk HP & Desktop -->
+    <!-- Wrapper Responsif untuk Multi-Platform -->
     <div class="flex flex-col md:flex-row h-screen overflow-hidden">
         
         <!-- SIDEBAR (Mobile Drawer & Desktop Sidebar) -->
@@ -292,7 +292,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxBb_Ot0CYZeJiiCvfodUwVZSL800ecUgx3Vxyujgz4LqN0m9ujRW89xmH5GZ9-il7uBw/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqPE_ru22w8eCAlx1ua5JVlA-5UFvPld9AW-8pF2mpcu8cV6N0ZQQ5Zt61pe17-ICCIQ/exec";
 
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
@@ -309,7 +309,6 @@
             showMatrixDashboard();
         };
 
-        // Fungsi Toggle Sidebar untuk HP (Responsive Drawer)
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('-translate-x-full');
@@ -404,7 +403,7 @@
                 mwcList.forEach(mwcName => {
                     let rowData = latestPerMWC[mwcName];
                     let card = document.createElement('div');
-                    card.className = "mwc-vertical-card bg-white shadow-xl rounded-2xl border border-gray-200 overflow-hidden";
+                    card.className = "mwc-vertical-card bg-white shadow-xl rounded-2xl border border-gray-200 overflow-hidden mb-6";
 
                     let headerHtml = `
                         <div class="bg-gradient-to-r from-[#0a7c6e] to-[#086358] text-white p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -451,8 +450,11 @@
             }
         }
 
-        // Fitur Cetak PDF Pilihan MWC
         async function showSelectPrintModal() {
+            if (!cachedSpreadsheetData || cachedSpreadsheetData.length === 0) {
+                await loadMatrixData();
+            }
+
             const mwcOptions = {
                 "MWC Palu Utara": "MWC Palu Utara",
                 "MWC Mantikulore": "MWC Mantikulore",
@@ -485,6 +487,11 @@
 
         function printSpecificMWC(mwcName) {
             const cards = document.querySelectorAll('.mwc-vertical-card');
+            if (cards.length === 0) {
+                Swal.fire('Perhatian', 'Data MWC belum dimuat di layar. Silakan muat ulang matriks terlebih dahulu.', 'warning');
+                return;
+            }
+
             cards.forEach(card => {
                 if (card.innerText.includes(mwcName)) {
                     card.style.display = 'block';
@@ -492,26 +499,24 @@
                     card.style.display = 'none';
                 }
             });
+            
             window.print();
-            // Reset tampilan kartu setelah print dialog ditutup
+            
             setTimeout(() => {
                 cards.forEach(card => card.style.display = 'block');
             }, 1000);
         }
 
-        // Fitur Cetak / Ekspor Excel (.xlsx) langsung di browser
         function exportToExcel() {
             if (!cachedSpreadsheetData || cachedSpreadsheetData.length === 0) {
                 Swal.fire('Data Kosong', 'Belum ada data untuk diekspor ke Excel.', 'warning');
                 return;
             }
 
-            // Buat worksheet dari data JSON
             const worksheet = XLSX.utils.json_to_sheet(cachedSpreadsheetData);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Data_Levelisasi_MWC");
 
-            // Download file .xlsx
             XLSX.writeFile(workbook, "Rekap_Levelisasi_MWC_Kota_Palu.xlsx");
             
             Swal.fire({
@@ -522,7 +527,6 @@
             });
         }
 
-        // Menu Petunjuk Pengisian Data
         function showGuideModal() {
             Swal.fire({
                 title: '<span class="text-[#0a7c6e]"><i class="fa-solid fa-book-open mr-2"></i> Petunjuk Pengisian Data</span>',
