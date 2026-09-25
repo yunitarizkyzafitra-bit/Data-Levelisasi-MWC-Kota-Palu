@@ -8,7 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Kustomisasi Palet Warna Color Hunt (#249d8f, #e9c46a, #e76f51, #fdf0d5) */
         .bg-custom-teal { background-color: #249d8f; }
         .bg-custom-gold { background-color: #e9c46a; }
         .bg-custom-coral { background-color: #e76f51; }
@@ -18,10 +17,16 @@
         .text-custom-gold { color: #e9c46a; }
         .text-custom-coral { color: #e76f51; }
         
-        .border-custom-teal { border-color: #249d8f; }
-        .border-custom-gold { border-color: #e9c46a; }
-        
-        .btn-custom-teal:hover { background-color: #1e8074 !important; }
+        /* CSS khusus untuk mode cetak PDF agar rapi & bersih */
+        @media print {
+            body { background: white !important; color: black !important; }
+            aside, header button, #actionTabs, .no-print { display: none !important; }
+            main { padding: 0 !important; overflow: visible !important; }
+            table { width: 100% !important; border-collapse: collapse !important; font-size: 10px !important; }
+            th, td { border: 1px solid #ddd !important; padding: 6px !important; }
+            .print-header { display: block !important; text-align: center; margin-bottom: 20px; }
+        }
+        .print-header { display: none; }
     </style>
 </head>
 <body class="bg-custom-cream font-sans antialiased text-gray-800">
@@ -30,10 +35,9 @@
         
         <!-- SIDEBAR -->
         <aside class="w-72 bg-[#1b766b] text-white flex flex-col shadow-2xl z-20 border-r border-[#155e55]">
-            <!-- Logo MWD.png & Judul Unit UCR MWD PALU -->
             <div class="p-4 bg-[#145b53] border-b border-[#114b43] flex items-center gap-3">
                 <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md flex-shrink-0 border-2 border-[#e9c46a] p-1 overflow-hidden">
-                    <img src="logo MWD.png" alt="Logo MWD" class="w-full h-full object-contain" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/e/ec/Logo_Wahdah_Islamiyah.png'">
+                    <img src="MWD.png" alt="Logo MWD" class="w-full h-full object-contain" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/e/ec/Logo_Wahdah_Islamiyah.png'">
                 </div>
                 <div>
                     <h1 class="text-xs font-black tracking-wider text-[#e9c46a] uppercase leading-snug">Unit UCR</h1>
@@ -41,7 +45,6 @@
                 </div>
             </div>
 
-            <!-- Navigasi Sidebar -->
             <nav class="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto">
                 <button onclick="showMatrixDashboard()" class="w-full text-left px-4 py-3 rounded-xl transition flex items-center gap-3 bg-[#249d8f] hover:bg-[#1e8074] text-white font-semibold mb-4 border border-[#e9c46a]/40 shadow-sm">
                     <i class="fa-solid fa-chart-pie text-[#e9c46a]"></i> Matrix Transparansi
@@ -90,25 +93,34 @@
 
             <div class="p-6 sm:p-8 max-w-7xl mx-auto w-full flex-1">
                 
+                <!-- KOP SURAT KHUSUS CETAK PDF -->
+                <div class="print-header">
+                    <h1 class="text-xl font-bold uppercase">Laporan Matrix Transparansi Levelisasi MWC</h1>
+                    <h2 class="text-sm font-semibold text-gray-600">Unit UCR - Muslimah Wahdah Islamiyah Kota Palu</h2>
+                    <hr class="my-2 border-black">
+                </div>
+
                 <!-- 1. MATRIX DASHBOARD (HOME) -->
                 <div id="matrixSection" class="space-y-6">
-                    <!-- Banner dengan warna utama teal & aksen gold -->
                     <div class="bg-gradient-to-r from-[#249d8f] to-[#1b766b] text-white rounded-2xl p-6 shadow-lg flex flex-col md:flex-row justify-between items-center gap-4 border border-[#e9c46a]/30">
                         <div>
                             <span class="bg-[#e9c46a] text-[#1b766b] text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider">Unit UCR MWD Palu</span>
-                            <h3 class="text-2xl font-black mt-2">Dashboard Levelisasi MWC Kota Palu</h3>
-                            <p class="text-emerald-100 text-sm mt-1">Klik nama MWC pada tabel di bawah untuk memasukkan PIN dan melihat rincian kartu data transparan.</p>
+                            <h3 class="text-2xl font-black mt-2">Matrix Aktivitas Keseluruhan MWC</h3>
+                            <p class="text-emerald-100 text-sm mt-1">Transparansi aktivitas dan rekapitulasi data input seluruh MWC se-Kota Palu.</p>
                         </div>
-                        <button onclick="loadMatrixData()" class="px-5 py-2.5 bg-[#e9c46a] hover:bg-[#dfb558] text-[#1b766b] font-extrabold text-sm rounded-xl shadow transition flex items-center gap-2">
-                            <i class="fa-solid fa-arrows-rotate"></i> Muat Ulang
-                        </button>
+                        <div class="flex gap-2">
+                            <button onclick="window.print()" class="px-4 py-2.5 bg-[#e76f51] hover:bg-[#d45d3f] text-white font-extrabold text-sm rounded-xl shadow transition flex items-center gap-2">
+                                <i class="fa-solid fa-file-pdf"></i> Cetak PDF
+                            </button>
+                            <button onclick="loadMatrixData()" class="px-4 py-2.5 bg-[#e9c46a] hover:bg-[#dfb558] text-[#1b766b] font-extrabold text-sm rounded-xl shadow transition flex items-center gap-2">
+                                <i class="fa-solid fa-arrows-rotate"></i> Muat Ulang
+                            </button>
+                        </div>
                     </div>
-
-                    <!-- 3 Kartu Ringkasan Statistik Telah Dihapus Sesuai Permintaan -->
 
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                         <div class="p-5 border-b bg-gray-50 flex justify-between items-center">
-                            <h4 class="font-bold text-gray-700 text-sm"><i class="fa-solid fa-table text-[#249d8f] mr-2"></i> Matriks Transparansi Seluruh MWC (Klik Nama MWC untuk Buka Kartu Data)</h4>
+                            <h4 class="font-bold text-gray-700 text-sm"><i class="fa-solid fa-table text-[#249d8f] mr-2"></i> Matriks Data Aktivitas Seluruh MWC</h4>
                         </div>
                         <div class="overflow-x-auto">
                             <table id="matrixTable" class="w-full text-left border-collapse text-xs">
@@ -273,7 +285,6 @@
     </div>
 
     <script>
-        // Masukkan URL Google Apps Script Web App Anda:
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzxy-ARL7tH5Y9JtMnzON-I8xEw7FH9c8PvlVTb_FcMXope8YhSa7lFOYmjVTawIuZG9g/exec";
 
         const MWC_PIN_LIST = {
