@@ -13,16 +13,17 @@
         .bg-custom-amber { background-color: #f59e0b; }
         .bg-custom-base { background-color: #fafafa; }
         
-        /* PENGATURAN CETAK PDF MULTI-HALAMAN UTUH & ANTI-TERPOTONG */
+        /* PENGATURAN CETAK PDF LAPORAN PROFESIONAL MULTI-HALAMAN */
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 10mm;
+                margin: 15mm;
             }
             body { 
                 background: white !important; 
-                color: black !important; 
-                font-size: 10pt;
+                color: #111 !important; 
+                font-size: 9pt;
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             }
             aside, header, nav, button, .no-print { 
                 display: none !important; 
@@ -31,20 +32,37 @@
                 padding: 0 !important; 
                 overflow: visible !important; 
                 width: 100% !important; 
+                max-width: 100% !important;
             }
             .print-header { 
                 display: block !important; 
                 text-align: center; 
-                margin-bottom: 15px; 
-                border-bottom: 2px solid #000;
-                padding-bottom: 8px;
+                margin-bottom: 25px; 
+                border-bottom: 2.5px solid #0a7c6e;
+                padding-bottom: 12px;
             }
             .mwc-vertical-card { 
                 break-inside: avoid !important; 
                 page-break-inside: avoid !important; 
-                border: 1px solid #ccc !important; 
+                border: 1px solid #cbd5e1 !important; 
                 box-shadow: none !important; 
-                margin-bottom: 20px !important; 
+                margin-bottom: 25px !important; 
+                border-radius: 8px !important;
+                background: #ffffff !important;
+            }
+            .mwc-card-header {
+                background: #0a7c6e !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                padding: 10px 15px !important;
+            }
+            .print-grid-item {
+                background: #f8fafc !important;
+                border: 1px solid #e2e8f0 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                break-inside: avoid;
             }
         }
         .print-header { display: none; }
@@ -103,7 +121,7 @@
 
         <!-- KONTEN UTAMA -->
         <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-[#fafafa]">
-            <header class="bg-white shadow-sm py-4 px-4 sm:px-8 flex justify-between items-center border-b border-gray-200 sticky top-0 z-20">
+            <header class="bg-white shadow-sm py-4 px-4 sm:px-8 flex justify-between items-center border-b border-gray-200 sticky top-0 z-25">
                 <div class="flex items-center gap-3">
                     <button onclick="toggleSidebar()" class="md:hidden text-[#0a7c6e] text-xl px-2 py-1"><i class="fa-solid fa-bars"></i></button>
                     <h2 id="currentTitle" class="text-sm sm:text-base font-bold text-gray-800 flex items-center gap-2">
@@ -118,10 +136,11 @@
 
             <div class="p-4 sm:p-8 max-w-6xl mx-auto w-full flex-1">
                 
+                <!-- HEADER LAPORAN KHUSUS CETAK PDF PROFESIONAL -->
                 <div class="print-header">
-                    <h1 class="text-xl font-bold uppercase">LAPORAN MATRIX TRANSPARANSI LEVELISASI MWC</h1>
-                    <h2 class="text-sm font-semibold text-gray-700">Unit UCR - Muslimah Wahdah Islamiyah Kota Palu</h2>
-                    <p class="text-xs text-gray-500 mt-1">Dicetak pada: <span id="printDateStr"></span></p>
+                    <h1 class="text-lg font-bold uppercase tracking-wider text-gray-900">LAPORAN EKSEKUTIF MATRIX TRANSPARANSI LEVELISASI MWC</h1>
+                    <h2 class="text-xs font-semibold text-[#0a7c6e] mt-1">UNIT UCR - MUSLIMAH WAHDAH ISLAMIYAH KOTA PALU</h2>
+                    <p class="text-[10px] text-gray-500 mt-1">Dokumen Rekapitulasi Resmi Seluruh 25 Indikator Wilayah • Dicetak pada: <span id="printDateStr"></span></p>
                 </div>
 
                 <!-- 1. DASHBOARD UTAMA -->
@@ -130,11 +149,11 @@
                         <div>
                             <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-black px-2.5 py-1 rounded-full uppercase">Unit UCR MWD Palu</span>
                             <h3 class="text-xl sm:text-2xl font-black mt-2">Matrix Aktivitas Keseluruhan MWC</h3>
-                            <p class="text-emerald-100 text-xs sm:text-sm mt-1">Seluruh 25 indikator ditampilkan secara utuh. Gunakan tombol edit untuk memperbarui data langsung.</p>
+                            <p class="text-emerald-100 text-xs sm:text-sm mt-1">Menampilkan seluruh 25 indikator dari server secara utuh dan terstruktur.</p>
                         </div>
                         <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
                             <button onclick="showSelectPrintModal()" class="flex-1 md:flex-none px-4 py-2.5 bg-[#ff6b35] hover:bg-[#e05a2b] text-white font-extrabold text-xs sm:text-sm rounded-xl shadow transition flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-file-pdf"></i> Cetak PDF Utuh
+                                <i class="fa-solid fa-file-pdf"></i> Cetak PDF Profesional
                             </button>
                             <button onclick="exportToExcelPro()" class="flex-1 md:flex-none px-4 py-2.5 bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-extrabold text-xs sm:text-sm rounded-xl shadow transition flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-file-excel"></i> Ekspor Excel Pro
@@ -308,7 +327,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyRdN77zPnmlrFlOqJrvz3tciFO685C413Q2BZgI3qsBwFkN-cdb4Sb-DPBYoyEOPSvAg/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzP24Q-X1-fregkkL9rDBPphsyyzfaEQjKfQAzAIUnPvHaKtdOX_FtfVVIjzeC5xeGWqA/exec";
 
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
@@ -428,8 +447,9 @@
                 card.className = "mwc-vertical-card bg-white shadow-xl rounded-2xl border border-gray-200 overflow-hidden mb-6";
                 card.setAttribute('data-mwc', mwcName);
 
+                // Tombol edit pada kartu telah dihapus sesuai instruksi
                 let headerHtml = `
-                    <div class="bg-gradient-to-r from-[#0a7c6e] to-[#086358] text-white p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div class="mwc-card-header bg-gradient-to-r from-[#0a7c6e] to-[#086358] text-white p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                         <div>
                             <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-black px-3 py-1 rounded-full uppercase">Wilayah MWC</span>
                             <h4 class="text-xl font-black mt-1">${mwcName}</h4>
@@ -437,9 +457,6 @@
                         <div class="flex items-center gap-2 no-print">
                             <button onclick="printSpecificMWC('${mwcName}')" class="px-3 py-2 bg-[#ff6b35] text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5">
                                 <i class="fa-solid fa-file-pdf"></i> Print MWC Ini
-                            </button>
-                            <button onclick="triggerEditFromDashboard('${mwcName}')" class="px-3.5 py-2 bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-black text-xs rounded-xl shadow transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-pen-to-square"></i> Edit Data Ini
                             </button>
                         </div>
                     </div>
@@ -450,7 +467,7 @@
                     for (const [key, value] of Object.entries(rowData)) {
                         if (key !== "Timestamp" && key !== "Nama MWC" && key !== "rowIndex") {
                             bodyHtml += `
-                                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                                <div class="print-grid-item bg-slate-50 p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
                                     <span class="text-gray-500 font-semibold mb-1">${key}</span>
                                     <span class="font-black text-[#0a7c6e] text-sm">${value !== "" ? value : "-"}</span>
                                 </div>
@@ -458,7 +475,7 @@
                         }
                     }
                 } else {
-                    bodyHtml += `<div class="col-span-full text-center py-6 text-gray-400 italic">Belum ada data terekam untuk wilayah ini. Silakan klik Edit Data Ini untuk mengisi.</div>`;
+                    bodyHtml += `<div class="col-span-full text-center py-6 text-gray-400 italic">Belum ada data terekam untuk wilayah ini.</div>`;
                 }
                 bodyHtml += `</div>`;
                 card.innerHTML = headerHtml + bodyHtml;
@@ -545,10 +562,10 @@
             if (!cachedSpreadsheetData.length) await loadMatrixData(true);
 
             const { value: chosenMWC } = await Swal.fire({
-                title: 'Cetak PDF Laporan Lengkap',
+                title: 'Cetak Laporan PDF Profesional',
                 input: 'select',
                 inputOptions: {
-                    "SEMUA MWC": "Cetak Semua MWC (Utuh Multi-Halaman)",
+                    "SEMUA MWC": "Cetak Semua MWC (Laporan Lengkap Multi-Halaman)",
                     "MWC Palu Utara": "MWC Palu Utara",
                     "MWC Mantikulore": "MWC Mantikulore",
                     "MWC Palu Selatan": "MWC Palu Selatan",
@@ -557,7 +574,7 @@
                 },
                 showCancelButton: true,
                 confirmButtonColor: '#0a7c6e',
-                confirmButtonText: 'Cetak Sekarang'
+                confirmButtonText: 'Cetak Dokumen'
             });
 
             if (chosenMWC) {
@@ -610,21 +627,14 @@
                 title: '<span class="text-[#0a7c6e] font-black text-lg">Petunjuk Penggunaan & Navigasi Aplikasi</span>',
                 html: `
                     <div class="text-left text-xs text-gray-700 space-y-3 leading-relaxed max-h-[60vh] overflow-y-auto px-1">
-                        <p>Selamat datang di pusat kendali <b>Matrix Transparansi Levelisasi MWC</b> Unit UCR Muslimah Wahdah Islamiyah Kota Palu. Panduan ringkas ini dirancang untuk mempermudah pemahaman Anda terhadap seluruh fitur:</p>
-                        
+                        <p>Selamat datang di pusat kendali <b>Matrix Transparansi Levelisasi MWC</b> Unit UCR Muslimah Wahdah Islamiyah Kota Palu.</p>
                         <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200">
                             <strong class="text-[#0a7c6e] block mb-1"><i class="fa-solid fa-chart-pie mr-1"></i> 1. Matrix Transparansi (Dashboard Utama)</strong>
-                            Menyajikan ikhtisar komprehensif dari 25 indikator data setiap wilayah MWC secara transparan. Anda dapat memantau perkembangan, mencetak laporan lengkap dalam format PDF multi-halaman yang rapi, maupun mengekspor data ke lembar kerja Excel profesional.
+                            Menyajikan rekapitulasi seluruh 25 indikator data wilayah MWC secara profesional, dilengkapi fitur cetak laporan PDF eksekutif multi-halaman yang rapi dan aman dari pemotongan baris.
                         </div>
-
                         <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
-                            <strong class="text-[#f59e0b] block mb-1 text-amber-800"><i class="fa-solid fa-pen-to-square mr-1"></i> 2. Tombol "Edit Data Ini" & "Edit Log Ini"</strong>
-                            Berfungsi untuk memperbarui informasi secara langsung. Ketika ditekan dan autentikasi PIN berhasil, sistem secara otomatis menarik data historis sebelumnya ke dalam formulir pengisian, menghindarkan duplikasi dan memastikan pembaruan baris data tersimpan secara akurat.
-                        </div>
-
-                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                            <strong class="text-gray-800 block mb-1"><i class="fa-solid fa-print mr-1"></i> 3. Pencetakan Dokumen PDF Multi-Halaman</strong>
-                            Telah disetel menggunakan aturan tata letak yang mengizinkan dokumen mengalir secara alami ke halaman berikutnya tanpa terpotong di tengah baris, memastikan seluruh data tercetak dengan rapi dan utuh.
+                            <strong class="text-[#f59e0b] block mb-1 text-amber-800"><i class="fa-solid fa-pen-to-square mr-1"></i> 2. Log Aktivitas & Menu Edit</strong>
+                            Anda dapat mengakses log aktivitas atau mengedit data historis dengan memilih wilayah MWC melalui menu sidebar sebelah kiri dan memasukkan PIN keamanan yang sesuai.
                         </div>
                     </div>
                 `,
