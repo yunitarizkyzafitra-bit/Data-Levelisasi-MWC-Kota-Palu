@@ -13,18 +13,12 @@
         .bg-custom-coral { background-color: #e76f51; }
         .bg-custom-cream { background-color: #fdf0d5; }
         
-        .text-custom-teal { color: #249d8f; }
-        .text-custom-gold { color: #e9c46a; }
-        .text-custom-coral { color: #e76f51; }
-        
-        /* CSS khusus untuk mode cetak PDF agar rapi & bersih */
         @media print {
             body { background: white !important; color: black !important; }
             aside, header button, #actionTabs, .no-print { display: none !important; }
             main { padding: 0 !important; overflow: visible !important; }
-            table { width: 100% !important; border-collapse: collapse !important; font-size: 10px !important; }
-            th, td { border: 1px solid #ddd !important; padding: 6px !important; }
             .print-header { display: block !important; text-align: center; margin-bottom: 20px; }
+            .mwc-vertical-card { break-inside: avoid; page-break-inside: avoid; border: 1px solid #ccc !important; box-shadow: none !important; margin-bottom: 20px; }
         }
         .print-header { display: none; }
     </style>
@@ -35,9 +29,10 @@
         
         <!-- SIDEBAR -->
         <aside class="w-72 bg-[#1b766b] text-white flex flex-col shadow-2xl z-20 border-r border-[#155e55]">
+            <!-- Header Logo Memanjang Sesuai Bentuk Asli & Judul Unit UCR MWD PALU -->
             <div class="p-4 bg-[#145b53] border-b border-[#114b43] flex items-center gap-3">
-                <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md flex-shrink-0 border-2 border-[#e9c46a] p-1 overflow-hidden">
-                    <img src="logo MWD.png" alt="Logo MWD" class="w-full h-full object-contain" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/e/ec/Logo_Wahdah_Islamiyah.png'">
+                <div class="h-10 px-1 bg-white rounded-lg flex items-center justify-center shadow-md flex-shrink-0 border-2 border-[#e9c46a] overflow-hidden">
+                    <img src="logo MWD.png" alt="Logo MWD" class="h-full w-auto object-contain" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/e/ec/Logo_Wahdah_Islamiyah.png'">
                 </div>
                 <div>
                     <h1 class="text-xs font-black tracking-wider text-[#e9c46a] uppercase leading-snug">Unit UCR</h1>
@@ -91,22 +86,21 @@
                 </div>
             </header>
 
-            <div class="p-6 sm:p-8 max-w-7xl mx-auto w-full flex-1">
+            <div class="p-6 sm:p-8 max-w-6xl mx-auto w-full flex-1">
                 
-                <!-- KOP SURAT KHUSUS CETAK PDF -->
                 <div class="print-header">
                     <h1 class="text-xl font-bold uppercase">Laporan Matrix Transparansi Levelisasi MWC</h1>
                     <h2 class="text-sm font-semibold text-gray-600">Unit UCR - Muslimah Wahdah Islamiyah Kota Palu</h2>
                     <hr class="my-2 border-black">
                 </div>
 
-                <!-- 1. MATRIX DASHBOARD (HOME) -->
+                <!-- 1. MATRIX DASHBOARD (VERTICAL CARD VIEW) -->
                 <div id="matrixSection" class="space-y-6">
                     <div class="bg-gradient-to-r from-[#249d8f] to-[#1b766b] text-white rounded-2xl p-6 shadow-lg flex flex-col md:flex-row justify-between items-center gap-4 border border-[#e9c46a]/30">
                         <div>
                             <span class="bg-[#e9c46a] text-[#1b766b] text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider">Unit UCR MWD Palu</span>
                             <h3 class="text-2xl font-black mt-2">Matrix Aktivitas Keseluruhan MWC</h3>
-                            <p class="text-emerald-100 text-sm mt-1">Transparansi aktivitas dan rekapitulasi data input seluruh MWC se-Kota Palu.</p>
+                            <p class="text-emerald-100 text-sm mt-1">Data ditampilkan dari atas ke bawah secara terstruktur agar mudah dibaca dan dicetak tanpa terpotong.</p>
                         </div>
                         <div class="flex gap-2">
                             <button onclick="window.print()" class="px-4 py-2.5 bg-[#e76f51] hover:bg-[#d45d3f] text-white font-extrabold text-sm rounded-xl shadow transition flex items-center gap-2">
@@ -118,15 +112,10 @@
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div class="p-5 border-b bg-gray-50 flex justify-between items-center">
-                            <h4 class="font-bold text-gray-700 text-sm"><i class="fa-solid fa-table text-[#249d8f] mr-2"></i> Matriks Data Aktivitas Seluruh MWC</h4>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table id="matrixTable" class="w-full text-left border-collapse text-xs">
-                                <thead id="matrixHead" class="bg-[#249d8f] text-white"></thead>
-                                <tbody id="matrixBody" class="divide-y divide-gray-100"></tbody>
-                            </table>
+                    <div id="verticalMatrixContainer" class="space-y-6">
+                        <div class="text-center py-10 bg-white rounded-2xl shadow-sm border border-gray-200">
+                            <i class="fa-solid fa-spinner fa-spin text-3xl text-[#249d8f]"></i>
+                            <p class="text-gray-500 mt-2 text-sm">Memuat data dari Google Spreadsheet...</p>
                         </div>
                     </div>
                 </div>
@@ -265,7 +254,7 @@
                     </form>
                 </div>
 
-                <!-- 3. VIEW RIWAYAT MWC (KARTU TRANSPARAN) -->
+                <!-- 3. VIEW RIWAYAT MWC -->
                 <div id="viewSection" class="hidden space-y-6">
                     <div class="bg-white shadow-sm rounded-2xl p-6 border border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
                         <div>
@@ -285,7 +274,7 @@
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-D57rnVOWkH1c86Xr1Ar8wXcls79PrmNmwQ-sqHydVdBUQiOu1F1--BvSXCNtj_ibbA/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzxy-ARL7tH5Y9JtMnzON-I8xEw7FH9c8PvlVTb_FcMXope8YhSa7lFOYmjVTawIuZG9g/exec";
 
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
@@ -365,11 +354,17 @@
         }
 
         async function loadMatrixData() {
+            const container = document.getElementById('verticalMatrixContainer');
+            container.innerHTML = `<div class="text-center py-10 bg-white rounded-2xl shadow-sm border border-gray-200"><i class="fa-solid fa-spinner fa-spin text-3xl text-[#249d8f]"></i><p class="text-gray-500 mt-2 text-sm">Memuat data dari Google Spreadsheet...</p></div>`;
+
             try {
                 let response = await fetch(SCRIPT_URL);
                 let data = await response.json();
 
-                if(data.length === 0) return;
+                if(data.length === 0) {
+                    container.innerHTML = `<div class="bg-white p-8 rounded-2xl text-center text-gray-500 text-sm shadow-sm">Belum ada data terekam di Spreadsheet.</div>`;
+                    return;
+                }
 
                 let latestPerMWC = {};
                 data.forEach(row => {
@@ -377,35 +372,51 @@
                     if(mwc) { latestPerMWC[mwc] = row; }
                 });
 
-                let headers = Object.keys(data[0]).filter(h => h !== "Timestamp");
-                let thead = document.getElementById('matrixHead');
-                let tbody = document.getElementById('matrixBody');
-
-                let headHtml = `<tr class="border-b border-[#1b766b]">`;
-                headers.forEach(h => headHtml += `<th class="p-3 font-semibold uppercase tracking-wider text-[11px]">${h}</th>`);
-                headHtml += `</tr>`;
-                thead.innerHTML = headHtml;
-
-                let bodyHtml = "";
+                container.innerHTML = "";
                 const mwcList = ["MWC Palu Utara", "MWC Mantikulore", "MWC Palu Selatan", "MWC Tatanga", "MWC Ulujadi"];
-                
-                mwcList.forEach(mwc => {
-                    let rowData = latestPerMWC[mwc];
-                    bodyHtml += `<tr onclick="selectMWC('${mwc}')" class="hover:bg-teal-50/60 transition cursor-pointer font-medium">`;
-                    headers.forEach(h => {
-                        let val = rowData ? (rowData[h] !== undefined ? rowData[h] : "-") : "<span class='text-gray-300 italic'>Belum input</span>";
-                        if(h === "Nama MWC") {
-                            bodyHtml += `<td class="p-3 font-bold text-[#249d8f] bg-teal-50/40 flex items-center gap-2"><i class="fa-solid fa-folder-open text-[#e76f51]"></i> ${val}</td>`;
-                        } else {
-                            bodyHtml += `<td class="p-3 text-gray-700">${val}</td>`;
+
+                mwcList.forEach(mwcName => {
+                    let rowData = latestPerMWC[mwcName];
+                    let card = document.createElement('div');
+                    card.className = "mwc-vertical-card bg-white shadow-xl rounded-2xl border border-gray-200 overflow-hidden";
+
+                    let headerHtml = `
+                        <div class="bg-gradient-to-r from-[#249d8f] to-[#1b766b] text-white p-5 flex justify-between items-center">
+                            <div>
+                                <span class="bg-[#e9c46a] text-[#1b766b] text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Wilayah MWC</span>
+                                <h4 class="text-xl font-black mt-1">${mwcName}</h4>
+                            </div>
+                            <button onclick="selectMWC('${mwcName}')" class="no-print px-4 py-2 bg-white text-[#249d8f] hover:bg-teal-50 font-bold text-xs rounded-xl shadow transition flex items-center gap-2">
+                                <i class="fa-solid fa-lock-open"></i> Akses / Edit PIN
+                            </button>
+                        </div>
+                    `;
+
+                    let bodyHtml = `<div class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">`;
+
+                    if (rowData) {
+                        for (const [key, value] of Object.entries(rowData)) {
+                            if (key !== "Timestamp" && key !== "Nama MWC") {
+                                bodyHtml += `
+                                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                                        <span class="text-gray-500 font-semibold mb-1">${key}</span>
+                                        <span class="font-black text-[#249d8f] text-sm">${value !== "" ? value : "-"}</span>
+                                    </div>
+                                `;
+                            }
                         }
-                    });
-                    bodyHtml += `</tr>`;
+                    } else {
+                        bodyHtml += `<div class="col-span-full text-center py-6 text-gray-400 italic">Belum ada data input untuk wilayah ini. Silakan klik tombol akses di atas untuk mengisi.</div>`;
+                    }
+
+                    bodyHtml += `</div>`;
+                    card.innerHTML = headerHtml + bodyHtml;
+                    container.appendChild(card);
                 });
-                tbody.innerHTML = bodyHtml;
 
             } catch (err) {
-                console.error("Gagal memuat matrix data:", err);
+                container.innerHTML = `<div class="bg-red-50 text-red-600 p-6 rounded-2xl text-center text-sm">Gagal memuat data matriks. Periksa koneksi atau URL Apps Script Anda.</div>`;
+                console.error(err);
             }
         }
 
