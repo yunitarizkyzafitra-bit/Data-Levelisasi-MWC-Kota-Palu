@@ -13,16 +13,16 @@
         .bg-custom-amber { background-color: #f59e0b; }
         .bg-custom-base { background-color: #fafafa; }
         
-        /* PENGATURAN CETAK PDF LAPORAN PROFESIONAL MULTI-HALAMAN */
+        /* PENGATURAN CETAK PDF LAPORAN PROFESIONAL MULTI-HALAMAN (DIOPTIMALKAN UNTUK 25 DATA) */
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 15mm;
+                margin: 10mm;
             }
             body { 
                 background: white !important; 
                 color: #111 !important; 
-                font-size: 9pt;
+                font-size: 8.5pt;
                 font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             }
             aside, header, nav, button, .no-print { 
@@ -37,17 +37,17 @@
             .print-header { 
                 display: block !important; 
                 text-align: center; 
-                margin-bottom: 25px; 
-                border-bottom: 2.5px solid #0a7c6e;
-                padding-bottom: 12px;
+                margin-bottom: 15px; 
+                border-bottom: 2px solid #0a7c6e;
+                padding-bottom: 8px;
             }
             .mwc-vertical-card { 
                 break-inside: avoid !important; 
                 page-break-inside: avoid !important; 
-                border: 1px solid #cbd5e1 !important; 
+                border: 1px solid #94a3b8 !important; 
                 box-shadow: none !important; 
-                margin-bottom: 25px !important; 
-                border-radius: 8px !important;
+                margin-bottom: 15px !important; 
+                border-radius: 6px !important;
                 background: #ffffff !important;
             }
             .mwc-card-header {
@@ -55,14 +55,23 @@
                 color: white !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
-                padding: 10px 15px !important;
+                padding: 8px 12px !important;
+            }
+            .print-grid-container {
+                display: grid !important;
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                gap: 6px !important;
+                padding: 10px !important;
             }
             .print-grid-item {
                 background: #f8fafc !important;
-                border: 1px solid #e2e8f0 !important;
+                border: 1px solid #cbd5e1 !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
                 break-inside: avoid;
+                page-break-inside: avoid;
+                padding: 6px 8px !important;
+                border-radius: 4px !important;
             }
         }
         .print-header { display: none; }
@@ -138,9 +147,9 @@
                 
                 <!-- HEADER LAPORAN KHUSUS CETAK PDF PROFESIONAL -->
                 <div class="print-header">
-                    <h1 class="text-lg font-bold uppercase tracking-wider text-gray-900">LAPORAN EKSEKUTIF MATRIX TRANSPARANSI LEVELISASI MWC</h1>
-                    <h2 class="text-xs font-semibold text-[#0a7c6e] mt-1">UNIT UCR - MUSLIMAH WAHDAH ISLAMIYAH KOTA PALU</h2>
-                    <p class="text-[10px] text-gray-500 mt-1">Dokumen Rekapitulasi Resmi Seluruh 25 Indikator Wilayah • Dicetak pada: <span id="printDateStr"></span></p>
+                    <h1 class="text-base font-bold uppercase tracking-wider text-gray-900">LAPORAN EKSEKUTIF MATRIX TRANSPARANSI LEVELISASI MWC</h1>
+                    <h2 class="text-xs font-semibold text-[#0a7c6e] mt-0.5">UNIT UCR - MUSLIMAH WAHDAH ISLAMIYAH KOTA PALU</h2>
+                    <p class="text-[9px] text-gray-500 mt-0.5">Dokumen Rekapitulasi Resmi Seluruh 25 Indikator Wilayah • Dicetak pada: <span id="printDateStr"></span></p>
                 </div>
 
                 <!-- 1. DASHBOARD UTAMA -->
@@ -327,7 +336,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzP24Q-X1-fregkkL9rDBPphsyyzfaEQjKfQAzAIUnPvHaKtdOX_FtfVVIjzeC5xeGWqA/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxyxAhYUi3oojjNeinJiBVSz2qSmSJ5lvd1plFln4rUkh0MEhPq4MPXUSX8b5qW8M56EA/exec";
 
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
@@ -447,28 +456,28 @@
                 card.className = "mwc-vertical-card bg-white shadow-xl rounded-2xl border border-gray-200 overflow-hidden mb-6";
                 card.setAttribute('data-mwc', mwcName);
 
-                // Tombol edit pada kartu telah dihapus sesuai instruksi
+                // Tombol edit pada kartu telah dihapus sepenuhnya
                 let headerHtml = `
-                    <div class="mwc-card-header bg-gradient-to-r from-[#0a7c6e] to-[#086358] text-white p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div class="mwc-card-header bg-gradient-to-r from-[#0a7c6e] to-[#086358] text-white p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                         <div>
-                            <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-black px-3 py-1 rounded-full uppercase">Wilayah MWC</span>
-                            <h4 class="text-xl font-black mt-1">${mwcName}</h4>
+                            <span class="bg-[#f59e0b] text-[#086358] text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase">Wilayah MWC</span>
+                            <h4 class="text-lg font-black mt-0.5">${mwcName}</h4>
                         </div>
                         <div class="flex items-center gap-2 no-print">
-                            <button onclick="printSpecificMWC('${mwcName}')" class="px-3 py-2 bg-[#ff6b35] text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5">
+                            <button onclick="printSpecificMWC('${mwcName}')" class="px-3 py-1.5 bg-[#ff6b35] text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5">
                                 <i class="fa-solid fa-file-pdf"></i> Print MWC Ini
                             </button>
                         </div>
                     </div>
                 `;
 
-                let bodyHtml = `<div class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">`;
+                let bodyHtml = `<div class="print-grid-container p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs">`;
                 if (rowData) {
                     for (const [key, value] of Object.entries(rowData)) {
                         if (key !== "Timestamp" && key !== "Nama MWC" && key !== "rowIndex") {
                             bodyHtml += `
-                                <div class="print-grid-item bg-slate-50 p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                                    <span class="text-gray-500 font-semibold mb-1">${key}</span>
+                                <div class="print-grid-item bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                                    <span class="text-gray-500 font-semibold mb-1 text-[11px]">${key}</span>
                                     <span class="font-black text-[#0a7c6e] text-sm">${value !== "" ? value : "-"}</span>
                                 </div>
                             `;
@@ -565,7 +574,7 @@
                 title: 'Cetak Laporan PDF Profesional',
                 input: 'select',
                 inputOptions: {
-                    "SEMUA MWC": "Cetak Semua MWC (Laporan Lengkap Multi-Halaman)",
+                    "SEMUA MWC": "Cetak Semua MWC (Laporan Lengkap 25 Item)",
                     "MWC Palu Utara": "MWC Palu Utara",
                     "MWC Mantikulore": "MWC Mantikulore",
                     "MWC Palu Selatan": "MWC Palu Selatan",
@@ -752,6 +761,7 @@
                     confirmButtonColor: '#0a7c6e'
                 });
                 
+                rowsCache = [];
                 cachedSpreadsheetData = [];
                 lastFetchTime = 0;
                 showMatrixDashboard();
@@ -760,6 +770,7 @@
                 Swal.fire('Gagal!', 'Terjadi kesalahan koneksi jaringan.', 'error');
             })
             .finally(() => {
+                btn.disabled,
                 btn.disabled = false;
                 btn.innerHTML = `<i class="fa-solid fa-paper-plane mr-2"></i> Kirim & Perbarui Data MWC`;
             });
