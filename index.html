@@ -42,9 +42,9 @@
             .print-header { 
                 display: block !important; 
                 text-align: center; 
-                margin-bottom: 15px; 
+                margin-bottom: 12px; 
                 border-bottom: 2px solid #0a7c6e;
-                padding-bottom: 8px;
+                padding-bottom: 6px;
             }
             .mwc-vertical-card { 
                 border: none !important; 
@@ -92,21 +92,36 @@
                 break-inside: avoid;
                 page-break-inside: avoid;
             }
-            /* Styling Khusus Cetak Agregat agar rapi terbagi dalam beberapa halaman tanpa terpotong */
+
+            /* Styling Khusus Cetak Agregat Parsial Terstruktur per Halaman */
             #aggregateSummaryGrid {
-                display: grid !important;
-                grid-template-columns: 1fr !important;
-                gap: 10px !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 12px !important;
             }
             .aggregate-print-card {
                 background: #ffffff !important;
                 border: 1px solid #cbd5e1 !important;
                 border-radius: 6px !important;
-                padding: 10px 12px !important;
+                padding: 10px 14px !important;
                 break-inside: avoid !important;
                 page-break-inside: avoid !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
+            }
+
+            /* Pengaturan Pemecahan Halaman Eksak Berdasarkan Nomor Item */
+            .aggregate-print-card:nth-of-type(5) {
+                page-break-before: always !important;
+                break-before: page !important;
+            }
+            .aggregate-print-card:nth-of-type(11) {
+                page-break-before: always !important;
+                break-before: page !important;
+            }
+            .aggregate-print-card:nth-of-type(18) {
+                page-break-before: always !important;
+                break-before: page !important;
             }
         }
         .print-header { display: none; }
@@ -275,7 +290,7 @@
 
                     <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8">
                         <h4 class="text-base font-bold text-[#0a7c6e] mb-4 flex items-center gap-2">
-                            <i class="fa-solid fa-calculator"></i> Rincian Akumulasi & Perolehan Masing-Masing MWC
+                            <i class="fa-solid fa-calculator"></i> Rincian Akumulasi & Perolehan Masing-Masing MWC (Nomor 1 s.d. 25)
                         </h4>
                         <div id="aggregateSummaryGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                         </div>
@@ -435,9 +450,8 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEkNyRylZgX2KXkN-uPJkKE_WmwbLYMfWIT7-A6aPNuOnQ14TQHMmusqRQohIbrCKXRw/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPbBrMP6ZhwRgomxveJ-avth24LlSQUGTuZTjEeDqZWeNk_4XzZVUe2pUrH9iS99_oVg/exec";
 
-        // Kamus PIN Aman (Disembunyikan dari UI & Panduan Publik)
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
             "MWC Mantikulore": "2256",
