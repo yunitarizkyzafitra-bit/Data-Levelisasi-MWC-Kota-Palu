@@ -14,86 +14,97 @@
         .bg-custom-base { background-color: #fafafa; }
         
         /* ==========================================================
-           PENGATURAN CETAK PDF PROFESIONAL & PRESISI KERTAS A4
+           PERBAIKAN TOTAL CETAK PDF: HAPUS SPACE KOSONG & PRESISI KERTAS
            ========================================================== */
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 8mm 10mm;
+                margin: 6mm 8mm;
             }
-            html, body {
-                height: auto !important;
-                overflow: visible !important;
-                background: white !important; 
-                color: #000 !important; 
-                font-size: 8pt !important;
-                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            * {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
-            /* Hilangkan elemen navigasi & batasan layout layar */
-            .flex, .h-screen, main, aside {
+            html, body {
+                width: 100% !important;
+                height: auto !important;
+                background: white !important; 
+                color: #000 !important; 
+                font-size: 7.5pt !important;
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: visible !important;
+            }
+            /* Matikan seluruh layout flex/screen utama aplikasi agar tidak ada ruang kosong di atas */
+            body > div, .flex, .h-screen, main, aside, header, nav {
                 display: block !important;
                 height: auto !important;
-                overflow: visible !important;
+                min-height: 0 !important;
                 position: static !important;
+                overflow: visible !important;
+                box-shadow: none !important;
+                background: transparent !important;
             }
-            aside, header, nav, button, .no-print { 
+            /* Sembunyikan elemen navigasi dan tombol interaktif */
+            aside, header, nav, button, .no-print, #actionTabs { 
                 display: none !important; 
             }
+            /* Paksa kontainer utama rata atas tanpa padding bawaan layar */
             main { 
                 padding: 0 !important; 
-                width: 100% !important; 
-                max-width: 100% !important;
                 margin: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
             }
             .print-header { 
                 display: block !important; 
                 text-align: center; 
-                margin-bottom: 10px; 
-                border-bottom: 2px solid #0a7c6e;
-                padding-bottom: 5px;
+                margin-bottom: 6px !important; 
+                border-bottom: 1.5px solid #0a7c6e;
+                padding-bottom: 3px;
             }
+            /* Kontrol kartu agar mengalir rapat dan tidak terpotong canggung */
             .mwc-vertical-card { 
                 display: block !important;
                 visibility: visible !important;
                 opacity: 1 !important;
                 break-inside: avoid !important; 
                 page-break-inside: avoid !important; 
-                page-break-after: always !important;
-                border: 1.5px solid #0a7c6e !important; 
+                page-break-after: auto !important;
+                border: 1px solid #0a7c6e !important; 
                 box-shadow: none !important; 
-                margin-bottom: 10px !important; 
-                border-radius: 4px !important;
+                margin-bottom: 8px !important; 
+                border-radius: 3px !important;
                 background: #ffffff !important;
                 width: 100% !important;
             }
             .mwc-card-header {
                 background: #0a7c6e !important;
                 color: white !important;
-                padding: 6px 10px !important;
+                padding: 4px 8px !important;
             }
-            /* Grid presisi agar pas di lebar kertas A4 tanpa terpotong kanan */
+            /* Grid presisi 3 kolom rapat ramah printer A4 */
             .print-grid-container {
                 display: grid !important;
                 grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-                gap: 4px !important;
-                padding: 8px !important;
+                gap: 3px !important;
+                padding: 6px !important;
             }
             .print-grid-item {
                 background: #f8fafc !important;
-                border: 1px solid #cbd5e1 !important;
+                border: 0.5px solid #cbd5e1 !important;
                 break-inside: avoid;
                 page-break-inside: avoid;
-                padding: 5px 6px !important;
-                border-radius: 3px !important;
+                padding: 4px 5px !important;
+                border-radius: 2px !important;
             }
             .print-grid-item span:first-child {
-                font-size: 7.5pt !important;
+                font-size: 7pt !important;
                 color: #475569 !important;
             }
             .print-grid-item span:last-child {
-                font-size: 8.5pt !important;
+                font-size: 8pt !important;
                 color: #0a7c6e !important;
                 font-weight: bold !important;
             }
@@ -360,7 +371,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwyNZPtI6Ux6FCHFKDsjdBQ1oIub8R4YeyqcG-uPq2aBcI2_72fFLSkAs_EwX_dMUPfWw/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxuzbSi-exQKfP8relMW_Yi6FaHDlw38gfL0NL23EWz4tx6XdIiFxt3VRXx0SLYRV7aDQ/exec";
 
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
@@ -590,7 +601,6 @@
             document.getElementById('tim_sosial').value = rowData["25. Tim Tanggap Sosial"] || 0;
         }
 
-        /* --- FUNGSI CETAK PDF LENGKAP SEMUA HALAMAN (PRESISI A4) --- */
         async function showSelectPrintModal() {
             Swal.fire({
                 title: 'Menyiapkan Dokumen...',
