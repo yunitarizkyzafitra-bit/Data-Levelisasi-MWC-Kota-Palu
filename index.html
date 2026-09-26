@@ -336,7 +336,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwhNQQ2eylCMrwg3YsZWPH2TlgH9FKBpYslMbH5n2g-C99nCdSty_qyaztbUov3yLsQNw/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby7kG_k4FEJy7QXTPbl10OTjVZFCvs5F5W_oot6I4hrPi4p68SwGJg-6HRXV8zFH-KPcQ/exec";
 
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
@@ -602,8 +602,9 @@
                 const cards = document.querySelectorAll('.mwc-vertical-card');
                 
                 if (chosenMWC === "SEMUA MWC") {
+                    // Memastikan seluruh kartu MWC dari Palu Utara sampai MWC Ulujadi ditampilkan secara utuh
                     cards.forEach(c => {
-                        c.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
+                        c.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important; page-break-after: always !important;";
                     });
                 } else {
                     cards.forEach(card => {
@@ -616,12 +617,12 @@
                     });
                 }
 
-                // Berikan jeda render DOM agar browser siap melakukan print multi-halaman
+                // Jeda rendering DOM agar browser siap merender seluruh halaman sampai tuntas
                 setTimeout(() => {
                     window.print();
                 }, 400);
 
-                // Kembalikan tampilan elemen setelah dialog print ditutup
+                // Mengembalikan kondisi tampilan kartu ke normal setelah dialog print ditutup
                 setTimeout(() => {
                     cards.forEach(c => {
                         c.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
