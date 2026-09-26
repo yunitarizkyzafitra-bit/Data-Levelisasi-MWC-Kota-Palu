@@ -13,7 +13,6 @@
         .bg-custom-amber { background-color: #f59e0b; }
         .bg-custom-base { background-color: #fafafa; }
         
-        /* PENGATURAN CETAK PDF LAPORAN PROFESIONAL */
         @media print {
             @page {
                 size: A4 portrait;
@@ -130,7 +129,6 @@
                     <i class="fa-solid fa-chart-pie text-[#f59e0b]"></i> Matrix Transparansi
                 </button>
                 
-                <!-- MENU TOTAL KADER DI SIDEBAR -->
                 <button onclick="showTotalKaderView(); toggleSidebar();" class="w-full text-left px-4 py-3 rounded-xl transition flex items-center gap-3 bg-[#075249] hover:bg-[#0a7c6e] text-white font-semibold mb-2 border border-[#f59e0b]/30 shadow-sm">
                     <i class="fa-solid fa-users-rectangle text-[#f59e0b]"></i> Total Kader & Agregat
                 </button>
@@ -180,14 +178,12 @@
 
             <div class="p-4 sm:p-8 max-w-6xl mx-auto w-full flex-1">
                 
-                <!-- HEADER LAPORAN KHUSUS CETAK PDF -->
                 <div class="print-header">
                     <h1 id="printHeaderTitle" class="text-base font-bold uppercase tracking-wider text-gray-900">LAPORAN DATA INPUT LEVELISASI MWC</h1>
                     <h2 class="text-xs font-semibold text-[#0a7c6e] mt-0.5">UNIT UCR - MUSLIMAH WAHDAH ISLAMIYAH KOTA PALU</h2>
                     <p class="text-[9px] text-gray-500 mt-0.5">Dicetak pada: <span id="printDateStr"></span></p>
                 </div>
 
-                <!-- 1. DASHBOARD UTAMA -->
                 <div id="matrixSection" class="space-y-6">
                     <div class="bg-gradient-to-r from-[#0a7c6e] to-[#086358] text-white rounded-2xl p-6 shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
                         <div>
@@ -205,7 +201,6 @@
                         </div>
                     </div>
 
-                    <!-- KOTAK RINGKASAN SPESIFIK -->
                     <div class="summary-boxes grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div class="bg-white p-4 rounded-2xl shadow-sm border border-emerald-300 flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-emerald-100 text-[#0a7c6e] flex items-center justify-center text-lg font-black flex-shrink-0">
@@ -253,7 +248,6 @@
                     </div>
                 </div>
 
-                <!-- 1.B. HALAMAN MENU TOTAL KADER & AGREGAT -->
                 <div id="totalKaderSection" class="hidden space-y-6">
                     <div class="bg-gradient-to-r from-[#086358] to-[#0a7c6e] text-white rounded-2xl p-6 shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
                         <div>
@@ -276,12 +270,10 @@
                             <i class="fa-solid fa-calculator"></i> Rincian Akumulasi Angka Parsial Seluruh Formulir MWC
                         </h4>
                         <div id="aggregateSummaryGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
-                            <!-- Diisi via JavaScript -->
                         </div>
                     </div>
                 </div>
 
-                <!-- 2. FORMULIR INPUT / EDIT -->
                 <div id="inputSection" class="hidden bg-white shadow-xl rounded-2xl p-6 sm:p-8 border border-gray-200 mb-10">
                     <div class="flex items-center justify-between mb-6 border-b pb-4">
                         <h3 class="text-lg sm:text-xl font-bold text-[#0a7c6e] flex items-center gap-2">
@@ -415,7 +407,6 @@
                     </form>
                 </div>
 
-                <!-- 3. VIEW LOG AKTIVITAS -->
                 <div id="viewSection" class="hidden space-y-6">
                     <div class="bg-white shadow-sm rounded-2xl p-6 border border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
                         <div>
@@ -438,12 +429,13 @@
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPbBrMP6ZhwRgomxveJ-avth24LlSQUGTuZTjEeDqZWeNk_4XzZVUe2pUrH9iS99_oVg/exec";
 
+        // Kamus PIN Aman (Disembunyikan dari UI & Panduan Publik)
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
-            "MWC Mantikulore": "1402",
+            "MWC Mantikulore": "2256",
             "MWC Palu Selatan": "Palsel 2026",
-            "MWC Tatanga": "1404",
-            "MWC Ulujadi": "1405"
+            "MWC Tatanga": "3330",
+            "MWC Ulujadi": "1190"
         };
 
         let selectedMWCName = "";
@@ -484,15 +476,15 @@
         async function selectMWCWithAuth(mwcName) {
             const { value: pin } = await Swal.fire({
                 title: `Autentikasi Keamanan`,
-                text: `Masukkan PIN Akses untuk ${mwcName}:`,
+                text: `Masukkan PIN Akses terotorisasi untuk ${mwcName}:`,
                 input: 'password',
-                inputPlaceholder: 'Masukkan PIN',
+                inputPlaceholder: 'Masukkan PIN Wilayah',
                 confirmButtonColor: '#0a7c6e',
                 allowOutsideClick: false
             });
 
             if (!pin || pin.trim() !== MWC_PIN_LIST[mwcName]) {
-                Swal.fire('Akses Ditolak', 'PIN Keamanan salah!', 'error');
+                Swal.fire('Akses Ditolak', 'PIN Keamanan salah atau tidak valid!', 'error');
                 return;
             }
 
@@ -760,23 +752,28 @@
             Swal.fire('Berhasil!', 'File Excel profesional berhasil diunduh.', 'success');
         }
 
+        // PANDUAN PENGGUNAAN AMAN (TANPA MENGUNGKAPKAN PIN)
         function showGuideModal() {
             Swal.fire({
-                title: '<span class="text-[#0a7c6e] font-black text-base uppercase tracking-wider">Petunjuk Penggunaan & Navigasi Aplikasi</span>',
+                title: '<span class="text-[#0a7c6e] font-black text-base uppercase tracking-wider">Petunjuk Penggunaan Aplikasi</span>',
                 html: `
                     <div class="text-left text-xs text-gray-700 space-y-3 leading-relaxed max-h-[65vh] overflow-y-auto px-1">
-                        <p class="font-medium">Selamat datang di pusat kendali <b>Matrix Transparansi Levelisasi MWC</b> Unit UCR Muslimah Wahdah Islamiyah Kota Palu:</p>
+                        <p class="font-medium">Panduan operasional sistem <b>Matrix Transparansi Levelisasi MWC</b> Unit UCR Muslimah Wahdah Islamiyah Kota Palu:</p>
                         <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
-                            <strong class="text-[#0a7c6e] block mb-1 font-bold"><i class="fa-solid fa-circle-1 mr-1.5"></i> Navigasi Menu Utama</strong>
-                            Gunakan bilah sisi (sidebar) untuk berpindah antara <b>Matrix Transparansi</b>, <b>Total Kader & Agregat</b>, serta memilih wilayah MWC.
+                            <strong class="text-[#0a7c6e] block mb-1 font-bold"><i class="fa-solid fa-circle-1 mr-1.5"></i> Navigasi & Pemilihan Wilayah</strong>
+                            Gunakan panel menu samping (*sidebar*) untuk melihat ringkasan global, total agregat kader, atau memilih wilayah MWC yang dikelola.
                         </div>
                         <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
-                            <strong class="text-[#0a7c6e] block mb-1 font-bold"><i class="fa-solid fa-circle-2 mr-1.5"></i> Autentikasi PIN MWC</strong>
-                            Setiap wilayah memiliki PIN keamanan tersendiri (contoh MWC Palu Selatan: <code>Palsel 2026</code>) untuk menjaga keabsahan data input.
+                            <strong class="text-[#0a7c6e] block mb-1 font-bold"><i class="fa-solid fa-circle-2 mr-1.5"></i> Autentikasi Pengurus</strong>
+                            Saat memilih wilayah MWC, sistem akan meminta <b>PIN Otorisasi Rahasia</b> yang dipegang oleh pengurus sah wilayah terkait demi menjaga integritas data.
+                        </div>
+                        <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
+                            <strong class="text-[#0a7c6e] block mb-1 font-bold"><i class="fa-solid fa-circle-3 mr-1.5"></i> Input & Laporan</strong>
+                            Lengkapi seluruh 25 indikator data pada formulir, kirim untuk memperbarui database pusat, atau cetak laporan resmi dalam bentuk PDF dan Excel.
                         </div>
                     </div>
                 `,
-                confirmButtonText: 'Saya Mengerti & Lanjutkan',
+                confirmButtonText: 'Tutup Panduan',
                 confirmButtonColor: '#0a7c6e',
                 width: '600px'
             });
