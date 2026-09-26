@@ -13,7 +13,7 @@
         .bg-custom-amber { background-color: #f59e0b; }
         .bg-custom-base { background-color: #fafafa; }
         
-        /* PENGATURAN CETAK PDF LAPORAN PROFESIONAL MULTI-HALAMAN (DIOPTIMALKAN UNTUK 25 DATA) */
+        /* PENGATURAN CETAK PDF LAPORAN PROFESIONAL MULTI-HALAMAN */
         @media print {
             @page {
                 size: A4 portrait;
@@ -336,7 +336,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPbBrMP6ZhwRgomxveJ-avth24LlSQUGTuZTjEeDqZWeNk_4XzZVUe2pUrH9iS99_oVg/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKOwiWhrYt0VY9qhHl5_Aj-2bhrfQy3Ht5ySfXHnuPCqBfeegk_bp9tuQ7EqZd1yqLAg/exec";
 
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
@@ -566,12 +566,25 @@
             document.getElementById('tim_sosial').value = rowData["25. Tim Tanggap Sosial"] || 0;
         }
 
-        /* --- FUNGSI CETAK PDF YANG DIPERBAIKI (TIDAK KOSONG LAGI) --- */
+        /* --- FUNGSI CETAK PDF YANG DISEMPURNAKAN (MEMUAT SEMUA DATA MATRIX OTOMATIS) --- */
         async function showSelectPrintModal() {
-            if (!cachedSpreadsheetData.length) await loadMatrixData(true);
+            // Tampilkan indikator proses / loading
+            Swal.fire({
+                title: 'Memuat Data Matrix...',
+                text: 'Menyiapkan seluruh data 25 item dari server untuk cetak profesional.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Pastikan data terbaru dari spreadsheet/server telah dimuat sepenuhnya
+            await loadMatrixData(true);
+            Swal.close();
 
             const { value: chosenMWC } = await Swal.fire({
                 title: 'Cetak Laporan PDF Profesional',
+                text: 'Semua data matrix transparansi siap dicetak.',
                 input: 'select',
                 inputOptions: {
                     "SEMUA MWC": "Cetak Semua MWC (Laporan Lengkap 25 Item)",
@@ -616,7 +629,21 @@
             }
         }
 
-        function printSpecificMWC(mwcName) {
+        async function printSpecificMWC(mwcName) {
+            Swal.fire({
+                title: 'Memuat Data...',
+                text: `Menyiapkan data untuk ${mwcName}.`,
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            if (!cachedSpreadsheetData.length) {
+                await loadMatrixData(true);
+            }
+            Swal.close();
+
             const cards = document.querySelectorAll('.mwc-vertical-card');
             cards.forEach(card => {
                 const cardMWC = card.getAttribute('data-mwc');
@@ -637,7 +664,7 @@
                 });
             }, 1000);
         }
-        /* ----------------------------------------------------------- */
+        /* --------------------------------------------------------------------------- */
 
         function exportToExcelPro() {
             if (!cachedSpreadsheetData || cachedSpreadsheetData.length === 0) {
