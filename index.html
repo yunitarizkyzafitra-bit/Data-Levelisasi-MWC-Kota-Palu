@@ -42,8 +42,12 @@
                 padding-bottom: 8px;
             }
             .mwc-vertical-card { 
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
                 break-inside: avoid !important; 
                 page-break-inside: avoid !important; 
+                page-break-after: always !important;
                 border: 1px solid #94a3b8 !important; 
                 box-shadow: none !important; 
                 margin-bottom: 20px !important; 
@@ -336,7 +340,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby7kG_k4FEJy7QXTPbl10OTjVZFCvs5F5W_oot6I4hrPi4p68SwGJg-6HRXV8zFH-KPcQ/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzq8un-gK7Chxc12pPPNfvfoVsdaeGzibRSQcbctdVDDPx6NJjvu4aiOeZDoQ80OrdaiA/exec";
 
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
@@ -577,7 +581,6 @@
                 }
             });
 
-            // Pastikan data terbaru dari server termuat sepenuhnya
             await loadMatrixData(true);
             Swal.close();
 
@@ -602,7 +605,7 @@
                 const cards = document.querySelectorAll('.mwc-vertical-card');
                 
                 if (chosenMWC === "SEMUA MWC") {
-                    // Memastikan seluruh kartu MWC dari Palu Utara sampai MWC Ulujadi ditampilkan secara utuh
+                    // Memaksa seluruh kartu tampil tanpa terkecuali dan membuat halaman baru per MWC
                     cards.forEach(c => {
                         c.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important; page-break-after: always !important;";
                     });
@@ -610,24 +613,24 @@
                     cards.forEach(card => {
                         const cardMWC = card.getAttribute('data-mwc');
                         if (cardMWC && cardMWC.toLowerCase() === chosenMWC.toLowerCase()) {
-                            card.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
+                            card.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important; page-break-after: auto !important;";
                         } else {
                             card.style.cssText = "display: none !important;";
                         }
                     });
                 }
 
-                // Jeda rendering DOM agar browser siap merender seluruh halaman sampai tuntas
+                // Berikan jeda waktu eksekusi DOM agar browser merender seluruh halaman
                 setTimeout(() => {
                     window.print();
-                }, 400);
+                }, 500);
 
-                // Mengembalikan kondisi tampilan kartu ke normal setelah dialog print ditutup
+                // Kembalikan tampilan ke semula setelah dialog cetak selesai
                 setTimeout(() => {
                     cards.forEach(c => {
                         c.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
                     });
-                }, 1200);
+                }, 1500);
             }
         }
 
@@ -658,13 +661,13 @@
 
             setTimeout(() => {
                 window.print();
-            }, 400);
+            }, 500);
 
             setTimeout(() => {
                 cards.forEach(card => {
                     card.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
                 });
-            }, 1200);
+            }, 1500);
         }
         /* ------------------------------------------------------------------ */
 
