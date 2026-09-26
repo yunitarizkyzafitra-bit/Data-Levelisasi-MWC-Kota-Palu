@@ -13,21 +13,25 @@
         .bg-custom-amber { background-color: #f59e0b; }
         .bg-custom-base { background-color: #fafafa; }
         
-        /* PENGATURAN CETAK PDF PROFESIONAL MULTI-HALAMAN (SOLUSI UTAMA TERPOTONG) */
+        /* ==========================================================
+           PENGATURAN CETAK PDF PROFESIONAL & PRESISI KERTAS A4
+           ========================================================== */
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 10mm;
+                margin: 8mm 10mm;
             }
             html, body {
                 height: auto !important;
                 overflow: visible !important;
                 background: white !important; 
-                color: #111 !important; 
-                font-size: 8.5pt;
+                color: #000 !important; 
+                font-size: 8pt !important;
                 font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
-            /* Matikan pembatas layar penuh dan flexbox tersembunyi saat dicetak */
+            /* Hilangkan elemen navigasi & batasan layout layar */
             .flex, .h-screen, main, aside {
                 display: block !important;
                 height: auto !important;
@@ -46,9 +50,9 @@
             .print-header { 
                 display: block !important; 
                 text-align: center; 
-                margin-bottom: 15px; 
+                margin-bottom: 10px; 
                 border-bottom: 2px solid #0a7c6e;
-                padding-bottom: 8px;
+                padding-bottom: 5px;
             }
             .mwc-vertical-card { 
                 display: block !important;
@@ -57,34 +61,41 @@
                 break-inside: avoid !important; 
                 page-break-inside: avoid !important; 
                 page-break-after: always !important;
-                border: 1px solid #94a3b8 !important; 
+                border: 1.5px solid #0a7c6e !important; 
                 box-shadow: none !important; 
-                margin-bottom: 20px !important; 
-                border-radius: 6px !important;
+                margin-bottom: 10px !important; 
+                border-radius: 4px !important;
                 background: #ffffff !important;
+                width: 100% !important;
             }
             .mwc-card-header {
                 background: #0a7c6e !important;
                 color: white !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                padding: 8px 12px !important;
+                padding: 6px 10px !important;
             }
+            /* Grid presisi agar pas di lebar kertas A4 tanpa terpotong kanan */
             .print-grid-container {
                 display: grid !important;
                 grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-                gap: 6px !important;
-                padding: 10px !important;
+                gap: 4px !important;
+                padding: 8px !important;
             }
             .print-grid-item {
                 background: #f8fafc !important;
                 border: 1px solid #cbd5e1 !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
                 break-inside: avoid;
                 page-break-inside: avoid;
-                padding: 6px 8px !important;
-                border-radius: 4px !important;
+                padding: 5px 6px !important;
+                border-radius: 3px !important;
+            }
+            .print-grid-item span:first-child {
+                font-size: 7.5pt !important;
+                color: #475569 !important;
+            }
+            .print-grid-item span:last-child {
+                font-size: 8.5pt !important;
+                color: #0a7c6e !important;
+                font-weight: bold !important;
             }
         }
         .print-header { display: none; }
@@ -160,9 +171,9 @@
                 
                 <!-- HEADER LAPORAN KHUSUS CETAK PDF PROFESIONAL -->
                 <div class="print-header">
-                    <h1 class="text-base font-bold uppercase tracking-wider text-gray-900">LAPORAN EKSEKUTIF MATRIX TRANSPARANSI LEVELISASI MWC</h1>
+                    <h1 class="text-sm font-bold uppercase tracking-wider text-gray-900">LAPORAN EKSEKUTIF MATRIX TRANSPARANSI LEVELISASI MWC</h1>
                     <h2 class="text-xs font-semibold text-[#0a7c6e] mt-0.5">UNIT UCR - MUSLIMAH WAHDAH ISLAMIYAH KOTA PALU</h2>
-                    <p class="text-[9px] text-gray-500 mt-0.5">Dokumen Rekapitulasi Resmi Seluruh Wilayah (Palu Utara s.d. Ulujadi) • Dicetak pada: <span id="printDateStr"></span></p>
+                    <p class="text-[8.5px] text-gray-500 mt-0.5">Dokumen Resmi Rekapitulasi Wilayah (Palu Utara s.d. Ulujadi) • Dicetak: <span id="printDateStr"></span></p>
                 </div>
 
                 <!-- 1. DASHBOARD UTAMA -->
@@ -349,7 +360,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwxwRuIYE12z-tlUeMSz7ZpOTbp2pIq0O_qiJ2Xf2QCkcpdVyoiaWP4cRFRV2rQ8eYJcw/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwyNZPtI6Ux6FCHFKDsjdBQ1oIub8R4YeyqcG-uPq2aBcI2_72fFLSkAs_EwX_dMUPfWw/exec";
 
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
@@ -579,7 +590,7 @@
             document.getElementById('tim_sosial').value = rowData["25. Tim Tanggap Sosial"] || 0;
         }
 
-        /* --- FUNGSI CETAK PDF LENGKAP SEMUA HALAMAN (MULTI-HALAMAN) --- */
+        /* --- FUNGSI CETAK PDF LENGKAP SEMUA HALAMAN (PRESISI A4) --- */
         async function showSelectPrintModal() {
             Swal.fire({
                 title: 'Menyiapkan Dokumen...',
@@ -598,7 +609,7 @@
                 text: 'Pilih lingkup wilayah yang ingin dicetak ke PDF:',
                 input: 'select',
                 inputOptions: {
-                    "SEMUA MWC": "Cetak Semua MWC (Lengkap s.d. Ulujadi - Multi Halaman)",
+                    "SEMUA MWC": "Cetak Semua MWC (Lengkap s.d. Ulujadi - Multi Halaman Presisi)",
                     "MWC Palu Utara": "MWC Palu Utara",
                     "MWC Mantikulore": "MWC Mantikulore",
                     "MWC Palu Selatan": "MWC Palu Selatan",
