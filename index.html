@@ -175,24 +175,51 @@
                         </div>
                     </div>
 
-                    <!-- KOTAK RINGKASAN TOTAL (TOTAL DAIYAH & TOTAL SEMUA ITEM ANGKA) -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- KOTAK RINGKASAN SPESIFIK 5 KATEGORI -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-[#0a7c6e] flex items-center justify-center text-xl font-black">
-                                <i class="fa-solid fa-users-viewfinder"></i>
+                            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-[#0a7c6e] flex items-center justify-center text-xl font-black flex-shrink-0">
+                                <i class="fa-solid fa-users"></i>
                             </div>
                             <div>
-                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Jumlah Daiyah (Seluruh MWC)</p>
-                                <h4 id="statTotalDaiyah" class="text-2xl font-black text-[#0a7c6e] mt-0.5">0</h4>
+                                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Total Jumlah Daiyah</p>
+                                <h4 id="statDaiyah" class="text-xl font-black text-[#0a7c6e] mt-0.5">0</h4>
                             </div>
                         </div>
                         <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-amber-100 text-[#f59e0b] flex items-center justify-center text-xl font-black">
-                                <i class="fa-solid fa-calculator"></i>
+                            <div class="w-12 h-12 rounded-xl bg-amber-100 text-[#f59e0b] flex items-center justify-center text-xl font-black flex-shrink-0">
+                                <i class="fa-solid fa-chalkboard-user"></i>
                             </div>
                             <div>
-                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Keseluruhan Semua Item Angka</p>
-                                <h4 id="statTotalSemuaItem" class="text-2xl font-black text-[#f59e0b] mt-0.5">0</h4>
+                                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Total Murabbiyah Takwin</p>
+                                <h4 id="statTakwin" class="text-xl font-black text-[#f59e0b] mt-0.5">0</h4>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl font-black flex-shrink-0">
+                                <i class="fa-solid fa-user-graduate"></i>
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Total Murabbiyah Ta'arif 1 & 2</p>
+                                <h4 id="statTarif" class="text-xl font-black text-blue-600 mt-0.5">0</h4>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl font-black flex-shrink-0">
+                                <i class="fa-solid fa-book-quran"></i>
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Total Pengajar Qur'an (Mudarrisah)</p>
+                                <h4 id="statMudarrisah" class="text-xl font-black text-purple-600 mt-0.5">0</h4>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-4 sm:col-span-2 lg:col-span-2">
+                            <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl font-black flex-shrink-0">
+                                <i class="fa-solid fa-award"></i>
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Total Jumlah Muhaffidzah</p>
+                                <h4 id="statMuhaffidzah" class="text-xl font-black text-rose-600 mt-0.5">0</h4>
                             </div>
                         </div>
                     </div>
@@ -462,8 +489,11 @@
             const container = document.getElementById('verticalMatrixContainer');
             if(data.length === 0) {
                 container.innerHTML = `<div class="bg-white p-8 rounded-2xl text-center text-gray-500 text-sm shadow-sm">Belum ada data terekam.</div>`;
-                document.getElementById('statTotalDaiyah').innerText = "0";
-                document.getElementById('statTotalSemuaItem').innerText = "0";
+                document.getElementById('statDaiyah').innerText = "0";
+                document.getElementById('statTakwin').innerText = "0";
+                document.getElementById('statTarif').innerText = "0";
+                document.getElementById('statMudarrisah').innerText = "0";
+                document.getElementById('statMuhaffidzah').innerText = "0";
                 return;
             }
 
@@ -476,25 +506,30 @@
             container.innerHTML = "";
             const mwcList = ["MWC Palu Utara", "MWC Mantikulore", "MWC Palu Selatan", "MWC Tatanga", "MWC Ulujadi"];
 
-            let grandTotalDaiyah = 0;
-            let grandTotalAllNumbers = 0;
+            let totalDaiyah = 0;
+            let totalTakwin = 0;
+            let totalTarif = 0;
+            let totalMudarrisah = 0;
+            let totalMuhaffidzah = 0;
 
             mwcList.forEach(mwcName => {
                 let rowData = latestPerMWC[mwcName];
                 
-                // Hitung akumulasi dari data terbaru tiap MWC
                 if (rowData) {
                     for (const [key, value] of Object.entries(rowData)) {
-                        if (key !== "Timestamp" && key !== "Nama MWC" && key !== "rowIndex") {
-                            // Cek apakah key merujuk pada jumlah daiyah
-                            if (key.toLowerCase().includes("daiyah")) {
-                                grandTotalDaiyah += Number(value) || 0;
-                            }
-                            // Hitung jika nilai dapat dikonversi ke angka (untuk total keseluruhan item berbasis angka)
-                            let parsedNum = Number(value);
-                            if (!isNaN(parsedNum) && value !== "") {
-                                grandTotalAllNumbers += parsedNum;
-                            }
+                        let valNum = Number(value) || 0;
+                        let kLower = key.toLowerCase();
+                        
+                        if (kLower.includes("daiyah")) {
+                            totalDaiyah += valNum;
+                        } else if (kLower.includes("takwin") && kLower.includes("murabbiyah")) {
+                            totalTakwin += valNum;
+                        } else if (kLower.includes("ta'arif") || kLower.includes("tarif")) {
+                            totalTarif += valNum;
+                        } else if (kLower.includes("mudarrisah") || (kLower.includes("pengajar") && kLower.includes("qur'an"))) {
+                            totalMudarrisah += valNum;
+                        } else if (kLower.includes("muhaffidzah")) {
+                            totalMuhaffidzah += valNum;
                         }
                     }
                 }
@@ -532,9 +567,12 @@
                 container.appendChild(card);
             });
 
-            // Tampilkan hasil kalkulasi pada kotak ringkasan atas
-            document.getElementById('statTotalDaiyah').innerText = grandTotalDaiyah.toLocaleString('id-ID');
-            document.getElementById('statTotalSemuaItem').innerText = grandTotalAllNumbers.toLocaleString('id-ID');
+            // Tampilkan hasil kalkulasi pada 5 kotak ringkasan atas
+            document.getElementById('statDaiyah').innerText = totalDaiyah.toLocaleString('id-ID');
+            document.getElementById('statTakwin').innerText = totalTakwin.toLocaleString('id-ID');
+            document.getElementById('statTarif').innerText = totalTarif.toLocaleString('id-ID');
+            document.getElementById('statMudarrisah').innerText = totalMudarrisah.toLocaleString('id-ID');
+            document.getElementById('statMuhaffidzah').innerText = totalMuhaffidzah.toLocaleString('id-ID');
         }
 
         function populateFormWithData(rowData) {
@@ -593,7 +631,7 @@
                         <p>Selamat datang di pusat kendali <b>Matrix Transparansi Levelisasi MWC</b> Unit UCR Muslimah Wahdah Islamiyah Kota Palu.</p>
                         <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200">
                             <strong class="text-[#0a7c6e] block mb-1"><i class="fa-solid fa-chart-pie mr-1"></i> 1. Matrix Transparansi (Dashboard Utama)</strong>
-                            Menyajikan rekapitulasi seluruh 25 indikator data wilayah MWC beserta ringkasan Total Jumlah Daiyah dan Total Keseluruhan Item Angka secara otomatis.
+                            Menyajikan rekapitulasi seluruh 25 indikator data wilayah MWC beserta ringkasan khusus untuk Total Daiyah, Murabbiyah Takwin, Murabbiyah Ta'arif, Pengajar Qur'an, dan Muhaffidzah secara otomatis.
                         </div>
                         <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
                             <strong class="text-[#f59e0b] block mb-1 text-amber-800"><i class="fa-solid fa-pen-to-square mr-1"></i> 2. Log Aktivitas & Menu Edit</strong>
