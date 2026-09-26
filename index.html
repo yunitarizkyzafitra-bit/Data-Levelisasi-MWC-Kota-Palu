@@ -13,7 +13,7 @@
         .bg-custom-amber { background-color: #f59e0b; }
         .bg-custom-base { background-color: #fafafa; }
         
-        /* PENGATURAN CETAK PDF LAPORAN PROFESIONAL MULTI-HALAMAN */
+        /* PENGATURAN CETAK PDF PROFESIONAL MULTI-HALAMAN SAMPAI MWC ULUJADI */
         @media print {
             @page {
                 size: A4 portrait;
@@ -46,7 +46,7 @@
                 page-break-inside: avoid !important; 
                 border: 1px solid #94a3b8 !important; 
                 box-shadow: none !important; 
-                margin-bottom: 15px !important; 
+                margin-bottom: 20px !important; 
                 border-radius: 6px !important;
                 background: #ffffff !important;
             }
@@ -149,7 +149,7 @@
                 <div class="print-header">
                     <h1 class="text-base font-bold uppercase tracking-wider text-gray-900">LAPORAN EKSEKUTIF MATRIX TRANSPARANSI LEVELISASI MWC</h1>
                     <h2 class="text-xs font-semibold text-[#0a7c6e] mt-0.5">UNIT UCR - MUSLIMAH WAHDAH ISLAMIYAH KOTA PALU</h2>
-                    <p class="text-[9px] text-gray-500 mt-0.5">Dokumen Rekapitulasi Resmi Seluruh 25 Indikator Wilayah • Dicetak pada: <span id="printDateStr"></span></p>
+                    <p class="text-[9px] text-gray-500 mt-0.5">Dokumen Rekapitulasi Resmi Seluruh Wilayah (Palu Utara s.d. Ulujadi) • Dicetak pada: <span id="printDateStr"></span></p>
                 </div>
 
                 <!-- 1. DASHBOARD UTAMA -->
@@ -336,7 +336,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKOwiWhrYt0VY9qhHl5_Aj-2bhrfQy3Ht5ySfXHnuPCqBfeegk_bp9tuQ7EqZd1yqLAg/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwhNQQ2eylCMrwg3YsZWPH2TlgH9FKBpYslMbH5n2g-C99nCdSty_qyaztbUov3yLsQNw/exec";
 
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
@@ -566,28 +566,27 @@
             document.getElementById('tim_sosial').value = rowData["25. Tim Tanggap Sosial"] || 0;
         }
 
-        /* --- FUNGSI CETAK PDF YANG DISEMPURNAKAN (MEMUAT SEMUA DATA MATRIX OTOMATIS) --- */
+        /* --- FUNGSI CETAK PDF LENGKAP SAMPAI MWC ULUJADI (MULTI-HALAMAN) --- */
         async function showSelectPrintModal() {
-            // Tampilkan indikator proses / loading
             Swal.fire({
-                title: 'Memuat Data Matrix...',
-                text: 'Menyiapkan seluruh data 25 item dari server untuk cetak profesional.',
+                title: 'Menyiapkan Dokumen...',
+                text: 'Memuat seluruh data dari Palu Utara hingga MWC Ulujadi.',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
                 }
             });
 
-            // Pastikan data terbaru dari spreadsheet/server telah dimuat sepenuhnya
+            // Pastikan data terbaru dari server termuat sepenuhnya
             await loadMatrixData(true);
             Swal.close();
 
             const { value: chosenMWC } = await Swal.fire({
                 title: 'Cetak Laporan PDF Profesional',
-                text: 'Semua data matrix transparansi siap dicetak.',
+                text: 'Pilih lingkup wilayah yang ingin dicetak ke PDF:',
                 input: 'select',
                 inputOptions: {
-                    "SEMUA MWC": "Cetak Semua MWC (Laporan Lengkap 25 Item)",
+                    "SEMUA MWC": "Cetak Semua MWC (Lengkap s.d. Ulujadi - Multi Halaman)",
                     "MWC Palu Utara": "MWC Palu Utara",
                     "MWC Mantikulore": "MWC Mantikulore",
                     "MWC Palu Selatan": "MWC Palu Selatan",
@@ -617,22 +616,24 @@
                     });
                 }
 
+                // Berikan jeda render DOM agar browser siap melakukan print multi-halaman
                 setTimeout(() => {
                     window.print();
-                }, 300);
+                }, 400);
 
+                // Kembalikan tampilan elemen setelah dialog print ditutup
                 setTimeout(() => {
                     cards.forEach(c => {
                         c.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
                     });
-                }, 1000);
+                }, 1200);
             }
         }
 
         async function printSpecificMWC(mwcName) {
             Swal.fire({
-                title: 'Memuat Data...',
-                text: `Menyiapkan data untuk ${mwcName}.`,
+                title: 'Menyiapkan Data...',
+                text: `Menyiapkan laporan untuk ${mwcName}.`,
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
@@ -656,15 +657,15 @@
 
             setTimeout(() => {
                 window.print();
-            }, 300);
+            }, 400);
 
             setTimeout(() => {
                 cards.forEach(card => {
                     card.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
                 });
-            }, 1000);
+            }, 1200);
         }
-        /* --------------------------------------------------------------------------- */
+        /* ------------------------------------------------------------------ */
 
         function exportToExcelPro() {
             if (!cachedSpreadsheetData || cachedSpreadsheetData.length === 0) {
@@ -692,7 +693,7 @@
                         <p>Selamat datang di pusat kendali <b>Matrix Transparansi Levelisasi MWC</b> Unit UCR Muslimah Wahdah Islamiyah Kota Palu.</p>
                         <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200">
                             <strong class="text-[#0a7c6e] block mb-1"><i class="fa-solid fa-chart-pie mr-1"></i> 1. Matrix Transparansi (Dashboard Utama)</strong>
-                            Menyajikan rekapitulasi seluruh 25 indikator data wilayah MWC secara profesional, dilengkapi fitur cetak laporan PDF eksekutif multi-halaman yang rapi dan aman dari pemotongan baris.
+                            Menyajikan rekapitulasi seluruh 25 indikator data wilayah MWC secara profesional, dilengkapi fitur cetak laporan PDF eksekutif multi-halaman yang mencakup seluruh wilayah dari Palu Utara sampai Ulujadi secara rapi tanpa terpotong.
                         </div>
                         <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
                             <strong class="text-[#f59e0b] block mb-1 text-amber-800"><i class="fa-solid fa-pen-to-square mr-1"></i> 2. Log Aktivitas & Menu Edit</strong>
