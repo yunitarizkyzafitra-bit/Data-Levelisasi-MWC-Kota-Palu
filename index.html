@@ -46,6 +46,7 @@
                 border-bottom: 2px solid #0a7c6e;
                 padding-bottom: 8px;
             }
+            /* Jika mencetak seluruh dokumen */
             .mwc-vertical-card { 
                 break-inside: avoid !important; 
                 page-break-inside: avoid !important; 
@@ -54,6 +55,16 @@
                 margin-bottom: 15px !important; 
                 border-radius: 6px !important;
                 background: #ffffff !important;
+            }
+            /* Sembunyikan kartu MWC yang tidak dipilih jika sedang cetak spesifik per MWC */
+            body.print-single-mwc .mwc-vertical-card:not(.target-print-mwc) {
+                display: none !important;
+            }
+            body.print-single-mwc .target-print-mwc {
+                display: block !important;
+                border: none !important;
+                box-shadow: none !important;
+                margin: 0 !important;
             }
             .mwc-card-header {
                 background: #0a7c6e !important;
@@ -152,7 +163,7 @@
                 
                 <!-- HEADER LAPORAN KHUSUS CETAK PDF PROFESIONAL -->
                 <div class="print-header">
-                    <h1 class="text-base font-bold uppercase tracking-wider text-gray-900">LAPORAN EKSEKUTIF MATRIX TRANSPARANSI LEVELISASI MWC</h1>
+                    <h1 id="printHeaderTitle" class="text-base font-bold uppercase tracking-wider text-gray-900">LAPORAN EKSEKUTIF MATRIX TRANSPARANSI LEVELISASI MWC</h1>
                     <h2 class="text-xs font-semibold text-[#0a7c6e] mt-0.5">UNIT UCR - MUSLIMAH WAHDAH ISLAMIYAH KOTA PALU</h2>
                     <p class="text-[9px] text-gray-500 mt-0.5">Dokumen Rekapitulasi Resmi Seluruh 25 Indikator Wilayah • Dicetak pada: <span id="printDateStr"></span></p>
                 </div>
@@ -175,51 +186,78 @@
                         </div>
                     </div>
 
-                    <!-- KOTAK RINGKASAN SPESIFIK 5 KATEGORI -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-[#0a7c6e] flex items-center justify-center text-xl font-black flex-shrink-0">
+                    <!-- KOTAK RINGKASAN SPESIFIK (8 KATEGORI) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-[#0a7c6e] flex items-center justify-center text-lg font-black flex-shrink-0">
                                 <i class="fa-solid fa-users"></i>
                             </div>
                             <div>
-                                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Total Jumlah Daiyah</p>
-                                <h4 id="statDaiyah" class="text-xl font-black text-[#0a7c6e] mt-0.5">0</h4>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Daiyah</p>
+                                <h4 id="statDaiyah" class="text-lg font-black text-[#0a7c6e] mt-0.5">0</h4>
                             </div>
                         </div>
-                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-amber-100 text-[#f59e0b] flex items-center justify-center text-xl font-black flex-shrink-0">
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-amber-100 text-[#f59e0b] flex items-center justify-center text-lg font-black flex-shrink-0">
                                 <i class="fa-solid fa-chalkboard-user"></i>
                             </div>
                             <div>
-                                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Total Murabbiyah Takwin</p>
-                                <h4 id="statTakwin" class="text-xl font-black text-[#f59e0b] mt-0.5">0</h4>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Murabbiyah Takwin</p>
+                                <h4 id="statTakwin" class="text-lg font-black text-[#f59e0b] mt-0.5">0</h4>
                             </div>
                         </div>
-                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl font-black flex-shrink-0">
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-lg font-black flex-shrink-0">
                                 <i class="fa-solid fa-user-graduate"></i>
                             </div>
                             <div>
-                                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Total Murabbiyah Ta'arif 1 & 2</p>
-                                <h4 id="statTarif" class="text-xl font-black text-blue-600 mt-0.5">0</h4>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Murabbiyah Ta'arif 1 & 2</p>
+                                <h4 id="statTarif" class="text-lg font-black text-blue-600 mt-0.5">0</h4>
                             </div>
                         </div>
-                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl font-black flex-shrink-0">
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-lg font-black flex-shrink-0">
                                 <i class="fa-solid fa-book-quran"></i>
                             </div>
                             <div>
-                                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Total Pengajar Qur'an (Mudarrisah)</p>
-                                <h4 id="statMudarrisah" class="text-xl font-black text-purple-600 mt-0.5">0</h4>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Pengajar Qur'an</p>
+                                <h4 id="statMudarrisah" class="text-lg font-black text-purple-600 mt-0.5">0</h4>
                             </div>
                         </div>
-                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-4 sm:col-span-2 lg:col-span-2">
-                            <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl font-black flex-shrink-0">
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-lg font-black flex-shrink-0">
                                 <i class="fa-solid fa-award"></i>
                             </div>
                             <div>
-                                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Total Jumlah Muhaffidzah</p>
-                                <h4 id="statMuhaffidzah" class="text-xl font-black text-rose-600 mt-0.5">0</h4>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Muhaffidzah</p>
+                                <h4 id="statMuhaffidzah" class="text-lg font-black text-rose-600 mt-0.5">0</h4>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg font-black flex-shrink-0">
+                                <i class="fa-solid fa-id-card"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Kader Ta'rif</p>
+                                <h4 id="statKaderTarif" class="text-lg font-black text-indigo-600 mt-0.5">0</h4>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-lg font-black flex-shrink-0">
+                                <i class="fa-solid fa-user-check"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Kader Takwin</p>
+                                <h4 id="statKaderTakwin" class="text-lg font-black text-teal-700 mt-0.5">0</h4>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-lg font-black flex-shrink-0">
+                                <i class="fa-solid fa-user-shield"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Kader Tanfidz</p>
+                                <h4 id="statKaderTanfidz" class="text-lg font-black text-orange-600 mt-0.5">0</h4>
                             </div>
                         </div>
                     </div>
@@ -494,6 +532,9 @@
                 document.getElementById('statTarif').innerText = "0";
                 document.getElementById('statMudarrisah').innerText = "0";
                 document.getElementById('statMuhaffidzah').innerText = "0";
+                document.getElementById('statKaderTarif').innerText = "0";
+                document.getElementById('statKaderTakwin').innerText = "0";
+                document.getElementById('statKaderTanfidz').innerText = "0";
                 return;
             }
 
@@ -511,6 +552,9 @@
             let totalTarif = 0;
             let totalMudarrisah = 0;
             let totalMuhaffidzah = 0;
+            let totalKaderTarif = 0;
+            let totalKaderTakwin = 0;
+            let totalKaderTanfidz = 0;
 
             mwcList.forEach(mwcName => {
                 let rowData = latestPerMWC[mwcName];
@@ -525,7 +569,15 @@
                         } else if (kLower.includes("takwin") && kLower.includes("murabbiyah")) {
                             totalTakwin += valNum;
                         } else if (kLower.includes("ta'arif") || kLower.includes("tarif")) {
-                            totalTarif += valNum;
+                            if (kLower.includes("kader")) {
+                                totalKaderTarif += valNum;
+                            } else {
+                                totalTarif += valNum;
+                            }
+                        } else if (kLower.includes("takwin") && kLower.includes("kader")) {
+                            totalKaderTakwin += valNum;
+                        } else if (kLower.includes("tanfidz") && kLower.includes("kader")) {
+                            totalKaderTanfidz += valNum;
                         } else if (kLower.includes("mudarrisah") || (kLower.includes("pengajar") && kLower.includes("qur'an"))) {
                             totalMudarrisah += valNum;
                         } else if (kLower.includes("muhaffidzah")) {
@@ -544,6 +596,9 @@
                             <span class="bg-[#f59e0b] text-[#086358] text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase">Wilayah MWC</span>
                             <h4 class="text-lg font-black mt-0.5">${mwcName}</h4>
                         </div>
+                        <button onclick="printSingleMWC('${mwcName}')" class="no-print bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-bold text-xs px-3.5 py-1.5 rounded-lg shadow transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-pdf"><span>Cetak PDF MWC</span></i>
+                        </button>
                     </div>
                 `;
 
@@ -567,12 +622,35 @@
                 container.appendChild(card);
             });
 
-            // Tampilkan hasil kalkulasi pada 5 kotak ringkasan atas
+            // Tampilkan hasil kalkulasi pada kotak ringkasan atas
             document.getElementById('statDaiyah').innerText = totalDaiyah.toLocaleString('id-ID');
             document.getElementById('statTakwin').innerText = totalTakwin.toLocaleString('id-ID');
             document.getElementById('statTarif').innerText = totalTarif.toLocaleString('id-ID');
             document.getElementById('statMudarrisah').innerText = totalMudarrisah.toLocaleString('id-ID');
             document.getElementById('statMuhaffidzah').innerText = totalMuhaffidzah.toLocaleString('id-ID');
+            document.getElementById('statKaderTarif').innerText = totalKaderTarif.toLocaleString('id-ID');
+            document.getElementById('statKaderTakwin').innerText = totalKaderTakwin.toLocaleString('id-ID');
+            document.getElementById('statKaderTanfidz').innerText = totalKaderTanfidz.toLocaleString('id-ID');
+        }
+
+        function printSingleMWC(mwcName) {
+            const cards = document.querySelectorAll('.mwc-vertical-card');
+            cards.forEach(card => {
+                card.classList.remove('target-print-mwc');
+                if (card.getAttribute('data-mwc') === mwcName) {
+                    card.classList.add('target-print-mwc');
+                }
+            });
+
+            document.body.classList.add('print-single-mwc');
+            document.getElementById('printHeaderTitle').innerText = `LAPORAN EKSEKUTIF LEVELISASI - ${mwcName.toUpperCase()}`;
+            
+            window.print();
+
+            setTimeout(() => {
+                document.body.classList.remove('print-single-mwc');
+                document.getElementById('printHeaderTitle').innerText = `LAPORAN EKSEKUTIF MATRIX TRANSPARANSI LEVELISASI MWC`;
+            }, 500);
         }
 
         function populateFormWithData(rowData) {
@@ -631,11 +709,11 @@
                         <p>Selamat datang di pusat kendali <b>Matrix Transparansi Levelisasi MWC</b> Unit UCR Muslimah Wahdah Islamiyah Kota Palu.</p>
                         <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200">
                             <strong class="text-[#0a7c6e] block mb-1"><i class="fa-solid fa-chart-pie mr-1"></i> 1. Matrix Transparansi (Dashboard Utama)</strong>
-                            Menyajikan rekapitulasi seluruh 25 indikator data wilayah MWC beserta ringkasan khusus untuk Total Daiyah, Murabbiyah Takwin, Murabbiyah Ta'arif, Pengajar Qur'an, dan Muhaffidzah secara otomatis.
+                            Menyajikan rekapitulasi seluruh 25 indikator data wilayah MWC beserta ringkasan otomatis untuk Total Daiyah, Murabbiyah Takwin, Murabbiyah Ta'arif, Pengajar Qur'an, Muhaffidzah, Kader Ta'rif, Kader Takwin, dan Kader Tanfidz.
                         </div>
                         <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
-                            <strong class="text-[#f59e0b] block mb-1 text-amber-800"><i class="fa-solid fa-pen-to-square mr-1"></i> 2. Log Aktivitas & Menu Edit</strong>
-                            Anda dapat mengakses log aktivitas atau mengedit data historis dengan memilih wilayah MWC melalui menu sidebar sebelah kiri dan memasukkan PIN keamanan yang sesuai.
+                            <strong class="text-[#f59e0b] block mb-1 text-amber-800"><i class="fa-solid fa-file-pdf mr-1"></i> 2. Cetak PDF Masing-Masing MWC</strong>
+                            Setiap kartu wilayah MWC dilengkapi tombol "Cetak PDF MWC" agar Anda dapat mencetak laporan spesifik per wilayah secara rapi.
                         </div>
                     </div>
                 `,
