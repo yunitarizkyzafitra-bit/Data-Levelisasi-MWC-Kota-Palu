@@ -14,12 +14,12 @@
         .bg-custom-base { background-color: #fafafa; }
         
         /* ==========================================================
-           PERBAIKAN TOTAL CETAK PDF: HAPUS SPACE KOSONG & PRESISI KERTAS
+           PENGATURAN CETAK PDF: UKURAN NORMAL & MULTI-HALAMAN OTOMATIS
            ========================================================== */
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 6mm 8mm;
+                margin: 10mm;
             }
             * {
                 -webkit-print-color-adjust: exact !important;
@@ -30,13 +30,11 @@
                 height: auto !important;
                 background: white !important; 
                 color: #000 !important; 
-                font-size: 7.5pt !important;
+                font-size: 10pt !important; /* Dikembalikan normal agar tidak kekecilan */
                 font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 margin: 0 !important;
                 padding: 0 !important;
-                overflow: visible !important;
             }
-            /* Matikan seluruh layout flex/screen utama aplikasi agar tidak ada ruang kosong di atas */
             body > div, .flex, .h-screen, main, aside, header, nav {
                 display: block !important;
                 height: auto !important;
@@ -46,11 +44,9 @@
                 box-shadow: none !important;
                 background: transparent !important;
             }
-            /* Sembunyikan elemen navigasi dan tombol interaktif */
             aside, header, nav, button, .no-print, #actionTabs { 
                 display: none !important; 
             }
-            /* Paksa kontainer utama rata atas tanpa padding bawaan layar */
             main { 
                 padding: 0 !important; 
                 margin: 0 !important;
@@ -60,51 +56,50 @@
             .print-header { 
                 display: block !important; 
                 text-align: center; 
-                margin-bottom: 6px !important; 
-                border-bottom: 1.5px solid #0a7c6e;
-                padding-bottom: 3px;
+                margin-bottom: 12px !important; 
+                border-bottom: 2px solid #0a7c6e;
+                padding-bottom: 6px;
             }
-            /* Kontrol kartu agar mengalir rapat dan tidak terpotong canggung */
+            /* Setiap kartu MWC dipaksa menempati halaman terpisah secara rapi (Multi-halaman) */
             .mwc-vertical-card { 
                 display: block !important;
                 visibility: visible !important;
                 opacity: 1 !important;
                 break-inside: avoid !important; 
                 page-break-inside: avoid !important; 
-                page-break-after: auto !important;
+                page-break-after: always !important; /* Berpindah halaman otomatis per MWC */
                 border: 1px solid #0a7c6e !important; 
                 box-shadow: none !important; 
-                margin-bottom: 8px !important; 
-                border-radius: 3px !important;
+                margin-bottom: 0 !important; 
+                border-radius: 6px !important;
                 background: #ffffff !important;
                 width: 100% !important;
             }
             .mwc-card-header {
                 background: #0a7c6e !important;
                 color: white !important;
-                padding: 4px 8px !important;
+                padding: 8px 12px !important;
             }
-            /* Grid presisi 3 kolom rapat ramah printer A4 */
             .print-grid-container {
                 display: grid !important;
                 grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-                gap: 3px !important;
-                padding: 6px !important;
+                gap: 6px !important;
+                padding: 10px !important;
             }
             .print-grid-item {
                 background: #f8fafc !important;
-                border: 0.5px solid #cbd5e1 !important;
+                border: 1px solid #cbd5e1 !important;
                 break-inside: avoid;
                 page-break-inside: avoid;
-                padding: 4px 5px !important;
-                border-radius: 2px !important;
+                padding: 6px 8px !important;
+                border-radius: 4px !important;
             }
             .print-grid-item span:first-child {
-                font-size: 7pt !important;
+                font-size: 8.5pt !important;
                 color: #475569 !important;
             }
             .print-grid-item span:last-child {
-                font-size: 8pt !important;
+                font-size: 9.5pt !important;
                 color: #0a7c6e !important;
                 font-weight: bold !important;
             }
@@ -180,11 +175,11 @@
 
             <div class="p-4 sm:p-8 max-w-6xl mx-auto w-full flex-1">
                 
-                <!-- HEADER LAPORAN KHUSUS CETAK PDF PROFESIONAL -->
+                <!-- HEADER LAPORAN KHUSUS CETAK PDF -->
                 <div class="print-header">
-                    <h1 class="text-sm font-bold uppercase tracking-wider text-gray-900">LAPORAN EKSEKUTIF MATRIX TRANSPARANSI LEVELISASI MWC</h1>
-                    <h2 class="text-xs font-semibold text-[#0a7c6e] mt-0.5">UNIT UCR - MUSLIMAH WAHDAH ISLAMIYAH KOTA PALU</h2>
-                    <p class="text-[8.5px] text-gray-500 mt-0.5">Dokumen Resmi Rekapitulasi Wilayah (Palu Utara s.d. Ulujadi) • Dicetak: <span id="printDateStr"></span></p>
+                    <h1 class="text-base font-bold uppercase tracking-wider text-gray-900">LAPORAN EKSEKUTIF MATRIX TRANSPARANSI LEVELISASI MWC</h1>
+                    <h2 class="text-sm font-semibold text-[#0a7c6e] mt-0.5">UNIT UCR - MUSLIMAH WAHDAH ISLAMIYAH KOTA PALU</h2>
+                    <p class="text-xs text-gray-500 mt-1">Dokumen Resmi Rekapitulasi Wilayah (Palu Utara s.d. Ulujadi) • Dicetak: <span id="printDateStr"></span></p>
                 </div>
 
                 <!-- 1. DASHBOARD UTAMA -->
@@ -371,7 +366,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxuzbSi-exQKfP8relMW_Yi6FaHDlw38gfL0NL23EWz4tx6XdIiFxt3VRXx0SLYRV7aDQ/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwyNZPtI6Ux6FCHFKDsjdBQ1oIub8R4YeyqcG-uPq2aBcI2_72fFLSkAs_EwX_dMUPfWw/exec";
 
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
@@ -619,7 +614,7 @@
                 text: 'Pilih lingkup wilayah yang ingin dicetak ke PDF:',
                 input: 'select',
                 inputOptions: {
-                    "SEMUA MWC": "Cetak Semua MWC (Lengkap s.d. Ulujadi - Multi Halaman Presisi)",
+                    "SEMUA MWC": "Cetak Semua MWC (Masing-masing MWC di halaman terpisah otomatis)",
                     "MWC Palu Utara": "MWC Palu Utara",
                     "MWC Mantikulore": "MWC Mantikulore",
                     "MWC Palu Selatan": "MWC Palu Selatan",
@@ -723,7 +718,7 @@
                         <p>Selamat datang di pusat kendali <b>Matrix Transparansi Levelisasi MWC</b> Unit UCR Muslimah Wahdah Islamiyah Kota Palu.</p>
                         <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200">
                             <strong class="text-[#0a7c6e] block mb-1"><i class="fa-solid fa-chart-pie mr-1"></i> 1. Matrix Transparansi (Dashboard Utama)</strong>
-                            Menyajikan rekapitulasi seluruh 25 indikator data wilayah MWC secara profesional, dilengkapi fitur cetak laporan PDF eksekutif multi-halaman yang mencakup seluruh wilayah dari Palu Utara sampai Ulujadi secara rapi tanpa terpotong.
+                            Menyajikan rekapitulasi seluruh 25 indikator data wilayah MWC secara profesional, dilengkapi fitur cetak laporan PDF eksekutif multi-halaman yang mencakup seluruh wilayah dari Palu Utara sampai Ulujadi secara rapi tanpa terpotong dan ukuran teks normal yang nyaman dibaca.
                         </div>
                         <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
                             <strong class="text-[#f59e0b] block mb-1 text-amber-800"><i class="fa-solid fa-pen-to-square mr-1"></i> 2. Log Aktivitas & Menu Edit</strong>
