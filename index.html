@@ -253,7 +253,7 @@
                         <div>
                             <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-black px-2.5 py-1 rounded-full uppercase">Rekapitulasi Agregat Kota Palu</span>
                             <h3 class="text-xl sm:text-2xl font-black mt-2">Menu Total Kader & Agregat Parsial</h3>
-                            <p class="text-emerald-100 text-xs sm:text-sm mt-1">Akumulasi parsial seluruh item formulir dari seluruh wilayah MWC.</p>
+                            <p class="text-emerald-100 text-xs sm:text-sm mt-1">Akumulasi parsial seluruh item formulir dari seluruh wilayah MWC lengkap dengan rincian per wilayah.</p>
                         </div>
                         <div class="flex gap-2">
                             <button onclick="printAggregatePDF()" class="px-4 py-2.5 bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-extrabold text-xs sm:text-sm rounded-xl shadow transition flex items-center gap-2">
@@ -267,9 +267,9 @@
 
                     <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8">
                         <h4 class="text-base font-bold text-[#0a7c6e] mb-4 flex items-center gap-2">
-                            <i class="fa-solid fa-calculator"></i> Rincian Akumulasi Angka Parsial Seluruh Formulir MWC
+                            <i class="fa-solid fa-calculator"></i> Rincian Akumulasi & Perolehan Masing-Masing MWC
                         </h4>
-                        <div id="aggregateSummaryGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
+                        <div id="aggregateSummaryGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                         </div>
                     </div>
                 </div>
@@ -646,35 +646,66 @@
                 if(mwc) { latestPerMWC[mwc] = row; }
             });
 
-            let sums = {};
-            const mwcList = ["MWC Palu Utara", "MWC Mantikulore", "MWC Palu Selatan", "MWC Tatanga", "MWC Ulujadi"];
-
-            mwcList.forEach(mwcName => {
-                let rowData = latestPerMWC[mwcName];
-                if(rowData) {
-                    for(let [k, v] of Object.entries(rowData)) {
-                        if(k !== "Timestamp" && k !== "Nama MWC" && k !== "rowIndex") {
-                            let num = Number(v) || 0;
-                            sums[k] = (sums[k] || 0) + num;
-                        }
+            // Kumpulkan daftar semua kunci indikator unik (kecuali Timestamp, Nama MWC, rowIndex)
+            let indicatorKeys = new Set();
+            cachedSpreadsheetData.forEach(row => {
+                for(let k of Object.keys(row)) {
+                    if(k !== "Timestamp" && k !== "Nama MWC" && k !== "rowIndex") {
+                        indicatorKeys.add(k);
                     }
                 }
             });
 
+            const mwcList = ["MWC Palu Utara", "MWC Mantikulore", "MWC Palu Selatan", "MWC Tatanga", "MWC Ulujadi"];
             grid.innerHTML = "";
-            for(let [key, val] of Object.entries(sums)) {
+
+            indicatorKeys.forEach(key => {
+                let totalIndicatorSum = 0;
+                let mwcDetailsHtml = "";
+
+                mwcList.forEach(mwcName => {
+                    let rowData = latestPerMWC[mwcName];
+                    let val = rowData && rowData[key] !== undefined && rowData[key] !== "" ? rowData[key] : "-";
+                    
+                    let numVal = Number(val);
+                    if (!isNaN(numVal)) {
+                        totalIndicatorSum += numVal;
+                    }
+
+                    // Singkatan nama MWC agar kompak di dalam kotak
+                    let shortName = mwcName.replace("MWC ", "");
+                    mwcDetailsHtml += `
+                        <div class="flex justify-between items-center bg-white px-2.5 py-1 rounded border border-gray-100 text-[11px]">
+                            <span class="text-gray-600 font-medium">${shortName}</span>
+                            <span class="font-bold text-[#0a7c6e]">${val}</span>
+                        </div>
+                    `;
+                });
+
+                // Kartu utama per indikator yang menampilkan total akumulasi + rincian MWC di samping/bawahnya
                 grid.innerHTML += `
-                    <div class="print-grid-item bg-slate-50 p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                        <span class="text-gray-500 font-semibold mb-1 text-[11px]">${key}</span>
-                        <span class="font-black text-[#0a7c6e] text-sm">${val.toLocaleString('id-ID')}</span>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div class="flex justify-between items-start mb-3 border-b pb-2">
+                            <span class="text-gray-800 font-bold text-xs uppercase tracking-wide pr-2">${key}</span>
+                            <div class="text-right flex-shrink-0">
+                                <span class="text-[10px] text-gray-400 block font-semibold">Total Agregat</span>
+                                <span class="font-black text-amber-600 text-sm">${isNaN(totalIndicatorSum) ? '-' : totalIndicatorSum.toLocaleString('id-ID')}</span>
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Perolehan Masing-Masing MWC:</p>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                                ${mwcDetailsHtml}
+                            </div>
+                        </div>
                     </div>
                 `;
-            }
+            });
         }
 
         function printAggregatePDF() {
             document.body.classList.add('print-aggregate-report');
-            document.getElementById('printHeaderTitle').innerText = `REKAPITULASI TOTAL AGREGAT & PARSIAL KOTA PALU`;
+            document.getElementById('printHeaderTitle').innerText = `REKAPITULASI TOTAL AGREGAT & RINCIAN PER MWC KOTA PALU`;
             
             window.print();
 
@@ -752,7 +783,6 @@
             Swal.fire('Berhasil!', 'File Excel profesional berhasil diunduh.', 'success');
         }
 
-        // PANDUAN PENGGUNAAN AMAN (TANPA MENGUNGKAPKAN PIN)
         function showGuideModal() {
             Swal.fire({
                 title: '<span class="text-[#0a7c6e] font-black text-base uppercase tracking-wider">Petunjuk Penggunaan Aplikasi</span>',
@@ -765,7 +795,7 @@
                         </div>
                         <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
                             <strong class="text-[#0a7c6e] block mb-1 font-bold"><i class="fa-solid fa-circle-2 mr-1.5"></i> Autentikasi Pengurus</strong>
-                            Saat memilih wilayah MWC, sistem akan meminta <b>PIN Otorisasi Rahasia</b> yang dipegang oleh pengurus sah wilayah terkait demi menjaga integritas data.
+                            Saat memilih wilayah MWC, sistem akan meminta PIN Akses terotorisasi demi menjaga integritas data.
                         </div>
                         <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
                             <strong class="text-[#0a7c6e] block mb-1 font-bold"><i class="fa-solid fa-circle-3 mr-1.5"></i> Input & Laporan</strong>
