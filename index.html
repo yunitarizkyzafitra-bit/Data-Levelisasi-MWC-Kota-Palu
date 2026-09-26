@@ -709,24 +709,39 @@
 
         function showGuideModal() {
             Swal.fire({
-                title: '<span class="text-[#0a7c6e] font-black text-lg">Petunjuk Penggunaan & Navigasi Aplikasi</span>',
-                html: `
-                    <div class="text-left text-xs text-gray-700 space-y-3 leading-relaxed max-h-[60vh] overflow-y-auto px-1">
-                        <p>Selamat datang di pusat kendali <b>Matrix Transparansi Levelisasi MWC</b> Unit UCR Muslimah Wahdah Islamiyah Kota Palu.</p>
-                        <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200">
-                            <strong class="text-[#0a7c6e] block mb-1"><i class="fa-solid fa-chart-pie mr-1"></i> 1. Matrix Transparansi (Dashboard Utama)</strong>
-                            Menyajikan rekapitulasi seluruh 25 indikator data wilayah MWC beserta ringkasan otomatis untuk Total Daiyah, Murabbiyah Takwin, Murabbiyah Ta'arif, Pengajar Qur'an, Muhaffidzah, Kader Ta'rif, Kader Takwin, dan Kader Tanfidz.
-                        </div>
-                        <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
-                            <strong class="text-[#f59e0b] block mb-1 text-amber-800"><i class="fa-solid fa-file-pdf mr-1"></i> 2. Cetak PDF Masing-Masing MWC</strong>
-                            Setiap kartu wilayah MWC dilengkapi tombol "Cetak PDF MWC" agar Anda dapat mencetak laporan spesifik per wilayah secara rapi dalam format daftar data input formulir.
-                        </div>
-                    </div>
-                `,
-                confirmButtonText: 'Saya Mengerti',
-                confirmButtonColor: '#0a7c6e'
-            });
-        }
+                function showGuideModal() {
+    Swal.fire({
+        title: '<span class="text-[#0a7c6e] font-black text-base uppercase tracking-wider">Petunjuk Penggunaan & Navigasi Aplikasi</span>',
+        html: `
+            <div class="text-left text-xs text-gray-700 space-y-3 leading-relaxed max-h-[65vh] overflow-y-auto px-1">
+                <p class="font-medium">Selamat datang di pusat kendali <b>Matrix Transparansi Levelisasi MWC</b> Unit UCR Muslimah Wahdah Islamiyah Kota Palu. Ikuti langkah-langkah operasional di bawah ini untuk menggunakan aplikasi secara optimal:</p>
+                
+                <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
+                    <strong class="text-[#0a7c6e] block mb-1 font-bold"><i class="fa-solid fa-circle-1 mr-1.5"></i> 1. Memilih Wilayah MWC</strong>
+                    Pilih dan tentukan wilayah MWC yang ingin Anda kelola melalui daftar menu navigasi yang tersedia pada bilah sisi (sidebar) sebelah kiri.
+                </div>
+
+                <div class="bg-amber-50 p-3.5 rounded-xl border border-amber-200">
+                    <strong class="text-[#d98b04] block mb-1 font-bold text-amber-800"><i class="fa-solid fa-circle-2 mr-1.5"></i> 2. Memasukkan PIN Keamanan</strong>
+                    Masukkan PIN keamanan rahasia yang telah dibagikan khusus untuk masing-masing wilayah MWC guna memberikan otorisasi dan hak akses pengisian data.
+                </div>
+
+                <div class="bg-blue-50 p-3.5 rounded-xl border border-blue-200">
+                    <strong class="text-blue-700 block mb-1 font-bold"><i class="fa-solid fa-circle-3 mr-1.5"></i> 3. Pengisian & Pembaruan Formulir (25 Item)</strong>
+                    Lengkapi seluruh 25 indikator data instrumen levelisasi secara teliti pada formulir yang tersedia, kemudian klik tombol kirim untuk memperbarui data secara real-time ke server pusat.
+                </div>
+
+                <div class="bg-purple-50 p-3.5 rounded-xl border border-purple-200">
+                    <strong class="text-purple-700 block mb-1 font-bold"><i class="fa-solid fa-circle-4 mr-1.5"></i> 4. Cetak PDF & Ekspor Laporan Eksekutif</strong>
+                    Gunakan fitur <b>Cetak PDF MWC</b> untuk mengunduh laporan per wilayah dalam format 2 kolom presisi yang memuat seluruh 25 item formulir secara rapi di satu halaman A4. Anda juga dapat menggunakan tombol <b>Ekspor Excel Pro</b> pada halaman utama untuk mengunduh rekapitulasi data keseluruhan wilayah.
+                </div>
+            </div>
+        `,
+        confirmButtonText: 'Saya Mengerti & Lanjutkan',
+        confirmButtonColor: '#0a7c6e',
+        width: '600px'
+    });
+}
 
         async function loadMWCHistory() {
             const container = document.getElementById('historyContainer');
