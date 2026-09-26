@@ -60,11 +60,9 @@
                 display: block !important;
             }
 
-            /* Container Agregat Khusus Cetak Multi-Page Terstruktur */
+            /* Memaksa Grid Agregat Berubah Menjadi Blok Mengalir untuk Multi-Page */
             #aggregateSummaryGrid {
-                display: flex !important;
-                flex-direction: column !important;
-                gap: 10px !important;
+                display: block !important;
                 width: 100% !important;
             }
             .aggregate-print-card {
@@ -72,19 +70,14 @@
                 border: 1px solid #cbd5e1 !important;
                 border-radius: 6px !important;
                 padding: 10px 14px !important;
+                margin-bottom: 12px !important;
                 break-inside: avoid !important;
                 page-break-inside: avoid !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
 
-            /* DISTRIBUSI PRESISI HINGGA 5 HALAMAN (25 Indikator Total)
-               - Page 1: Indikator 1 s.d 5
-               - Page 2: Indikator 6 s.d 11
-               - Page 3: Indikator 12 s.d 17
-               - Page 4: Indikator 18 s.d 21
-               - Page 5: Indikator 22 s.d 25
-            */
+            /* DISTRIBUSI PRESISI HINGGA 5 HALAMAN (25 Indikator Total) */
             .aggregate-print-card:nth-of-type(6) {
                 page-break-before: always !important;
                 break-before: page !important;
