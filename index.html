@@ -16,16 +16,18 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 8mm;
+                margin: 10mm;
                 @top-right {
-                    content: "Halaman " counter(page);
+                    content: "Halaman " counter(page) " dari " counter(pages);
                     font-size: 8pt;
+                    font-weight: bold;
+                    color: #555;
                 }
             }
             body { 
                 background: white !important; 
                 color: #111 !important; 
-                font-size: 8.5pt;
+                font-size: 9pt;
                 font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             }
             aside, header, nav, button, .no-print, .summary-boxes { 
@@ -40,9 +42,9 @@
             .print-header { 
                 display: block !important; 
                 text-align: center; 
-                margin-bottom: 10px; 
+                margin-bottom: 15px; 
                 border-bottom: 2px solid #0a7c6e;
-                padding-bottom: 5px;
+                padding-bottom: 8px;
             }
             .mwc-vertical-card { 
                 border: none !important; 
@@ -90,15 +92,21 @@
                 break-inside: avoid;
                 page-break-inside: avoid;
             }
-            .print-grid-item span:first-child {
-                font-weight: 600;
-                color: #334155;
-                font-size: 8pt;
+            /* Styling Khusus Cetak Agregat agar rapi terbagi dalam beberapa halaman tanpa terpotong */
+            #aggregateSummaryGrid {
+                display: grid !important;
+                grid-template-columns: 1fr !important;
+                gap: 10px !important;
             }
-            .print-grid-item span:last-child {
-                font-weight: 700;
-                color: #0a7c6e;
-                font-size: 8.5pt;
+            .aggregate-print-card {
+                background: #ffffff !important;
+                border: 1px solid #cbd5e1 !important;
+                border-radius: 6px !important;
+                padding: 10px 12px !important;
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
         }
         .print-header { display: none; }
@@ -427,7 +435,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPbBrMP6ZhwRgomxveJ-avth24LlSQUGTuZTjEeDqZWeNk_4XzZVUe2pUrH9iS99_oVg/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEkNyRylZgX2KXkN-uPJkKE_WmwbLYMfWIT7-A6aPNuOnQ14TQHMmusqRQohIbrCKXRw/exec";
 
         // Kamus PIN Aman (Disembunyikan dari UI & Panduan Publik)
         const MWC_PIN_LIST = {
@@ -646,7 +654,6 @@
                 if(mwc) { latestPerMWC[mwc] = row; }
             });
 
-            // Kumpulkan daftar semua kunci indikator unik (kecuali Timestamp, Nama MWC, rowIndex)
             let indicatorKeys = new Set();
             cachedSpreadsheetData.forEach(row => {
                 for(let k of Object.keys(row)) {
@@ -672,7 +679,6 @@
                         totalIndicatorSum += numVal;
                     }
 
-                    // Singkatan nama MWC agar kompak di dalam kotak
                     let shortName = mwcName.replace("MWC ", "");
                     mwcDetailsHtml += `
                         <div class="flex justify-between items-center bg-white px-2.5 py-1 rounded border border-gray-100 text-[11px]">
@@ -682,9 +688,8 @@
                     `;
                 });
 
-                // Kartu utama per indikator yang menampilkan total akumulasi + rincian MWC di samping/bawahnya
                 grid.innerHTML += `
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div class="aggregate-print-card bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
                         <div class="flex justify-between items-start mb-3 border-b pb-2">
                             <span class="text-gray-800 font-bold text-xs uppercase tracking-wide pr-2">${key}</span>
                             <div class="text-right flex-shrink-0">
