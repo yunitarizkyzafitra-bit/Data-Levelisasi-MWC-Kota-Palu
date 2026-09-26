@@ -336,7 +336,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxyxAhYUi3oojjNeinJiBVSz2qSmSJ5lvd1plFln4rUkh0MEhPq4MPXUSX8b5qW8M56EA/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPbBrMP6ZhwRgomxveJ-avth24LlSQUGTuZTjEeDqZWeNk_4XzZVUe2pUrH9iS99_oVg/exec";
 
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
@@ -456,7 +456,6 @@
                 card.className = "mwc-vertical-card bg-white shadow-xl rounded-2xl border border-gray-200 overflow-hidden mb-6";
                 card.setAttribute('data-mwc', mwcName);
 
-                // Tombol edit pada kartu telah dihapus sepenuhnya
                 let headerHtml = `
                     <div class="mwc-card-header bg-gradient-to-r from-[#0a7c6e] to-[#086358] text-white p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                         <div>
@@ -567,6 +566,7 @@
             document.getElementById('tim_sosial').value = rowData["25. Tim Tanggap Sosial"] || 0;
         }
 
+        /* --- FUNGSI CETAK PDF YANG DIPERBAIKI (TIDAK KOSONG LAGI) --- */
         async function showSelectPrintModal() {
             if (!cachedSpreadsheetData.length) await loadMatrixData(true);
 
@@ -587,13 +587,32 @@
             });
 
             if (chosenMWC) {
+                const cards = document.querySelectorAll('.mwc-vertical-card');
+                
                 if (chosenMWC === "SEMUA MWC") {
-                    const cards = document.querySelectorAll('.mwc-vertical-card');
-                    cards.forEach(c => c.style.setProperty('display', 'block', 'important'));
-                    window.print();
+                    cards.forEach(c => {
+                        c.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
+                    });
                 } else {
-                    printSpecificMWC(chosenMWC);
+                    cards.forEach(card => {
+                        const cardMWC = card.getAttribute('data-mwc');
+                        if (cardMWC && cardMWC.toLowerCase() === chosenMWC.toLowerCase()) {
+                            card.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
+                        } else {
+                            card.style.cssText = "display: none !important;";
+                        }
+                    });
                 }
+
+                setTimeout(() => {
+                    window.print();
+                }, 300);
+
+                setTimeout(() => {
+                    cards.forEach(c => {
+                        c.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
+                    });
+                }, 1000);
             }
         }
 
@@ -602,16 +621,23 @@
             cards.forEach(card => {
                 const cardMWC = card.getAttribute('data-mwc');
                 if (cardMWC && cardMWC.toLowerCase() === mwcName.toLowerCase()) {
-                    card.style.setProperty('display', 'block', 'important');
+                    card.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
                 } else {
-                    card.style.setProperty('display', 'none', 'important');
+                    card.style.cssText = "display: none !important;";
                 }
             });
-            window.print();
+
             setTimeout(() => {
-                cards.forEach(card => card.style.setProperty('display', 'block', 'important'));
+                window.print();
+            }, 300);
+
+            setTimeout(() => {
+                cards.forEach(card => {
+                    card.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
+                });
             }, 1000);
         }
+        /* ----------------------------------------------------------- */
 
         function exportToExcelPro() {
             if (!cachedSpreadsheetData || cachedSpreadsheetData.length === 0) {
@@ -761,7 +787,6 @@
                     confirmButtonColor: '#0a7c6e'
                 });
                 
-                rowsCache = [];
                 cachedSpreadsheetData = [];
                 lastFetchTime = 0;
                 showMatrixDashboard();
@@ -770,7 +795,6 @@
                 Swal.fire('Gagal!', 'Terjadi kesalahan koneksi jaringan.', 'error');
             })
             .finally(() => {
-                btn.disabled,
                 btn.disabled = false;
                 btn.innerHTML = `<i class="fa-solid fa-paper-plane mr-2"></i> Kirim & Perbarui Data MWC`;
             });
