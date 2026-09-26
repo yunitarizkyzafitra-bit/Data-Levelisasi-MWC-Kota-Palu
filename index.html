@@ -13,26 +13,35 @@
         .bg-custom-amber { background-color: #f59e0b; }
         .bg-custom-base { background-color: #fafafa; }
         
-        /* PENGATURAN CETAK PDF PROFESIONAL MULTI-HALAMAN SAMPAI MWC ULUJADI */
+        /* PENGATURAN CETAK PDF PROFESIONAL MULTI-HALAMAN (SOLUSI UTAMA TERPOTONG) */
         @media print {
             @page {
                 size: A4 portrait;
                 margin: 10mm;
             }
-            body { 
+            html, body {
+                height: auto !important;
+                overflow: visible !important;
                 background: white !important; 
                 color: #111 !important; 
                 font-size: 8.5pt;
                 font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            }
+            /* Matikan pembatas layar penuh dan flexbox tersembunyi saat dicetak */
+            .flex, .h-screen, main, aside {
+                display: block !important;
+                height: auto !important;
+                overflow: visible !important;
+                position: static !important;
             }
             aside, header, nav, button, .no-print { 
                 display: none !important; 
             }
             main { 
                 padding: 0 !important; 
-                overflow: visible !important; 
                 width: 100% !important; 
                 max-width: 100% !important;
+                margin: 0 !important;
             }
             .print-header { 
                 display: block !important; 
@@ -340,7 +349,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzq8un-gK7Chxc12pPPNfvfoVsdaeGzibRSQcbctdVDDPx6NJjvu4aiOeZDoQ80OrdaiA/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwxwRuIYE12z-tlUeMSz7ZpOTbp2pIq0O_qiJ2Xf2QCkcpdVyoiaWP4cRFRV2rQ8eYJcw/exec";
 
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
@@ -570,7 +579,7 @@
             document.getElementById('tim_sosial').value = rowData["25. Tim Tanggap Sosial"] || 0;
         }
 
-        /* --- FUNGSI CETAK PDF LENGKAP SAMPAI MWC ULUJADI (MULTI-HALAMAN) --- */
+        /* --- FUNGSI CETAK PDF LENGKAP SEMUA HALAMAN (MULTI-HALAMAN) --- */
         async function showSelectPrintModal() {
             Swal.fire({
                 title: 'Menyiapkan Dokumen...',
@@ -605,7 +614,6 @@
                 const cards = document.querySelectorAll('.mwc-vertical-card');
                 
                 if (chosenMWC === "SEMUA MWC") {
-                    // Memaksa seluruh kartu tampil tanpa terkecuali dan membuat halaman baru per MWC
                     cards.forEach(c => {
                         c.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important; page-break-after: always !important;";
                     });
@@ -620,12 +628,10 @@
                     });
                 }
 
-                // Berikan jeda waktu eksekusi DOM agar browser merender seluruh halaman
                 setTimeout(() => {
                     window.print();
                 }, 500);
 
-                // Kembalikan tampilan ke semula setelah dialog cetak selesai
                 setTimeout(() => {
                     cards.forEach(c => {
                         c.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
@@ -669,7 +675,6 @@
                 });
             }, 1500);
         }
-        /* ------------------------------------------------------------------ */
 
         function exportToExcelPro() {
             if (!cachedSpreadsheetData || cachedSpreadsheetData.length === 0) {
