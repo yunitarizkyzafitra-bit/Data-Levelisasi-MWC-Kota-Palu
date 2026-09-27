@@ -354,7 +354,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx8D3jBnYjxNkk-oJ_YyHmup4A7zN04wxjqkpGEXfBzb6XQwI4d5yfXlRSaO2SoRRYZBw/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPbBrMP6ZhwRgomxveJ-avth24LlSQUGTuZTjEeDqZWeNk_4XzZVUe2pUrH9iS99_oVg/exec";
 
         const MWC_PIN_LIST = {
             "MWC Tawaeli": "1401",
@@ -712,7 +712,7 @@
             });
         }
 
-        // FUNGSI PDF OPTIMAL 2 KOLOM SIMETRIS (PAS 1 HALAMAN PENUH)
+        // FUNGSI PDF DENGAN KOP YANG DITURUNKAN DAN DIPERBESAR SECARA PRESISI (TETAP 1 HALAMAN)
         function downloadMWCPDF(mwcName) {
             const cards = document.querySelectorAll('.mwc-vertical-card');
             let targetCard = null;
@@ -731,23 +731,23 @@
             const btnInClone = targetCard.querySelector('button');
             if (btnInClone) btnInClone.remove();
 
-            // Kontainer PDF dengan padding luar agar berjarak pas dan rapi dari sisi kertas
+            // Kontainer PDF dengan margin atas (padding-top) agar kop turun dan tidak terlalu menempel ke atas
             const container = document.createElement('div');
-            container.style.padding = '6px 10px';
+            container.style.padding = '10px 10px 6px 10px'; // Padding atas ditambah sedikit agar turun
             container.style.background = '#ffffff';
             container.style.fontFamily = 'Helvetica, Arial, sans-serif';
             container.style.color = '#111';
             
-            // Kop surat ringkas dengan jarak bawah yang proporsional
+            // Kop surat dengan ukuran font yang sedikit diperbesar (presisi: di atas teks isi, tetapi tidak sebesar sidebar)
             container.innerHTML = `
-                <div style="text-align: center; margin-bottom: 6px; border-bottom: 1.5px solid #0a7c6e; padding-bottom: 3px;">
-                    <h2 style="color: #0a7c6e; font-size: 10.5px; font-weight: bold; margin: 0; text-transform: uppercase;">LAPORAN DATA LEVELISASI - ${mwcName.toUpperCase()}</h2>
-                    <p style="font-size: 7.5px; color: #555; margin: 2px 0 0 0;">Unit UCR - Muslimah Wahdah Islamiyah Kota Palu | Tanggal: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                <div style="text-align: center; margin-bottom: 8px; border-bottom: 2px solid #0a7c6e; padding-bottom: 5px;">
+                    <h2 style="color: #0a7c6e; font-size: 11.5px; font-weight: 900; margin: 0 0 2px 0; text-transform: uppercase; letter-spacing: 0.5px;">LAPORAN DATA LEVELISASI - ${mwcName.toUpperCase()}</h2>
+                    <p style="font-size: 8.5px; color: #445; font-weight: bold; margin: 0;">Unit UCR - Muslimah Wahdah Islamiyah Kota Palu | Tanggal: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                 </div>
             `;
             container.appendChild(targetCard);
 
-            // Set grid tepat 2 kolom simetris dengan jarak antar kotak (*gap*) yang rapat dan seimbang
+            // Set grid tepat 2 kolom simetris dengan jarak antar kotak yang rapat
             const gridContainer = container.querySelector('.grid');
             if (gridContainer) {
                 gridContainer.style.display = 'grid';
@@ -755,7 +755,7 @@
                 gridContainer.style.gap = '2px 6px';
             }
 
-            // Berikan padding compact yang rapi di dalam setiap kotak item data
+            // Padding di dalam setiap kotak item data
             const itemBoxes = container.querySelectorAll('.bg-slate-50');
             itemBoxes.forEach(box => {
                 box.style.padding = '3px 5px';
@@ -765,7 +765,7 @@
                 box.style.minHeight = '18px';
             });
 
-            // Atur ukuran font teks label dan nilai agar seluruh 26 data muat sempurna dalam 1 halaman
+            // Ukuran font teks label dan nilai dalam kotak agar tetap muat pas 1 halaman
             const textSpans = container.querySelectorAll('.bg-slate-50 span');
             textSpans.forEach(span => {
                 if (span.classList.contains('font-black')) {
@@ -777,7 +777,7 @@
             });
 
             const opt = {
-                margin:       [2.5, 3, 2.5, 3], // Margin kertas optimal agar pas 1 halaman penuh
+                margin:       [2, 3, 2, 3], // Margin kertas optimal
                 filename:     `Laporan_Levelisasi_${mwcName.replace(/\s+/g, '_')}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2.5, useCORS: true, logging: false },
@@ -786,14 +786,14 @@
 
             Swal.fire({
                 title: 'Memproses PDF...',
-                text: 'Menyusun 26 indikator dalam 2 kolom simetris (Pas 1 Halaman)...',
+                text: 'Menyesuaikan posisi kop dan tata letak...',
                 allowOutsideClick: false,
                 didOpen: () => { Swal.showLoading(); }
             });
 
             html2pdf().from(container).set(opt).save().then(() => {
                 Swal.close();
-                Swal.fire('Berhasil!', 'File PDF berhasil diunduh dalam 2 kolom simetris pas 1 halaman.', 'success');
+                Swal.fire('Berhasil!', 'PDF berhasil diunduh dengan posisi kop yang lebih presisi.', 'success');
             }).catch(err => {
                 Swal.close();
                 Swal.fire('Gagal', 'Terjadi kendala saat merender PDF.', 'error');
