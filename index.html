@@ -46,7 +46,7 @@
                 border-bottom: 2px solid #0a7c6e;
                 padding-bottom: 6px;
             }
-            /* Menyembunyikan banner utama "Matrix Aktivitas Keseluruhan MWC" saat cetak */
+            /* Menyembunyikan banner utama saat cetak */
             .matrix-banner-header {
                 display: none !important;
             }
@@ -69,39 +69,42 @@
                 display: block !important;
             }
 
-            /* Aturan khusus untuk MWC Palu Selatan: hanya menampilkan teks MWC Palu Selatan dan menyembunyikan elemen dekoratif lainnya di header card */
-            body.print-single-mwc[data-printing-mwc="MWC Palu Selatan"] .target-print-mwc .mwc-card-header .mwc-badge-label,
-            body.print-single-mwc[data-printing-mwc="MWC Palu Selatan"] .target-print-mwc .mwc-card-header button {
-                display: none !important;
-            }
-            body.print-single-mwc[data-printing-mwc="MWC Palu Selatan"] .target-print-mwc .mwc-card-header {
-                background: transparent !important;
-                color: #0a7c6e !important;
-                border-bottom: 2px solid #0a7c6e !important;
-                padding: 0 0 8px 0 !important;
+            /* --- PENGATURAN HEADER KARTU SAAT DICETAK KE PDF --- */
+            /* Memastikan header kartu (termasuk MWC Palu Selatan) tampil utuh dengan latar hijau */
+            .mwc-card-header {
+                display: block !important;
+                background-color: #0a7c6e !important;
+                color: #ffffff !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                padding: 10px 14px !important;
                 margin-bottom: 12px !important;
-                text-align: center !important;
+                border-radius: 6px !important;
             }
-            body.print-single-mwc[data-printing-mwc="MWC Palu Selatan"] .target-print-mwc .mwc-card-header h4 {
-                font-size: 16pt !important;
-                font-weight: 900 !important;
+            .mwc-card-header h4 {
+                color: #ffffff !important;
+                font-size: 14pt !important;
+                font-weight: 800 !important;
+                margin: 0 !important;
                 text-transform: uppercase !important;
-                color: #0a7c6e !important;
+            }
+            .mwc-card-header .mwc-badge-label {
+                display: inline-block !important;
+                background-color: #f59e0b !important;
+                color: #086358 !important;
+                font-size: 8pt !important;
+                font-weight: 800 !important;
+                padding: 2px 8px !important;
+                border-radius: 9999px !important;
+                margin-bottom: 4px !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
 
-            .mwc-card-header {
-                background: #0a7c6e !important;
-                color: white !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                padding: 6px 10px !important;
-                margin-bottom: 8px;
-                border-radius: 4px;
-            }
             .print-grid-container {
                 display: grid !important;
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 4px 8px !important;
+                gap: 6px 10px !important;
                 padding: 0 !important;
             }
             .print-grid-item {
@@ -110,10 +113,10 @@
                 align-items: center !important;
                 background: #f8fafc !important;
                 border: 1px solid #e2e8f0 !important;
-                padding: 4px 8px !important;
+                padding: 6px 10px !important;
                 border-radius: 4px !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
                 break-inside: avoid;
                 page-break-inside: avoid;
             }
@@ -135,15 +138,8 @@
                 print-color-adjust: exact;
             }
 
-            /* Pengaturan Pemecahan Halaman Eksak Berdasarkan Nomor Item hingga 25 Poin */
-            .aggregate-print-card:nth-of-type(5) {
-                page-break-before: always !important;
-                break-before: page !important;
-            }
-            .aggregate-print-card:nth-of-type(11) {
-                page-break-before: always !important;
-                break-before: page !important;
-            }
+            .aggregate-print-card:nth-of-type(5),
+            .aggregate-print-card:nth-of-type(11),
             .aggregate-print-card:nth-of-type(18) {
                 page-break-before: always !important;
                 break-before: page !important;
@@ -639,7 +635,7 @@
                             <h4 class="text-lg font-black mt-0.5">${mwcName}</h4>
                         </div>
                         <button onclick="printSingleMWC('${mwcName}')" class="no-print bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-bold text-xs px-3.5 py-1.5 rounded-lg shadow transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-file-pdf"><span>Cetak PDF MWC</span></i>
+                            <i class="fa-solid fa-file-pdf"></i><span>Cetak PDF MWC</span>
                         </button>
                     </div>
                 `;
@@ -754,14 +750,12 @@
             });
 
             document.body.classList.add('print-single-mwc');
-            document.body.setAttribute('data-printing-mwc', mwcName);
             document.getElementById('printHeaderTitle').innerText = `LAPORAN DATA INPUT LEVELISASI - ${mwcName.toUpperCase()}`;
             
             window.print();
 
             setTimeout(() => {
                 document.body.classList.remove('print-single-mwc');
-                document.body.removeAttribute('data-printing-mwc');
                 document.getElementById('printHeaderTitle').innerText = `LAPORAN DATA INPUT LEVELISASI MWC`;
             }, 500);
         }
