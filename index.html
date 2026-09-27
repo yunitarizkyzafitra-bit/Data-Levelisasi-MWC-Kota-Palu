@@ -17,97 +17,67 @@
             @page {
                 size: A4 portrait;
                 margin: 10mm;
+                @top-right {
+                    content: "Halaman " counter(page) " dari " counter(pages);
+                    font-size: 8pt;
+                    font-weight: bold;
+                    color: #555;
+                }
             }
             
-            /* 1. Paksa HTML dan Body menjadi dokumen cetak murni tanpa batas */
-            *, *:before, *:after {
-                box-sizing: border-box;
-            }
+            /* 1. Paksa HTML & Body bebas dari kunci tinggi layar (h-screen) */
             html, body {
                 height: auto !important;
-                width: 100% !important;
                 overflow: visible !important;
-                background: #ffffff !important; 
-                color: #111111 !important; 
+                background: white !important; 
+                color: #111 !important; 
                 font-size: 9pt;
                 font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-                position: static !important;
             }
 
-            /* 2. Sembunyikan seluruh elemen navigasi, sidebar, header web, dan tombol */
-            aside, header, nav, button, .no-print, .summary-boxes, #matrixSection, #inputSection, #viewSection, .bg-gradient-to-r { 
+            /* 2. Sembunyikan elemen navigasi yang tidak perlu saat dicetak */
+            aside, header, nav, button, .no-print, .summary-boxes, #matrixSection, #inputSection, #viewSection { 
                 display: none !important; 
             }
 
-            /* 3. Bebaskan elemen main dari batasan tinggi layar flex */
+            /* 3. Atur main agar mengalir secara vertikal penuh */
             main { 
                 padding: 0 !important; 
-                margin: 0 !important;
                 overflow: visible !important; 
                 width: 100% !important; 
                 max-width: 100% !important;
                 display: block !important;
                 height: auto !important;
-                position: static !important;
             }
 
-            /* 4. Tampilkan judul khusus cetak */
             .print-header { 
-                display: block !important; 
-                text-align: center; 
-                margin-bottom: 12px !important; 
-                border-bottom: 2px solid #0a7c6e;
-                padding-bottom: 6px;
+                display: none !important; 
             }
 
-            /* 5. Buka kunci kontainer total kader agar murni mengalir ke bawah */
-            body.print-aggregate-report,
-            body.print-aggregate-report #totalKaderSection {
+            /* Cetak hanya untuk single MWC card yang dipilih */
+            body.print-single-mwc .mwc-vertical-card {
+                display: none !important;
+            }
+            body.print-single-mwc .mwc-vertical-card.target-print-mwc {
                 display: block !important;
-                width: 100% !important;
-                height: auto !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                background: transparent !important;
-                position: static !important;
-            }
-
-            body.print-aggregate-report #totalKaderSection > div {
                 border: none !important;
                 box-shadow: none !important;
-                padding: 0 !important;
-                background: transparent !important;
-            }
-
-            /* 6. Ubah grid kartu menjadi blok vertikal penuh */
-            #aggregateSummaryGrid {
-                display: block !important;
+                margin: 0 !important;
                 width: 100% !important;
-                height: auto !important;
             }
-
-            /* 7. Desain Kartu Agregat saat dicetak */
-            .aggregate-print-card {
-                background: #ffffff !important;
-                border: 1px solid #cbd5e1 !important;
-                border-radius: 6px !important;
-                padding: 10px 14px !important;
-                margin-bottom: 15px !important;
+            body.print-single-mwc .target-print-mwc .no-print {
+                display: none !important;
+            }
+            body.print-single-mwc .target-print-mwc .print-grid-container {
+                display: grid !important;
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 6mm !important;
+            }
+            body.print-single-mwc .target-print-mwc .print-grid-item {
                 break-inside: avoid !important;
                 page-break-inside: avoid !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-
-            /* 8. PEMOTONGAN HALAMAN OTOMATIS (Setiap 4 kartu pindah ke halaman baru) */
-            .aggregate-print-card:nth-of-type(4n + 1) {
-                page-break-before: always !important;
-                break-before: page !important;
-            }
-            
-            .aggregate-print-card:first-of-type {
-                page-break-before: avoid !important;
-                break-before: avoid !important;
+                border: 1px solid #cbd5e1 !important;
+                background: #fff !important;
             }
         }
 
@@ -262,7 +232,7 @@
                         <div>
                             <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-black px-2.5 py-1 rounded-full uppercase">Rekapitulasi Agregat Kota Palu</span>
                             <h3 class="text-xl sm:text-2xl font-black mt-2">Menu Total Kader & Agregat Parsial</h3>
-                            <p class="text-emerald-100 text-xs sm:text-sm mt-1">Akumulasi parsial seluruh 25 indikator dari seluruh wilayah MWC terdistribusi rapi.</p>
+                            <p class="text-emerald-100 text-xs sm:text-sm mt-1">Akumulasi parsial seluruh 25 indikator dari seluruh wilayah MWC.</p>
                         </div>
                         <div class="flex gap-2">
                             <button onclick="showMatrixDashboard()" class="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition">
