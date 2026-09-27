@@ -712,7 +712,7 @@
             });
         }
 
-        // FUNGSI PDF OPTIMAL 1 HALAMAN PENUH (Jarak Rapih & Profesional)
+        // FUNGSI PDF OPTIMAL 2 KOLOM SIMETRIS (PAS 1 HALAMAN PENUH)
         function downloadMWCPDF(mwcName) {
             const cards = document.querySelectorAll('.mwc-vertical-card');
             let targetCard = null;
@@ -733,50 +733,51 @@
 
             // Kontainer PDF dengan padding luar agar berjarak pas dan rapi dari sisi kertas
             const container = document.createElement('div');
-            container.style.padding = '8px 12px';
+            container.style.padding = '6px 10px';
             container.style.background = '#ffffff';
             container.style.fontFamily = 'Helvetica, Arial, sans-serif';
             container.style.color = '#111';
             
             // Kop surat ringkas dengan jarak bawah yang proporsional
             container.innerHTML = `
-                <div style="text-align: center; margin-bottom: 8px; border-bottom: 1.5px solid #0a7c6e; padding-bottom: 4px;">
-                    <h2 style="color: #0a7c6e; font-size: 11px; font-weight: bold; margin: 0; text-transform: uppercase;">LAPORAN DATA LEVELISASI - ${mwcName.toUpperCase()}</h2>
-                    <p style="font-size: 8px; color: #555; margin: 2px 0 0 0;">Unit UCR - Muslimah Wahdah Islamiyah Kota Palu | Tanggal: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                <div style="text-align: center; margin-bottom: 6px; border-bottom: 1.5px solid #0a7c6e; padding-bottom: 3px;">
+                    <h2 style="color: #0a7c6e; font-size: 10.5px; font-weight: bold; margin: 0; text-transform: uppercase;">LAPORAN DATA LEVELISASI - ${mwcName.toUpperCase()}</h2>
+                    <p style="font-size: 7.5px; color: #555; margin: 2px 0 0 0;">Unit UCR - Muslimah Wahdah Islamiyah Kota Palu | Tanggal: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                 </div>
             `;
             container.appendChild(targetCard);
 
-            // Set grid 3 kolom dengan jarak antar kotak (*gap*) yang pas dan seimbang
+            // Set grid tepat 2 kolom simetris dengan jarak antar kotak (*gap*) yang rapat dan seimbang
             const gridContainer = container.querySelector('.grid');
             if (gridContainer) {
                 gridContainer.style.display = 'grid';
-                gridContainer.style.gridTemplateColumns = 'repeat(3, minmax(0, 1fr))';
-                gridContainer.style.gap = '3px';
+                gridContainer.style.gridTemplateColumns = 'repeat(2, minmax(0, 1fr))';
+                gridContainer.style.gap = '2px 6px';
             }
 
-            // Berikan padding yang rapi di dalam setiap kotak item data agar tidak terlalu rapat
+            // Berikan padding compact yang rapi di dalam setiap kotak item data
             const itemBoxes = container.querySelectorAll('.bg-slate-50');
             itemBoxes.forEach(box => {
-                box.style.padding = '4px 6px';
-                box.style.borderRadius = '5px';
+                box.style.padding = '3px 5px';
+                box.style.borderRadius = '3px';
                 box.style.marginBottom = '0px';
-                box.style.border = '1px solid #e2e8f0';
+                box.style.border = '1px solid #cbd5e1';
+                box.style.minHeight = '18px';
             });
 
-            // Atur ukuran font teks label dan nilai agar proporsional dan mudah dibaca
+            // Atur ukuran font teks label dan nilai agar seluruh 26 data muat sempurna dalam 1 halaman
             const textSpans = container.querySelectorAll('.bg-slate-50 span');
             textSpans.forEach(span => {
                 if (span.classList.contains('font-black')) {
-                    span.style.fontSize = '10px';
+                    span.style.fontSize = '9px';
                 } else {
-                    span.style.fontSize = '8px';
-                    span.style.lineHeight = '1.1';
+                    span.style.fontSize = '7.5px';
+                    span.style.lineHeight = '1.05';
                 }
             });
 
             const opt = {
-                margin:       [3, 3, 3, 3], // Margin kertas seimbang agar ada jarak profesional dari tepi
+                margin:       [2.5, 3, 2.5, 3], // Margin kertas optimal agar pas 1 halaman penuh
                 filename:     `Laporan_Levelisasi_${mwcName.replace(/\s+/g, '_')}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2.5, useCORS: true, logging: false },
@@ -785,14 +786,14 @@
 
             Swal.fire({
                 title: 'Memproses PDF...',
-                text: 'Menyusun tata letak laporan agar rapi dan pas 1 halaman penuh...',
+                text: 'Menyusun 26 indikator dalam 2 kolom simetris (Pas 1 Halaman)...',
                 allowOutsideClick: false,
                 didOpen: () => { Swal.showLoading(); }
             });
 
             html2pdf().from(container).set(opt).save().then(() => {
                 Swal.close();
-                Swal.fire('Berhasil!', 'File PDF berhasil diunduh pas 1 halaman dengan rapi.', 'success');
+                Swal.fire('Berhasil!', 'File PDF berhasil diunduh dalam 2 kolom simetris pas 1 halaman.', 'success');
             }).catch(err => {
                 Swal.close();
                 Swal.fire('Gagal', 'Terjadi kendala saat merender PDF.', 'error');
@@ -863,7 +864,7 @@
                         </div>
                         <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
                             <strong class="text-[#0a7c6e] block mb-1 font-bold"><i class="fa-solid fa-circle-3 mr-1.5"></i> Input & Laporan</strong>
-                            Lengkapi seluruh 26 indikator data pada formulir, kirim untuk memperbarui database pusat, atau gunakan tombol <b>Save PDF MWC</b> untuk mengunduh laporan resmi per wilayah secara instan di HP, Tab, maupun Laptop.
+                            Lengkapi seluruh 26 indikator data pada formulir, kirim untuk memperbarui database pusat, atau gunakan tombol <b>Save PDF MWC</b> untuk mengunduh laporan resmi per wilayah secara instan dalam 2 kolom simetris pas 1 halaman.
                         </div>
                     </div>
                 `,
