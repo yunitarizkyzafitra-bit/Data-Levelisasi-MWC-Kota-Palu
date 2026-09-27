@@ -46,7 +46,6 @@
                 border-bottom: 2px solid #0a7c6e;
                 padding-bottom: 6px;
             }
-            /* Menyembunyikan banner utama saat cetak */
             .matrix-banner-header {
                 display: none !important;
             }
@@ -56,21 +55,26 @@
                 margin: 0 !important; 
                 background: #ffffff !important;
             }
+            
+            /* Kontrol Mode Cetak Berdasarkan Target */
             body.print-single-mwc .mwc-vertical-card:not(.target-print-mwc) {
                 display: none !important;
             }
             body.print-single-mwc .target-print-mwc {
                 display: block !important;
             }
-            body.print-aggregate-report .print-hide-on-aggregate {
+            
+            body.print-aggregate-mode #matrixSection {
                 display: none !important;
             }
-            body.print-aggregate-report .print-show-on-aggregate {
+            body.print-aggregate-mode #totalKaderSection {
                 display: block !important;
+            }
+            body.print-aggregate-mode .aggregate-banner-header {
+                display: none !important;
             }
 
             /* --- PENGATURAN HEADER KARTU SAAT DICETAK KE PDF --- */
-            /* Memastikan header kartu (termasuk MWC Palu Selatan) tampil utuh dengan latar hijau */
             .mwc-card-header {
                 display: block !important;
                 background-color: #0a7c6e !important;
@@ -121,28 +125,21 @@
                 page-break-inside: avoid;
             }
 
-            /* Styling Khusus Cetak Agregat Parsial Terstruktur per Halaman */
+            /* Styling Khusus Cetak Agregat Dokumen */
             #aggregateSummaryGrid {
-                display: flex !important;
-                flex-direction: column !important;
-                gap: 12px !important;
+                display: grid !important;
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 8px !important;
             }
             .aggregate-print-card {
                 background: #ffffff !important;
                 border: 1px solid #cbd5e1 !important;
                 border-radius: 6px !important;
-                padding: 10px 14px !important;
+                padding: 8px 12px !important;
                 break-inside: avoid !important;
                 page-break-inside: avoid !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
-            }
-
-            .aggregate-print-card:nth-of-type(5),
-            .aggregate-print-card:nth-of-type(11),
-            .aggregate-print-card:nth-of-type(18) {
-                page-break-before: always !important;
-                break-before: page !important;
             }
         }
         .print-header { display: none; }
@@ -223,7 +220,7 @@
             <div class="p-4 sm:p-8 max-w-6xl mx-auto w-full flex-1">
                 
                 <div class="print-header">
-                    <h1 id="printHeaderTitle" class="text-base font-bold uppercase tracking-wider text-gray-900">LAPORAN DATA INPUT LEVELISASI MWC</h1>
+                    <h1 id="printHeaderTitle" class="text-base font-bold uppercase tracking-wider text-gray-900">LAPORAN REKAPITULASI AGREGAT KOTA PALU</h1>
                     <h2 class="text-xs font-semibold text-[#0a7c6e] mt-0.5">UNIT UCR - MUSLIMAH WAHDAH ISLAMIYAH KOTA PALU</h2>
                     <p class="text-[9px] text-gray-500 mt-0.5">Dicetak pada: <span id="printDateStr"></span></p>
                 </div>
@@ -293,13 +290,16 @@
                 </div>
 
                 <div id="totalKaderSection" class="hidden space-y-6">
-                    <div class="bg-gradient-to-r from-[#086358] to-[#0a7c6e] text-white rounded-2xl p-6 shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="aggregate-banner-header bg-gradient-to-r from-[#086358] to-[#0a7c6e] text-white rounded-2xl p-6 shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
                         <div>
                             <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-black px-2.5 py-1 rounded-full uppercase">Rekapitulasi Agregat Kota Palu</span>
                             <h3 class="text-xl sm:text-2xl font-black mt-2">Menu Total Kader & Agregat Parsial</h3>
                             <p class="text-emerald-100 text-xs sm:text-sm mt-1">Akumulasi parsial seluruh item formulir dari seluruh wilayah MWC lengkap dengan rincian per wilayah.</p>
                         </div>
-                        <div class="flex gap-2">
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="printAggregateDocument()" class="px-4 py-2.5 bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-file-pdf"></i> Cetak Dokumen Agregat
+                            </button>
                             <button onclick="showMatrixDashboard()" class="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition">
                                 <i class="fa-solid fa-arrow-left"></i> Kembali
                             </button>
@@ -713,7 +713,7 @@
 
                     let shortName = mwcName.replace("MWC ", "");
                     mwcDetailsHtml += `
-                        <div class="flex justify-between items-center bg-white px-2.5 py-1 rounded border border-gray-100 text-[11px]">
+                        <div class="flex justify-between items-center bg-white px-2 py-0.5 rounded border border-gray-100 text-[10px]">
                             <span class="text-gray-600 font-medium">${shortName}</span>
                             <span class="font-bold text-[#0a7c6e]">${val}</span>
                         </div>
@@ -721,17 +721,16 @@
                 });
 
                 grid.innerHTML += `
-                    <div class="aggregate-print-card bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                        <div class="flex justify-between items-start mb-3 border-b pb-2">
-                            <span class="text-gray-800 font-bold text-xs uppercase tracking-wide pr-2">${key}</span>
+                    <div class="aggregate-print-card bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div class="flex justify-between items-start mb-2 border-b pb-1.5">
+                            <span class="text-gray-800 font-bold text-[11px] uppercase tracking-wide pr-2">${key}</span>
                             <div class="text-right flex-shrink-0">
-                                <span class="text-[10px] text-gray-400 block font-semibold">Total Agregat</span>
-                                <span class="font-black text-amber-600 text-sm">${isNaN(totalIndicatorSum) ? '-' : totalIndicatorSum.toLocaleString('id-ID')}</span>
+                                <span class="text-[9px] text-gray-400 block font-semibold">Total</span>
+                                <span class="font-black text-amber-600 text-xs">${isNaN(totalIndicatorSum) ? '-' : totalIndicatorSum.toLocaleString('id-ID')}</span>
                             </div>
                         </div>
                         <div class="space-y-1">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Perolehan Masing-Masing MWC:</p>
-                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-1">
                                 ${mwcDetailsHtml}
                             </div>
                         </div>
@@ -756,7 +755,18 @@
 
             setTimeout(() => {
                 document.body.classList.remove('print-single-mwc');
-                document.getElementById('printHeaderTitle').innerText = `LAPORAN DATA INPUT LEVELISASI MWC`;
+                document.getElementById('printHeaderTitle').innerText = `LAPORAN REKAPITULASI AGREGAT KOTA PALU`;
+            }, 500);
+        }
+
+        function printAggregateDocument() {
+            document.body.classList.add('print-aggregate-mode');
+            document.getElementById('printHeaderTitle').innerText = `LAPORAN REKAPITULASI AGREGAT KOTA PALU`;
+
+            window.print();
+
+            setTimeout(() => {
+                document.body.classList.remove('print-aggregate-mode');
             }, 500);
         }
 
