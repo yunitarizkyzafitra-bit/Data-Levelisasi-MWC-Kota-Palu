@@ -166,32 +166,6 @@
                     <i class="fa-solid fa-users-rectangle text-[#f59e0b]"></i> Total Kader & Agregat
                 </button>
 
-                <!-- MENU DROPDOWN KARTU KADER UTAMA -->
-                <div class="mb-2">
-                    <button onclick="toggleDropdownCardMenu()" class="w-full text-left px-4 py-3 rounded-xl transition flex items-center justify-between bg-[#075249] hover:bg-[#0a7c6e] text-white font-semibold border border-[#f59e0b]/30 shadow-sm">
-                        <span class="flex items-center gap-3"><i class="fa-solid fa-id-badge text-[#f59e0b]"></i> Kartu Ringkasan Kader</span>
-                        <i id="dropdownCardIcon" class="fa-solid fa-chevron-down text-xs text-[#f59e0b] transition-transform duration-200"></i>
-                    </button>
-                    <div id="dropdownCardContent" class="hidden mt-1.5 space-y-1 pl-3 bg-[#064f45] p-2 rounded-xl border border-[#0a7c6e]">
-                        <div class="p-2 rounded-lg bg-[#086358]/80 text-xs flex justify-between items-center text-emerald-100">
-                            <span><i class="fa-solid fa-users text-[#f59e0b] mr-1.5"></i> Daiyah:</span>
-                            <span id="navStatDaiyah" class="font-black text-white bg-[#0a7c6e] px-2 py-0.5 rounded">0</span>
-                        </div>
-                        <div class="p-2 rounded-lg bg-[#086358]/80 text-xs flex justify-between items-center text-emerald-100">
-                            <span><i class="fa-solid fa-id-card text-indigo-300 mr-1.5"></i> Ta'rif:</span>
-                            <span id="navStatTarif" class="font-black text-white bg-[#0a7c6e] px-2 py-0.5 rounded">0</span>
-                        </div>
-                        <div class="p-2 rounded-lg bg-[#086358]/80 text-xs flex justify-between items-center text-emerald-100">
-                            <span><i class="fa-solid fa-user-check text-teal-300 mr-1.5"></i> Takwin:</span>
-                            <span id="navStatTakwin" class="font-black text-white bg-[#0a7c6e] px-2 py-0.5 rounded">0</span>
-                        </div>
-                        <div class="p-2 rounded-lg bg-[#086358]/80 text-xs flex justify-between items-center text-emerald-100">
-                            <span><i class="fa-solid fa-user-shield text-orange-300 mr-1.5"></i> Tanfidz:</span>
-                            <span id="navStatTanfidz" class="font-black text-white bg-[#0a7c6e] px-2 py-0.5 rounded">0</span>
-                        </div>
-                    </div>
-                </div>
-
                 <button onclick="showGuideModal(); toggleSidebar();" class="w-full text-left px-4 py-3 rounded-xl transition flex items-center gap-3 bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-bold mb-4 shadow-sm">
                     <i class="fa-solid fa-book-open"></i> Petunjuk Pengisian Data
                 </button>
@@ -530,13 +504,6 @@
             document.getElementById('sidebar').classList.toggle('-translate-x-full');
         }
 
-        function toggleDropdownCardMenu() {
-            const content = document.getElementById('dropdownCardContent');
-            const icon = document.getElementById('dropdownCardIcon');
-            content.classList.toggle('hidden');
-            icon.classList.toggle('rotate-180');
-        }
-
         function showMatrixDashboard() {
             selectedMWCName = "";
             document.getElementById('matrixSection').classList.remove('hidden');
@@ -648,12 +615,6 @@
             document.getElementById('statKaderTarif').innerText = valTarif.toLocaleString('id-ID');
             document.getElementById('statKaderTakwin').innerText = valTakwin.toLocaleString('id-ID');
             document.getElementById('statKaderTanfidz').innerText = valTanfidz.toLocaleString('id-ID');
-
-            // Update Kartu pada Menu Dropdown Sidebar
-            document.getElementById('navStatDaiyah').innerText = valDaiyah.toLocaleString('id-ID');
-            document.getElementById('navStatTarif').innerText = valTarif.toLocaleString('id-ID');
-            document.getElementById('navStatTakwin').innerText = valTakwin.toLocaleString('id-ID');
-            document.getElementById('navStatTanfidz').innerText = valTanfidz.toLocaleString('id-ID');
         }
 
         function switchTab(tab) {
@@ -701,10 +662,6 @@
                 document.getElementById('statKaderTarif').innerText = "0";
                 document.getElementById('statKaderTakwin').innerText = "0";
                 document.getElementById('statKaderTanfidz').innerText = "0";
-                document.getElementById('navStatDaiyah').innerText = "0";
-                document.getElementById('navStatTarif').innerText = "0";
-                document.getElementById('navStatTakwin').innerText = "0";
-                document.getElementById('navStatTanfidz').innerText = "0";
                 return;
             }
 
@@ -785,11 +742,6 @@
                 document.getElementById('statKaderTakwin').innerText = totalKaderTakwin.toLocaleString('id-ID');
                 document.getElementById('statKaderTanfidz').innerText = totalKaderTanfidz.toLocaleString('id-ID');
             }
-
-            document.getElementById('navStatDaiyah').innerText = totalDaiyah.toLocaleString('id-ID');
-            document.getElementById('navStatTarif').innerText = totalKaderTarif.toLocaleString('id-ID');
-            document.getElementById('navStatTakwin').innerText = totalKaderTakwin.toLocaleString('id-ID');
-            document.getElementById('navStatTanfidz').innerText = totalKaderTanfidz.toLocaleString('id-ID');
         }
 
         async function renderAggregateData() {
