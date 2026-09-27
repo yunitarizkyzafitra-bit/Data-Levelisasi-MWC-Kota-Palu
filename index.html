@@ -712,7 +712,7 @@
             });
         }
 
-        // FUNGSI PDF OPTIMAL 1 HALAMAN PENUH (Tanpa Sisa Ruang Kosong di Bawah)
+        // FUNGSI PDF OPTIMAL 1 HALAMAN PENUH (Jarak Rapih & Profesional)
         function downloadMWCPDF(mwcName) {
             const cards = document.querySelectorAll('.mwc-vertical-card');
             let targetCard = null;
@@ -731,51 +731,52 @@
             const btnInClone = targetCard.querySelector('button');
             if (btnInClone) btnInClone.remove();
 
-            // Kontainer PDF dengan margin tipis agar mengisi penuh seluruh sisi kertas
+            // Kontainer PDF dengan padding luar agar berjarak pas dan rapi dari sisi kertas
             const container = document.createElement('div');
-            container.style.padding = '4px 8px';
+            container.style.padding = '8px 12px';
             container.style.background = '#ffffff';
             container.style.fontFamily = 'Helvetica, Arial, sans-serif';
             container.style.color = '#111';
             
-            // Kop surat ringkas hemat ruang vertikal
+            // Kop surat ringkas dengan jarak bawah yang proporsional
             container.innerHTML = `
-                <div style="text-align: center; margin-bottom: 6px; border-bottom: 1.5px solid #0a7c6e; padding-bottom: 3px;">
+                <div style="text-align: center; margin-bottom: 8px; border-bottom: 1.5px solid #0a7c6e; padding-bottom: 4px;">
                     <h2 style="color: #0a7c6e; font-size: 11px; font-weight: bold; margin: 0; text-transform: uppercase;">LAPORAN DATA LEVELISASI - ${mwcName.toUpperCase()}</h2>
                     <p style="font-size: 8px; color: #555; margin: 2px 0 0 0;">Unit UCR - Muslimah Wahdah Islamiyah Kota Palu | Tanggal: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                 </div>
             `;
             container.appendChild(targetCard);
 
-            // KUNCI SUHU: Set 3 kolom agar 26 data terdistribusi padat & simetris memenuhi 1 halaman
+            // Set grid 3 kolom dengan jarak antar kotak (*gap*) yang pas dan seimbang
             const gridContainer = container.querySelector('.grid');
             if (gridContainer) {
                 gridContainer.style.display = 'grid';
                 gridContainer.style.gridTemplateColumns = 'repeat(3, minmax(0, 1fr))';
-                gridContainer.style.gap = '2px';
+                gridContainer.style.gap = '3px';
             }
 
-            // Rapatkan padding kotak item data
+            // Berikan padding yang rapi di dalam setiap kotak item data agar tidak terlalu rapat
             const itemBoxes = container.querySelectorAll('.bg-slate-50');
             itemBoxes.forEach(box => {
-                box.style.padding = '3px 5px';
-                box.style.borderRadius = '4px';
+                box.style.padding = '4px 6px';
+                box.style.borderRadius = '5px';
                 box.style.marginBottom = '0px';
+                box.style.border = '1px solid #e2e8f0';
             });
 
-            // Sesuaikan ukuran font teks label dan nilai angka
+            // Atur ukuran font teks label dan nilai agar proporsional dan mudah dibaca
             const textSpans = container.querySelectorAll('.bg-slate-50 span');
             textSpans.forEach(span => {
                 if (span.classList.contains('font-black')) {
                     span.style.fontSize = '10px';
                 } else {
                     span.style.fontSize = '8px';
-                    span.style.lineHeight = '1.05';
+                    span.style.lineHeight = '1.1';
                 }
             });
 
             const opt = {
-                margin:       [1, 1, 1, 1], // Margin kertas sangat minim agar memenuhi seluruh lembar
+                margin:       [3, 3, 3, 3], // Margin kertas seimbang agar ada jarak profesional dari tepi
                 filename:     `Laporan_Levelisasi_${mwcName.replace(/\s+/g, '_')}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2.5, useCORS: true, logging: false },
@@ -784,14 +785,14 @@
 
             Swal.fire({
                 title: 'Memproses PDF...',
-                text: 'Menyusun 26 data agar pas memenuhi 1 halaman penuh...',
+                text: 'Menyusun tata letak laporan agar rapi dan pas 1 halaman penuh...',
                 allowOutsideClick: false,
                 didOpen: () => { Swal.showLoading(); }
             });
 
             html2pdf().from(container).set(opt).save().then(() => {
                 Swal.close();
-                Swal.fire('Berhasil!', 'File PDF berhasil diunduh pas 1 halaman penuh.', 'success');
+                Swal.fire('Berhasil!', 'File PDF berhasil diunduh pas 1 halaman dengan rapi.', 'success');
             }).catch(err => {
                 Swal.close();
                 Swal.fire('Gagal', 'Terjadi kendala saat merender PDF.', 'error');
