@@ -61,13 +61,6 @@
             body.print-single-mwc .target-print-mwc {
                 display: block !important;
             }
-            body.print-aggregate-report .print-hide-on-aggregate {
-                display: none !important;
-            }
-            body.print-aggregate-report .print-show-on-aggregate {
-                display: block !important;
-            }
-
             .mwc-card-header {
                 display: block !important;
                 background-color: #0a7c6e !important;
@@ -85,19 +78,6 @@
                 margin: 0 !important;
                 text-transform: uppercase !important;
             }
-            .mwc-card-header .mwc-badge-label {
-                display: inline-block !important;
-                background-color: #f59e0b !important;
-                color: #086358 !important;
-                font-size: 8pt !important;
-                font-weight: 800 !important;
-                padding: 2px 8px !important;
-                border-radius: 9999px !important;
-                margin-bottom: 4px !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-
             .print-grid-container {
                 display: grid !important;
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -117,7 +97,6 @@
                 break-inside: avoid;
                 page-break-inside: avoid;
             }
-
             #aggregateSummaryGrid {
                 display: flex !important;
                 flex-direction: column !important;
@@ -132,13 +111,6 @@
                 page-break-inside: avoid !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
-            }
-
-            .aggregate-print-card:nth-of-type(5),
-            .aggregate-print-card:nth-of-type(11),
-            .aggregate-print-card:nth-of-type(18) {
-                page-break-before: always !important;
-                break-before: page !important;
             }
         }
         .print-header { display: none; }
@@ -170,7 +142,7 @@
                 </button>
                 
                 <button onclick="showTotalKaderView(); toggleSidebar();" class="w-full text-left px-4 py-3 rounded-xl transition flex items-center gap-3 bg-[#075249] hover:bg-[#0a7c6e] text-white font-semibold mb-2 border border-[#f59e0b]/30 shadow-sm">
-                    <i class="fa-solid fa-users-rectangle text-[#f59e0b]"></i> Total Kader & Agregat
+                    <i class="fa-solid fa-users-rectangle text-[#f59e0b]"></i> Total Kader & Agregat (1-26)
                 </button>
 
                 <button onclick="showGuideModal(); toggleSidebar();" class="w-full text-left px-4 py-3 rounded-xl transition flex items-center gap-3 bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-bold mb-4 shadow-sm">
@@ -207,7 +179,7 @@
                 <div class="flex items-center gap-3">
                     <button onclick="toggleSidebar()" class="md:hidden text-[#0a7c6e] text-xl px-2 py-1"><i class="fa-solid fa-bars"></i></button>
                     <h2 id="currentTitle" class="text-sm sm:text-base font-bold text-gray-800 flex items-center gap-2">
-                        <i class="fa-solid fa-table-cells text-[#0a7c6e]"></i> Matrix Transparansi Data Levelisasi MWC (26 Item Lengkap)
+                        <i class="fa-solid fa-table-cells text-[#0a7c6e]"></i> Matrix Transparansi Data Levelisasi MWC (26 Item Terurut)
                     </h2>
                 </div>
                 <div id="actionTabs" class="hidden gap-2">
@@ -229,7 +201,7 @@
                         <div>
                             <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-black px-2.5 py-1 rounded-full uppercase">Unit UCR MWD Palu</span>
                             <h3 class="text-xl sm:text-2xl font-black mt-2">Matrix Aktivitas Keseluruhan MWC</h3>
-                            <p class="text-emerald-100 text-xs sm:text-sm mt-1">Menampilkan seluruh 26 indikator dari server secara utuh dan terstruktur.</p>
+                            <p class="text-emerald-100 text-xs sm:text-sm mt-1">Menampilkan seluruh 26 indikator secara utuh, aman, dan terstruktur.</p>
                         </div>
                         <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
                             <button onclick="exportToExcelPro()" class="flex-1 md:flex-none px-4 py-2.5 bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-extrabold text-xs sm:text-sm rounded-xl shadow transition flex items-center justify-center gap-2">
@@ -238,45 +210,6 @@
                             <button onclick="loadMatrixData(true)" class="px-3 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition" title="Muat Ulang">
                                 <i class="fa-solid fa-arrows-rotate"></i>
                             </button>
-                        </div>
-                    </div>
-
-                    <div class="summary-boxes grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-emerald-300 flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-[#0a7c6e] flex items-center justify-center text-lg font-black flex-shrink-0">
-                                <i class="fa-solid fa-users"></i>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-bold text-[#0a7c6e] uppercase tracking-wider">Total Daiyah</p>
-                                <h4 id="statDaiyah" class="text-lg font-black text-[#0a7c6e] mt-0.5">0</h4>
-                            </div>
-                        </div>
-                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg font-black flex-shrink-0">
-                                <i class="fa-solid fa-id-card"></i>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Kader Ta'rif</p>
-                                <h4 id="statKaderTarif" class="text-lg font-black text-indigo-600 mt-0.5">0</h4>
-                            </div>
-                        </div>
-                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-lg font-black flex-shrink-0">
-                                <i class="fa-solid fa-user-check"></i>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Kader Takwin</p>
-                                <h4 id="statKaderTakwin" class="text-lg font-black text-teal-700 mt-0.5">0</h4>
-                            </div>
-                        </div>
-                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-lg font-black flex-shrink-0">
-                                <i class="fa-solid fa-user-shield"></i>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Kader Tanfidz</p>
-                                <h4 id="statKaderTanfidz" class="text-lg font-black text-orange-600 mt-0.5">0</h4>
-                            </div>
                         </div>
                     </div>
 
@@ -292,8 +225,8 @@
                     <div class="bg-gradient-to-r from-[#086358] to-[#0a7c6e] text-white rounded-2xl p-6 shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
                         <div>
                             <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-black px-2.5 py-1 rounded-full uppercase">Rekapitulasi Agregat Kota Palu</span>
-                            <h3 class="text-xl sm:text-2xl font-black mt-2">Menu Total Kader & Agregat Parsial</h3>
-                            <p class="text-emerald-100 text-xs sm:text-sm mt-1">Akumulasi parsial seluruh item formulir dari seluruh wilayah MWC lengkap dengan rincian per wilayah.</p>
+                            <h3 class="text-xl sm:text-2xl font-black mt-2">Menu Akumulasi & Agregat Lengkap (Nomor 1 s.d. 26)</h3>
+                            <p class="text-emerald-100 text-xs sm:text-sm mt-1">Akumulasi komprehensif seluruh indikator angka dan teks secara presisi tanpa ada yang terlewat.</p>
                         </div>
                         <div class="flex gap-2">
                             <button onclick="showMatrixDashboard()" class="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition">
@@ -304,7 +237,7 @@
 
                     <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8">
                         <h4 class="text-base font-bold text-[#0a7c6e] mb-4 flex items-center gap-2">
-                            <i class="fa-solid fa-calculator"></i> Rincian Akumulasi & Perolehan Masing-Masing MWC (Nomor 1 s.d. 26)
+                            <i class="fa-solid fa-calculator"></i> Rincian Akumulasi Angka & Kategori (Item 1 s.d. 26)
                         </h4>
                         <div id="aggregateSummaryGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                         </div>
@@ -376,7 +309,7 @@
                             </div>
                             <div class="md:col-span-2">
                                 <label class="block font-semibold text-gray-700 mb-1">13. Punya kantor/PDM/Sekret (Jika ada, tuliskan jika di sewa / punya sendiri)</label>
-                                <input type="text" id="status_kantor" placeholder="Sewa / Punya Sendiri" class="w-full px-4 py-2 rounded-lg border">
+                                <input type="text" id="status_kantor" placeholder="Sewa / Punya Sendiri / Belum ada" class="w-full px-4 py-2 rounded-lg border">
                             </div>
                             <div>
                                 <label class="block font-semibold text-gray-700 mb-1">14. Memiliki Unit Usaha MWC</label>
@@ -391,7 +324,7 @@
                             </div>
                             <div>
                                 <label class="block font-semibold text-gray-700 mb-1">16. Jenis media dakwah</label>
-                                <input type="text" id="jenis_media" placeholder="IG, Telegram, dll" class="w-full px-4 py-2 rounded-lg border">
+                                <input type="text" id="jenis_media" placeholder="IG, Telegram, FB, dll" class="w-full px-4 py-2 rounded-lg border">
                             </div>
                             <div>
                                 <label class="block font-semibold text-gray-700 mb-1">17. Memiliki hardware yang memadai (laptop/PC, kamera dll)</label>
@@ -494,7 +427,7 @@
             document.getElementById('inputSection').classList.add('hidden');
             document.getElementById('viewSection').classList.add('hidden');
             document.getElementById('actionTabs').classList.add('hidden');
-            document.getElementById('currentTitle').innerHTML = `<i class="fa-solid fa-table-cells text-[#0a7c6e] mr-2"></i> Matrix Transparansi Data Levelisasi MWC (26 Item Lengkap)`;
+            document.getElementById('currentTitle').innerHTML = `<i class="fa-solid fa-table-cells text-[#0a7c6e] mr-2"></i> Matrix Transparansi Data Levelisasi MWC (26 Item Terurut)`;
             loadMatrixData(false);
         }
 
@@ -505,7 +438,7 @@
             document.getElementById('inputSection').classList.add('hidden');
             document.getElementById('viewSection').classList.add('hidden');
             document.getElementById('actionTabs').classList.add('hidden');
-            document.getElementById('currentTitle').innerHTML = `<i class="fa-solid fa-users-rectangle text-[#0a7c6e] mr-2"></i> Menu Total Kader & Agregat Parsial`;
+            document.getElementById('currentTitle').innerHTML = `<i class="fa-solid fa-users-rectangle text-[#0a7c6e] mr-2"></i> Menu Akumulasi & Agregat Lengkap (1-26)`;
             renderAggregateData();
         }
 
@@ -579,10 +512,6 @@
             const container = document.getElementById('verticalMatrixContainer');
             if(data.length === 0) {
                 container.innerHTML = `<div class="bg-white p-8 rounded-2xl text-center text-gray-500 text-sm shadow-sm">Belum ada data terekam.</div>`;
-                document.getElementById('statDaiyah').innerText = "0";
-                document.getElementById('statKaderTarif').innerText = "0";
-                document.getElementById('statKaderTakwin').innerText = "0";
-                document.getElementById('statKaderTanfidz').innerText = "0";
                 return;
             }
 
@@ -595,31 +524,8 @@
             container.innerHTML = "";
             const mwcList = ["MWC Palu Utara", "MWC Mantikulore", "MWC Palu Selatan", "MWC Tatanga", "MWC Ulujadi"];
 
-            let totalDaiyah = 0;
-            let totalKaderTarif = 0;
-            let totalKaderTakwin = 0;
-            let totalKaderTanfidz = 0;
-
             mwcList.forEach(mwcName => {
                 let rowData = latestPerMWC[mwcName];
-                
-                if (rowData) {
-                    for (const [key, value] of Object.entries(rowData)) {
-                        let valNum = Number(value) || 0;
-                        let kLower = key.toLowerCase();
-                        
-                        if (kLower.includes("daiyah")) {
-                            totalDaiyah += valNum;
-                        } else if (kLower.includes("ta'arif") || kLower.includes("tarif")) {
-                            if (kLower.includes("kader")) totalKaderTarif += valNum;
-                        } else if (kLower.includes("takwin") && kLower.includes("kader")) {
-                            totalKaderTakwin += valNum;
-                        } else if (kLower.includes("tanfidz") && kLower.includes("kader")) {
-                            totalKaderTanfidz += valNum;
-                        }
-                    }
-                }
-
                 let card = document.createElement('div');
                 card.className = "mwc-vertical-card bg-white shadow-xl rounded-2xl border border-gray-200 overflow-hidden mb-6";
                 card.setAttribute('data-mwc', mwcName);
@@ -643,7 +549,7 @@
                             bodyHtml += `
                                 <div class="print-grid-item bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
                                     <span class="text-gray-500 font-semibold mb-1 text-[11px]">${key}</span>
-                                    <span class="font-black text-[#0a7c6e] text-sm">${value !== "" ? value : "-"}</span>
+                                    <span class="font-black text-[#0a7c6e] text-sm">${value !== "" && value !== null ? value : "-"}</span>
                                 </div>
                             `;
                         }
@@ -655,11 +561,6 @@
                 card.innerHTML = headerHtml + bodyHtml;
                 container.appendChild(card);
             });
-
-            document.getElementById('statDaiyah').innerText = totalDaiyah.toLocaleString('id-ID');
-            document.getElementById('statKaderTarif').innerText = totalKaderTarif.toLocaleString('id-ID');
-            document.getElementById('statKaderTakwin').innerText = totalKaderTakwin.toLocaleString('id-ID');
-            document.getElementById('statKaderTanfidz').innerText = totalKaderTanfidz.toLocaleString('id-ID');
         }
 
         async function renderAggregateData() {
@@ -695,16 +596,23 @@
             grid.innerHTML = "";
 
             indicatorKeys.forEach(key => {
-                let totalIndicatorSum = 0;
+                let numericSum = 0;
+                let isNumericField = true;
+                let textValuesCount = {};
                 let mwcDetailsHtml = "";
 
                 mwcList.forEach(mwcName => {
                     let rowData = latestPerMWC[mwcName];
-                    let val = rowData && rowData[key] !== undefined && rowData[key] !== "" ? rowData[key] : "-";
+                    let val = rowData && rowData[key] !== undefined && rowData[key] !== "" && rowData[key] !== null ? rowData[key] : "-";
                     
                     let numVal = Number(val);
-                    if (!isNaN(numVal)) {
-                        totalIndicatorSum += numVal;
+                    if (!isNaN(numVal) && val !== "-") {
+                        numericSum += numVal;
+                    } else {
+                        isNumericField = false;
+                        if (val !== "-") {
+                            textValuesCount[val] = (textValuesCount[val] || 0) + 1;
+                        }
                     }
 
                     let shortName = mwcName.replace("MWC ", "");
@@ -716,13 +624,22 @@
                     `;
                 });
 
+                // Smart aggregate calculation display
+                let aggregateDisplay = "";
+                if (isNumericField) {
+                    aggregateDisplay = numericSum.toLocaleString('id-ID');
+                } else {
+                    let textSummary = Object.entries(textValuesCount).map(([text, count]) => `${text} (${count})`).join(', ');
+                    aggregateDisplay = textSummary !== "" ? textSummary : "Tidak ada";
+                }
+
                 grid.innerHTML += `
                     <div class="aggregate-print-card bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
                         <div class="flex justify-between items-start mb-3 border-b pb-2">
                             <span class="text-gray-800 font-bold text-xs uppercase tracking-wide pr-2">${key}</span>
                             <div class="text-right flex-shrink-0">
                                 <span class="text-[10px] text-gray-400 block font-semibold">Total Agregat</span>
-                                <span class="font-black text-amber-600 text-sm">${isNaN(totalIndicatorSum) ? '-' : totalIndicatorSum.toLocaleString('id-ID')}</span>
+                                <span class="font-black text-amber-600 text-xs sm:text-sm">${aggregateDisplay}</span>
                             </div>
                         </div>
                         <div class="space-y-1">
@@ -812,15 +729,11 @@
                         <p class="font-medium">Panduan operasional sistem <b>Matrix Transparansi Levelisasi MWC</b> Unit UCR Muslimah Wahdah Islamiyah Kota Palu:</p>
                         <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
                             <strong class="text-[#0a7c6e] block mb-1 font-bold"><i class="fa-solid fa-circle-1 mr-1.5"></i> Navigasi & Pemilihan Wilayah</strong>
-                            Gunakan panel menu samping (*sidebar*) untuk melihat ringkasan global, total agregat kader, atau memilih wilayah MWC yang dikelola.
+                            Gunakan panel menu samping (*sidebar*) untuk melihat ringkasan global, total agregat kader terurut 1-26, atau memilih wilayah MWC.
                         </div>
                         <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
-                            <strong class="text-[#0a7c6e] block mb-1 font-bold"><i class="fa-solid fa-circle-2 mr-1.5"></i> Autentikasi Pengurus</strong>
-                            Saat memilih wilayah MWC, sistem akan meminta PIN Akses terotorisasi demi menjaga integritas data.
-                        </div>
-                        <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
-                            <strong class="text-[#0a7c6e] block mb-1 font-bold"><i class="fa-solid fa-circle-3 mr-1.5"></i> Input & Laporan</strong>
-                            Lengkapi seluruh 26 indikator data pada formulir, kirim untuk memperbarui database pusat, atau cetak laporan resmi dalam bentuk PDF dan Excel.
+                            <strong class="text-[#0a7c6e] block mb-1 font-bold"><i class="fa-solid fa-circle-2 mr-1.5"></i> Akumulasi Cerdas</strong>
+                            Menu Total Agregat mengakumulasi data angka maupun kategori teks secara presisi tanpa ada yang terlewat.
                         </div>
                     </div>
                 `,
@@ -871,7 +784,7 @@
                             gridContent += `
                                 <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 flex flex-col justify-between">
                                     <span class="text-gray-500 font-semibold mb-1">${key}</span>
-                                    <span class="font-black text-[#0a7c6e] text-sm">${value !== "" ? value : "-"}</span>
+                                    <span class="font-black text-[#0a7c6e] text-sm">${value !== "" && value !== null ? value : "-"}</span>
                                 </div>
                             `;
                         }
