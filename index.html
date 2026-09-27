@@ -178,8 +178,8 @@
                 </button>
 
                 <p class="text-[10px] font-bold text-[#f59e0b] uppercase tracking-wider px-3 mb-2">Pilih Wilayah MWC:</p>
-                <button onclick="selectMWCWithAuth('MWC Palu Utara'); toggleSidebar();" class="w-full text-left px-4 py-2.5 rounded-xl transition flex items-center justify-between text-sm font-medium text-gray-200 hover:bg-[#0a7c6e]">
-                    <span class="flex items-center gap-2.5"><i class="fa-solid fa-location-dot text-[#f59e0b] text-xs"></i> Palu Utara</span>
+                <button onclick="selectMWCWithAuth('MWC Tawaeli'); toggleSidebar();" class="w-full text-left px-4 py-2.5 rounded-xl transition flex items-center justify-between text-sm font-medium text-gray-200 hover:bg-[#0a7c6e]">
+                    <span class="flex items-center gap-2.5"><i class="fa-solid fa-location-dot text-[#f59e0b] text-xs"></i> Tawaeli</span>
                     <i class="fa-solid fa-chevron-right text-[10px] text-[#f59e0b]"></i>
                 </button>
                 <button onclick="selectMWCWithAuth('MWC Mantikulore'); toggleSidebar();" class="w-full text-left px-4 py-2.5 rounded-xl transition flex items-center justify-between text-sm font-medium text-gray-200 hover:bg-[#0a7c6e]">
@@ -467,7 +467,7 @@
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPbBrMP6ZhwRgomxveJ-avth24LlSQUGTuZTjEeDqZWeNk_4XzZVUe2pUrH9iS99_oVg/exec";
 
         const MWC_PIN_LIST = {
-            "MWC Palu Utara": "1401",
+            "MWC Tawaeli": "1401",
             "MWC Mantikulore": "2256",
             "MWC Palu Selatan": "Palsel 2026",
             "MWC Tatanga": "3330",
@@ -593,7 +593,7 @@
             });
 
             container.innerHTML = "";
-            const mwcList = ["MWC Palu Utara", "MWC Mantikulore", "MWC Palu Selatan", "MWC Tatanga", "MWC Ulujadi"];
+            const mwcList = ["MWC Tawaeli", "MWC Mantikulore", "MWC Palu Selatan", "MWC Tatanga", "MWC Ulujadi"];
 
             let totalDaiyah = 0;
             let totalKaderTarif = 0;
@@ -691,7 +691,7 @@
                 }
             });
 
-            const mwcList = ["MWC Palu Utara", "MWC Mantikulore", "MWC Palu Selatan", "MWC Tatanga", "MWC Ulujadi"];
+            const mwcList = ["MWC Tawaeli", "MWC Mantikulore", "MWC Palu Selatan", "MWC Tatanga", "MWC Ulujadi"];
             grid.innerHTML = "";
 
             indicatorKeys.forEach(key => {
