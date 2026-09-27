@@ -30,21 +30,31 @@
                 font-size: 9pt;
                 font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             }
-            aside, header, nav, button, .no-print, .summary-boxes { 
+            /* Menghilangkan elemen yang tidak diperlukan saat cetak PDF termasuk kop laporan & filter wilayah */
+            header, nav, button, .no-print, .summary-boxes, .print-header, #mwcFilterDropdownContainer { 
                 display: none !important; 
+            }
+            /* Mempertahankan hanya sidebar paling atas (jika diinginkan tampil di cetak) dan area konten utama */
+            aside {
+                display: block !important;
+                position: relative !important;
+                width: 100% !important;
+                transform: none !important;
+                background: #086358 !important;
+                color: white !important;
+                box-shadow: none !important;
+                margin-bottom: 15px;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            aside nav {
+                display: none !important; /* Sembunyikan menu link interaktif di sidebar saat cetak, sisakan logo/header atasnya saja */
             }
             main { 
                 padding: 0 !important; 
                 overflow: visible !important; 
                 width: 100% !important; 
                 max-width: 100% !important;
-            }
-            .print-header { 
-                display: block !important; 
-                text-align: center; 
-                margin-bottom: 12px; 
-                border-bottom: 2px solid #0a7c6e;
-                padding-bottom: 6px;
             }
             .matrix-banner-header {
                 display: none !important;
@@ -235,7 +245,7 @@
                     </div>
 
                     <!-- KONTROL DROPDOWN PEMILIHAN MWC DI ATAS KARTU STATISTIK -->
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-emerald-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                    <div id="mwcFilterDropdownContainer" class="bg-white p-4 rounded-2xl shadow-sm border border-emerald-200 flex flex-col sm:flex-row justify-between items-center gap-3">
                         <div class="flex items-center gap-2.5 w-full sm:w-auto">
                             <div class="w-9 h-9 rounded-xl bg-emerald-100 text-[#0a7c6e] flex items-center justify-center font-bold flex-shrink-0">
                                 <i class="fa-solid fa-filter"></i>
