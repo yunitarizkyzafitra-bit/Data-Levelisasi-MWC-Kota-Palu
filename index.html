@@ -464,7 +464,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxVnCZolxvZwfqbmAw8KbNcC2nUf28yhOFFIH33y-b1YsD7OQHDvwBv9xdwhzx0M68qJQ/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPbBrMP6ZhwRgomxveJ-avth24LlSQUGTuZTjEeDqZWeNk_4XzZVUe2pUrH9iS99_oVg/exec";
 
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
@@ -696,6 +696,7 @@
 
             indicatorKeys.forEach(key => {
                 let numericSum = 0;
+                let hasValidNumber = false;
                 let isNumericField = true;
                 let textValuesCount = {};
                 let mwcDetailsHtml = "";
@@ -711,13 +712,18 @@
                         }
                     }
                     
-                    let numVal = Number(val);
-                    if (!isNaN(numVal) && val !== "-") {
+                    let cleanVal = String(val).trim();
+                    let numVal = Number(cleanVal);
+                    
+                    if (cleanVal !== "" && cleanVal !== "-" && !isNaN(numVal)) {
                         numericSum += numVal;
+                        hasValidNumber = true;
                     } else {
-                        isNumericField = false;
-                        if (val !== "-" && String(val).toLowerCase() !== "tidak") {
-                            textValuesCount[val] = (textValuesCount[val] || 0) + 1;
+                        if (cleanVal !== "" && cleanVal !== "-") {
+                            isNumericField = false;
+                            if (cleanVal.toLowerCase() !== "tidak") {
+                                textValuesCount[cleanVal] = (textValuesCount[cleanVal] || 0) + 1;
+                            }
                         }
                     }
 
@@ -731,7 +737,7 @@
                 });
 
                 let aggregateDisplay = "";
-                if (isNumericField) {
+                if (isNumericField || hasValidNumber) {
                     aggregateDisplay = numericSum.toLocaleString('id-ID');
                 } else {
                     let textSummary = Object.entries(textValuesCount).map(([text, count]) => `${text} (${count})`).join(', ');
