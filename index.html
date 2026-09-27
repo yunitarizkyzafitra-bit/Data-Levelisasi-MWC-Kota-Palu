@@ -16,18 +16,12 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 10mm;
-                @top-right {
-                    content: "Halaman " counter(page) " dari " counter(pages);
-                    font-size: 8pt;
-                    font-weight: bold;
-                    color: #555;
-                }
+                margin: 6mm; /* Margin diperkecil agar 25 poin muat dalam 1 halaman */
             }
             body { 
                 background: white !important; 
                 color: #111 !important; 
-                font-size: 9pt;
+                font-size: 7.5pt; /* Ukuran font disesuaikan untuk dokumen padat */
                 font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             }
             aside, header, nav, button, .no-print, .summary-boxes { 
@@ -39,13 +33,12 @@
                 width: 100% !important; 
                 max-width: 100% !important;
             }
-            .print-header { 
-                display: block !important; 
-                text-align: center; 
-                margin-bottom: 12px; 
-                border-bottom: 2px solid #0a7c6e;
-                padding-bottom: 6px;
+            
+            /* Sembunyikan kop atas khusus pada mode cetak agregat */
+            body.print-aggregate-mode .print-header {
+                display: none !important;
             }
+
             .matrix-banner-header {
                 display: none !important;
             }
@@ -74,68 +67,20 @@
                 display: none !important;
             }
 
-            /* --- PENGATURAN HEADER KARTU SAAT DICETAK KE PDF --- */
-            .mwc-card-header {
-                display: block !important;
-                background-color: #0a7c6e !important;
-                color: #ffffff !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-                padding: 10px 14px !important;
-                margin-bottom: 12px !important;
-                border-radius: 6px !important;
-            }
-            .mwc-card-header h4 {
-                color: #ffffff !important;
-                font-size: 14pt !important;
-                font-weight: 800 !important;
-                margin: 0 !important;
-                text-transform: uppercase !important;
-            }
-            .mwc-card-header .mwc-badge-label {
-                display: inline-block !important;
-                background-color: #f59e0b !important;
-                color: #086358 !important;
-                font-size: 8pt !important;
-                font-weight: 800 !important;
-                padding: 2px 8px !important;
-                border-radius: 9999px !important;
-                margin-bottom: 4px !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
+            /* --- PENGATURAN GRID AGREGAT AGAR MUAT 1 HALAMAN (25 POIN) --- */
+            body.print-aggregate-mode #aggregateSummaryGrid {
+                display: grid !important;
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important; /* 2 Kolom menyamping */
+                gap: 4px 8px !important;
+                max-height: 100vh !important;
+                overflow: hidden !important;
             }
 
-            .print-grid-container {
-                display: grid !important;
-                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 6px 10px !important;
-                padding: 0 !important;
-            }
-            .print-grid-item {
-                display: flex !important;
-                justify-content: space-between !important;
-                align-items: center !important;
-                background: #f8fafc !important;
-                border: 1px solid #e2e8f0 !important;
-                padding: 6px 10px !important;
-                border-radius: 4px !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-                break-inside: avoid;
-                page-break-inside: avoid;
-            }
-
-            /* Styling Khusus Cetak Agregat Dokumen */
-            #aggregateSummaryGrid {
-                display: grid !important;
-                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 8px !important;
-            }
-            .aggregate-print-card {
+            body.print-aggregate-mode .aggregate-print-card {
                 background: #ffffff !important;
                 border: 1px solid #cbd5e1 !important;
-                border-radius: 6px !important;
-                padding: 8px 12px !important;
+                border-radius: 4px !important;
+                padding: 4px 8px !important;
                 break-inside: avoid !important;
                 page-break-inside: avoid !important;
                 -webkit-print-color-adjust: exact;
@@ -143,7 +88,6 @@
             }
         }
         .print-header { display: none; }
-        .print-show-on-aggregate { display: none; }
     </style>
 </head>
 <body class="bg-custom-base font-sans antialiased text-gray-800">
@@ -713,7 +657,7 @@
 
                     let shortName = mwcName.replace("MWC ", "");
                     mwcDetailsHtml += `
-                        <div class="flex justify-between items-center bg-white px-2 py-0.5 rounded border border-gray-100 text-[10px]">
+                        <div class="flex justify-between items-center bg-white px-1.5 py-0.5 rounded border border-gray-100 text-[9px]">
                             <span class="text-gray-600 font-medium">${shortName}</span>
                             <span class="font-bold text-[#0a7c6e]">${val}</span>
                         </div>
@@ -721,16 +665,15 @@
                 });
 
                 grid.innerHTML += `
-                    <div class="aggregate-print-card bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                        <div class="flex justify-between items-start mb-2 border-b pb-1.5">
-                            <span class="text-gray-800 font-bold text-[11px] uppercase tracking-wide pr-2">${key}</span>
+                    <div class="aggregate-print-card bg-slate-50 p-2 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div class="flex justify-between items-start mb-1 border-b pb-1">
+                            <span class="text-gray-800 font-bold text-[10px] uppercase tracking-wide pr-1 leading-tight">${key}</span>
                             <div class="text-right flex-shrink-0">
-                                <span class="text-[9px] text-gray-400 block font-semibold">Total</span>
-                                <span class="font-black text-amber-600 text-xs">${isNaN(totalIndicatorSum) ? '-' : totalIndicatorSum.toLocaleString('id-ID')}</span>
+                                <span class="font-black text-amber-600 text-[11px]">${isNaN(totalIndicatorSum) ? '-' : totalIndicatorSum.toLocaleString('id-ID')}</span>
                             </div>
                         </div>
-                        <div class="space-y-1">
-                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-1">
+                        <div class="space-y-0.5">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-0.5">
                                 ${mwcDetailsHtml}
                             </div>
                         </div>
@@ -761,7 +704,6 @@
 
         function printAggregateDocument() {
             document.body.classList.add('print-aggregate-mode');
-            document.getElementById('printHeaderTitle').innerText = `LAPORAN REKAPITULASI AGREGAT KOTA PALU`;
 
             window.print();
 
