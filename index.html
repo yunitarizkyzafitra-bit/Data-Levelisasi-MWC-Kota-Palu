@@ -133,13 +133,6 @@
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
-
-            .aggregate-print-card:nth-of-type(5),
-            .aggregate-print-card:nth-of-type(11),
-            .aggregate-print-card:nth-of-type(18) {
-                page-break-before: always !important;
-                break-before: page !important;
-            }
         }
         .print-header { display: none; }
         .print-show-on-aggregate { display: none; }
@@ -172,6 +165,32 @@
                 <button onclick="showTotalKaderView(); toggleSidebar();" class="w-full text-left px-4 py-3 rounded-xl transition flex items-center gap-3 bg-[#075249] hover:bg-[#0a7c6e] text-white font-semibold mb-2 border border-[#f59e0b]/30 shadow-sm">
                     <i class="fa-solid fa-users-rectangle text-[#f59e0b]"></i> Total Kader & Agregat
                 </button>
+
+                <!-- MENU DROPDOWN KARTU KADER UTAMA -->
+                <div class="mb-2">
+                    <button onclick="toggleDropdownCardMenu()" class="w-full text-left px-4 py-3 rounded-xl transition flex items-center justify-between bg-[#075249] hover:bg-[#0a7c6e] text-white font-semibold border border-[#f59e0b]/30 shadow-sm">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-id-badge text-[#f59e0b]"></i> Kartu Ringkasan Kader</span>
+                        <i id="dropdownCardIcon" class="fa-solid fa-chevron-down text-xs text-[#f59e0b] transition-transform duration-200"></i>
+                    </button>
+                    <div id="dropdownCardContent" class="hidden mt-1.5 space-y-1 pl-3 bg-[#064f45] p-2 rounded-xl border border-[#0a7c6e]">
+                        <div class="p-2 rounded-lg bg-[#086358]/80 text-xs flex justify-between items-center text-emerald-100">
+                            <span><i class="fa-solid fa-users text-[#f59e0b] mr-1.5"></i> Daiyah:</span>
+                            <span id="navStatDaiyah" class="font-black text-white bg-[#0a7c6e] px-2 py-0.5 rounded">0</span>
+                        </div>
+                        <div class="p-2 rounded-lg bg-[#086358]/80 text-xs flex justify-between items-center text-emerald-100">
+                            <span><i class="fa-solid fa-id-card text-indigo-300 mr-1.5"></i> Ta'rif:</span>
+                            <span id="navStatTarif" class="font-black text-white bg-[#0a7c6e] px-2 py-0.5 rounded">0</span>
+                        </div>
+                        <div class="p-2 rounded-lg bg-[#086358]/80 text-xs flex justify-between items-center text-emerald-100">
+                            <span><i class="fa-solid fa-user-check text-teal-300 mr-1.5"></i> Takwin:</span>
+                            <span id="navStatTakwin" class="font-black text-white bg-[#0a7c6e] px-2 py-0.5 rounded">0</span>
+                        </div>
+                        <div class="p-2 rounded-lg bg-[#086358]/80 text-xs flex justify-between items-center text-emerald-100">
+                            <span><i class="fa-solid fa-user-shield text-orange-300 mr-1.5"></i> Tanfidz:</span>
+                            <span id="navStatTanfidz" class="font-black text-white bg-[#0a7c6e] px-2 py-0.5 rounded">0</span>
+                        </div>
+                    </div>
+                </div>
 
                 <button onclick="showGuideModal(); toggleSidebar();" class="w-full text-left px-4 py-3 rounded-xl transition flex items-center gap-3 bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-bold mb-4 shadow-sm">
                     <i class="fa-solid fa-book-open"></i> Petunjuk Pengisian Data
@@ -241,13 +260,37 @@
                         </div>
                     </div>
 
+                    <!-- KONTROL DROPDOWN PEMILIHAN MWC DI ATAS KARTU STATISTIK -->
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-emerald-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <div class="flex items-center gap-2.5 w-full sm:w-auto">
+                            <div class="w-9 h-9 rounded-xl bg-emerald-100 text-[#0a7c6e] flex items-center justify-center font-bold flex-shrink-0">
+                                <i class="fa-solid fa-filter"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-gray-700 uppercase">Filter Wilayah Kartu Statistik</h4>
+                                <p class="text-[11px] text-gray-400">Pilih MWC untuk menampilkan data spesifik</p>
+                            </div>
+                        </div>
+                        <div class="w-full sm:w-72">
+                            <select id="mwcFilterDropdown" onchange="onMWCFilterChange(this.value)" class="w-full px-4 py-2.5 bg-slate-50 border border-emerald-300 rounded-xl font-bold text-xs text-[#0a7c6e] focus:ring-2 focus:ring-[#0a7c6e] outline-none shadow-sm cursor-pointer">
+                                <option value="ALL">-- SEMUA MWC (TOTAL KOTA PALU) --</option>
+                                <option value="MWC Tawaeli">MWC Tawaeli</option>
+                                <option value="MWC Mantikulore">MWC Mantikulore</option>
+                                <option value="MWC Palu Selatan">MWC Palu Selatan</option>
+                                <option value="MWC Tatanga">MWC Tatanga</option>
+                                <option value="MWC Ulujadi">MWC Ulujadi</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- KARTU STATISTIK UTAMA DI DASHBOARD -->
                     <div class="summary-boxes grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div class="bg-white p-4 rounded-2xl shadow-sm border border-emerald-300 flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-emerald-100 text-[#0a7c6e] flex items-center justify-center text-lg font-black flex-shrink-0">
                                 <i class="fa-solid fa-users"></i>
                             </div>
                             <div>
-                                <p class="text-[10px] font-bold text-[#0a7c6e] uppercase tracking-wider">Total Daiyah</p>
+                                <p id="labelStatDaiyah" class="text-[10px] font-bold text-[#0a7c6e] uppercase tracking-wider">Total Daiyah</p>
                                 <h4 id="statDaiyah" class="text-lg font-black text-[#0a7c6e] mt-0.5">0</h4>
                             </div>
                         </div>
@@ -256,7 +299,7 @@
                                 <i class="fa-solid fa-id-card"></i>
                             </div>
                             <div>
-                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Kader Ta'rif</p>
+                                <p id="labelStatTarif" class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Kader Ta'rif</p>
                                 <h4 id="statKaderTarif" class="text-lg font-black text-indigo-600 mt-0.5">0</h4>
                             </div>
                         </div>
@@ -265,7 +308,7 @@
                                 <i class="fa-solid fa-user-check"></i>
                             </div>
                             <div>
-                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Kader Takwin</p>
+                                <p id="labelStatTakwin" class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Kader Takwin</p>
                                 <h4 id="statKaderTakwin" class="text-lg font-black text-teal-700 mt-0.5">0</h4>
                             </div>
                         </div>
@@ -274,7 +317,7 @@
                                 <i class="fa-solid fa-user-shield"></i>
                             </div>
                             <div>
-                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Kader Tanfidz</p>
+                                <p id="labelStatTanfidz" class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Kader Tanfidz</p>
                                 <h4 id="statKaderTanfidz" class="text-lg font-black text-orange-600 mt-0.5">0</h4>
                             </div>
                         </div>
@@ -487,6 +530,13 @@
             document.getElementById('sidebar').classList.toggle('-translate-x-full');
         }
 
+        function toggleDropdownCardMenu() {
+            const content = document.getElementById('dropdownCardContent');
+            const icon = document.getElementById('dropdownCardIcon');
+            content.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        }
+
         function showMatrixDashboard() {
             selectedMWCName = "";
             document.getElementById('matrixSection').classList.remove('hidden');
@@ -495,6 +545,10 @@
             document.getElementById('viewSection').classList.add('hidden');
             document.getElementById('actionTabs').classList.add('hidden');
             document.getElementById('currentTitle').innerHTML = `<i class="fa-solid fa-table-cells text-[#0a7c6e] mr-2"></i> Matrix Transparansi Data Levelisasi MWC (26 Item Lengkap)`;
+            
+            // Set dropdown ke posisi ALL
+            document.getElementById('mwcFilterDropdown').value = "ALL";
+
             loadMatrixData(false);
         }
 
@@ -532,7 +586,6 @@
             document.getElementById('formMwcName').innerText = mwcName;
             document.getElementById('input_nama_mwc').value = mwcName;
 
-            // Pastikan data terbaru sudah dimuat agar form terisi otomatis sesuai MWC yang dipilih
             if (cachedSpreadsheetData.length === 0) {
                 try {
                     let response = await fetch(SCRIPT_URL);
@@ -544,8 +597,63 @@
 
             let latestRow = cachedSpreadsheetData.find(item => item["Nama MWC"] === mwcName);
             populateFormWithData(latestRow || {});
-
             switchTab('input');
+        }
+
+        function onMWCFilterChange(selectedValue) {
+            if (selectedValue === "ALL") {
+                // Tampilkan total keseluruhan kota
+                document.getElementById('labelStatDaiyah').innerText = "Total Daiyah";
+                document.getElementById('labelStatTarif').innerText = "Total Kader Ta'rif";
+                document.getElementById('labelStatTakwin').innerText = "Total Kader Takwin";
+                document.getElementById('labelStatTanfidz').innerText = "Total Kader Tanfidz";
+                renderMatrixCards(cachedSpreadsheetData);
+            } else {
+                // Tampilkan data spesifik MWC yang dipilih dari data input
+                document.getElementById('labelStatDaiyah').innerText = `Daiyah (${selectedValue})`;
+                document.getElementById('labelStatTarif').innerText = `Kader Ta'rif (${selectedValue})`;
+                document.getElementById('labelStatTakwin').innerText = `Kader Takwin (${selectedValue})`;
+                document.getElementById('labelStatTanfidz').innerText = `Kader Tanfidz (${selectedValue})`;
+
+                let latestPerMWC = {};
+                cachedSpreadsheetData.forEach(row => {
+                    let mwc = row["Nama MWC"];
+                    if(mwc) { latestPerMWC[mwc] = row; }
+                });
+
+                let rowData = latestPerMWC[selectedValue] || {};
+                updateDashboardCardsForMWC(rowData);
+            }
+        }
+
+        function updateDashboardCardsForMWC(rowData) {
+            let valDaiyah = 0, valTarif = 0, valTakwin = 0, valTanfidz = 0;
+
+            for (const [key, value] of Object.entries(rowData)) {
+                let vNum = Number(value) || 0;
+                let kLower = key.toLowerCase();
+                if (kLower.includes("daiyah")) {
+                    valDaiyah = vNum;
+                } else if (kLower.includes("ta'arif") || kLower.includes("tarif")) {
+                    if (kLower.includes("kader")) valTarif = vNum;
+                } else if (kLower.includes("takwin") && kLower.includes("kader")) {
+                    valTakwin = vNum;
+                } else if (kLower.includes("tanfidz") && kLower.includes("kader")) {
+                    valTanfidz = vNum;
+                }
+            }
+
+            // Update Kartu Tampilan Dashboard Utama
+            document.getElementById('statDaiyah').innerText = valDaiyah.toLocaleString('id-ID');
+            document.getElementById('statKaderTarif').innerText = valTarif.toLocaleString('id-ID');
+            document.getElementById('statKaderTakwin').innerText = valTakwin.toLocaleString('id-ID');
+            document.getElementById('statKaderTanfidz').innerText = valTanfidz.toLocaleString('id-ID');
+
+            // Update Kartu pada Menu Dropdown Sidebar
+            document.getElementById('navStatDaiyah').innerText = valDaiyah.toLocaleString('id-ID');
+            document.getElementById('navStatTarif').innerText = valTarif.toLocaleString('id-ID');
+            document.getElementById('navStatTakwin').innerText = valTakwin.toLocaleString('id-ID');
+            document.getElementById('navStatTanfidz').innerText = valTanfidz.toLocaleString('id-ID');
         }
 
         function switchTab(tab) {
@@ -593,6 +701,10 @@
                 document.getElementById('statKaderTarif').innerText = "0";
                 document.getElementById('statKaderTakwin').innerText = "0";
                 document.getElementById('statKaderTanfidz').innerText = "0";
+                document.getElementById('navStatDaiyah').innerText = "0";
+                document.getElementById('navStatTarif').innerText = "0";
+                document.getElementById('navStatTakwin').innerText = "0";
+                document.getElementById('navStatTanfidz').innerText = "0";
                 return;
             }
 
@@ -666,10 +778,18 @@
                 container.appendChild(card);
             });
 
-            document.getElementById('statDaiyah').innerText = totalDaiyah.toLocaleString('id-ID');
-            document.getElementById('statKaderTarif').innerText = totalKaderTarif.toLocaleString('id-ID');
-            document.getElementById('statKaderTakwin').innerText = totalKaderTakwin.toLocaleString('id-ID');
-            document.getElementById('statKaderTanfidz').innerText = totalKaderTanfidz.toLocaleString('id-ID');
+            // Jika filter sedang di posisi ALL, perbarui kartu statistik dengan total kota
+            if (document.getElementById('mwcFilterDropdown').value === "ALL") {
+                document.getElementById('statDaiyah').innerText = totalDaiyah.toLocaleString('id-ID');
+                document.getElementById('statKaderTarif').innerText = totalKaderTarif.toLocaleString('id-ID');
+                document.getElementById('statKaderTakwin').innerText = totalKaderTakwin.toLocaleString('id-ID');
+                document.getElementById('statKaderTanfidz').innerText = totalKaderTanfidz.toLocaleString('id-ID');
+            }
+
+            document.getElementById('navStatDaiyah').innerText = totalDaiyah.toLocaleString('id-ID');
+            document.getElementById('navStatTarif').innerText = totalKaderTarif.toLocaleString('id-ID');
+            document.getElementById('navStatTakwin').innerText = totalKaderTakwin.toLocaleString('id-ID');
+            document.getElementById('navStatTanfidz').innerText = totalKaderTanfidz.toLocaleString('id-ID');
         }
 
         async function renderAggregateData() {
