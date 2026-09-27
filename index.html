@@ -46,6 +46,10 @@
                 border-bottom: 2px solid #0a7c6e;
                 padding-bottom: 6px;
             }
+            /* Menyembunyikan banner utama "Matrix Aktivitas Keseluruhan MWC" saat cetak */
+            .matrix-banner-header {
+                display: none !important;
+            }
             .mwc-vertical-card { 
                 border: none !important; 
                 box-shadow: none !important; 
@@ -64,6 +68,27 @@
             body.print-aggregate-report .print-show-on-aggregate {
                 display: block !important;
             }
+
+            /* Aturan khusus untuk MWC Palu Selatan: hanya menampilkan teks MWC Palu Selatan dan menyembunyikan elemen dekoratif lainnya di header card */
+            body.print-single-mwc[data-printing-mwc="MWC Palu Selatan"] .target-print-mwc .mwc-card-header .mwc-badge-label,
+            body.print-single-mwc[data-printing-mwc="MWC Palu Selatan"] .target-print-mwc .mwc-card-header button {
+                display: none !important;
+            }
+            body.print-single-mwc[data-printing-mwc="MWC Palu Selatan"] .target-print-mwc .mwc-card-header {
+                background: transparent !important;
+                color: #0a7c6e !important;
+                border-bottom: 2px solid #0a7c6e !important;
+                padding: 0 0 8px 0 !important;
+                margin-bottom: 12px !important;
+                text-align: center !important;
+            }
+            body.print-single-mwc[data-printing-mwc="MWC Palu Selatan"] .target-print-mwc .mwc-card-header h4 {
+                font-size: 16pt !important;
+                font-weight: 900 !important;
+                text-transform: uppercase !important;
+                color: #0a7c6e !important;
+            }
+
             .mwc-card-header {
                 background: #0a7c6e !important;
                 color: white !important;
@@ -208,7 +233,7 @@
                 </div>
 
                 <div id="matrixSection" class="space-y-6">
-                    <div class="bg-gradient-to-r from-[#0a7c6e] to-[#086358] text-white rounded-2xl p-6 shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="matrix-banner-header bg-gradient-to-r from-[#0a7c6e] to-[#086358] text-white rounded-2xl p-6 shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
                         <div>
                             <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-black px-2.5 py-1 rounded-full uppercase">Unit UCR MWD Palu</span>
                             <h3 class="text-xl sm:text-2xl font-black mt-2">Matrix Aktivitas Keseluruhan MWC</h3>
@@ -610,7 +635,7 @@
                 let headerHtml = `
                     <div class="mwc-card-header bg-gradient-to-r from-[#0a7c6e] to-[#086358] text-white p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                         <div>
-                            <span class="bg-[#f59e0b] text-[#086358] text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase">Wilayah MWC</span>
+                            <span class="mwc-badge-label bg-[#f59e0b] text-[#086358] text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase">Wilayah MWC</span>
                             <h4 class="text-lg font-black mt-0.5">${mwcName}</h4>
                         </div>
                         <button onclick="printSingleMWC('${mwcName}')" class="no-print bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-bold text-xs px-3.5 py-1.5 rounded-lg shadow transition flex items-center gap-1.5">
@@ -729,12 +754,14 @@
             });
 
             document.body.classList.add('print-single-mwc');
+            document.body.setAttribute('data-printing-mwc', mwcName);
             document.getElementById('printHeaderTitle').innerText = `LAPORAN DATA INPUT LEVELISASI - ${mwcName.toUpperCase()}`;
             
             window.print();
 
             setTimeout(() => {
                 document.body.classList.remove('print-single-mwc');
+                document.body.removeAttribute('data-printing-mwc');
                 document.getElementById('printHeaderTitle').innerText = `LAPORAN DATA INPUT LEVELISASI MWC`;
             }, 500);
         }
