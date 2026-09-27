@@ -532,6 +532,16 @@
             document.getElementById('formMwcName').innerText = mwcName;
             document.getElementById('input_nama_mwc').value = mwcName;
 
+            // Pastikan data terbaru sudah dimuat agar form terisi otomatis sesuai MWC yang dipilih
+            if (cachedSpreadsheetData.length === 0) {
+                try {
+                    let response = await fetch(SCRIPT_URL);
+                    cachedSpreadsheetData = await response.json();
+                } catch(e) {
+                    console.error("Gagal memuat cache data untuk auto-fill");
+                }
+            }
+
             let latestRow = cachedSpreadsheetData.find(item => item["Nama MWC"] === mwcName);
             populateFormWithData(latestRow || {});
 
