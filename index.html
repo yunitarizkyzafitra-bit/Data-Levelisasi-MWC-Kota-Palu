@@ -30,25 +30,9 @@
                 font-size: 9pt;
                 font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             }
-            /* Menghilangkan elemen yang tidak diperlukan saat cetak PDF termasuk kop laporan & filter wilayah */
-            header, nav, button, .no-print, .summary-boxes, .print-header, #mwcFilterDropdownContainer { 
+            /* Menghilangkan header, nav, tombol, kop laporan, filter, dan sidebar utama saat cetak */
+            header, nav, button, .no-print, .summary-boxes, .print-header, #mwcFilterDropdownContainer, aside { 
                 display: none !important; 
-            }
-            /* Mempertahankan hanya sidebar paling atas (jika diinginkan tampil di cetak) dan area konten utama */
-            aside {
-                display: block !important;
-                position: relative !important;
-                width: 100% !important;
-                transform: none !important;
-                background: #086358 !important;
-                color: white !important;
-                box-shadow: none !important;
-                margin-bottom: 15px;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-            aside nav {
-                display: none !important; /* Sembunyikan menu link interaktif di sidebar saat cetak, sisakan logo/header atasnya saja */
             }
             main { 
                 padding: 0 !important; 
