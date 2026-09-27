@@ -46,7 +46,6 @@
                 border-bottom: 2px solid #0a7c6e;
                 padding-bottom: 6px;
             }
-            /* Menyembunyikan banner utama saat cetak */
             .matrix-banner-header {
                 display: none !important;
             }
@@ -69,8 +68,6 @@
                 display: block !important;
             }
 
-            /* --- PENGATURAN HEADER KARTU SAAT DICETAK KE PDF --- */
-            /* Memastikan header kartu (termasuk MWC Palu Selatan) tampil utuh dengan latar hijau */
             .mwc-card-header {
                 display: block !important;
                 background-color: #0a7c6e !important;
@@ -121,7 +118,6 @@
                 page-break-inside: avoid;
             }
 
-            /* Styling Khusus Cetak Agregat Parsial Terstruktur per Halaman */
             #aggregateSummaryGrid {
                 display: flex !important;
                 flex-direction: column !important;
@@ -468,7 +464,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz6QWSqVE6E2gxGXJa_gZ8lqInN1CABps5vDxpyO-eMf91DPD1JhQjed5cC0-zBOqaM4w/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxVnCZolxvZwfqbmAw8KbNcC2nUf28yhOFFIH33y-b1YsD7OQHDvwBv9xdwhzx0M68qJQ/exec";
 
         const MWC_PIN_LIST = {
             "MWC Palu Utara": "1401",
@@ -706,14 +702,21 @@
 
                 mwcList.forEach(mwcName => {
                     let rowData = latestPerMWC[mwcName];
-                    let val = rowData && rowData[key] !== undefined && rowData[key] !== "" && rowData[key] !== null ? rowData[key] : "-";
+                    let val = "-";
+                    
+                    if (rowData) {
+                        let matchedKey = Object.keys(rowData).find(k => k.trim().toLowerCase() === key.trim().toLowerCase());
+                        if (matchedKey && rowData[matchedKey] !== undefined && rowData[matchedKey] !== "" && rowData[matchedKey] !== null) {
+                            val = rowData[matchedKey];
+                        }
+                    }
                     
                     let numVal = Number(val);
                     if (!isNaN(numVal) && val !== "-") {
                         numericSum += numVal;
                     } else {
                         isNumericField = false;
-                        if (val !== "-" && val.toLowerCase() !== "tidak") {
+                        if (val !== "-" && String(val).toLowerCase() !== "tidak") {
                             textValuesCount[val] = (textValuesCount[val] || 0) + 1;
                         }
                     }
@@ -777,29 +780,29 @@
 
         function populateFormWithData(rowData) {
             document.getElementById('edit_row_index').value = rowData["rowIndex"] || rowData["row"] || "";
-            document.getElementById('p_aktif').value = rowData["1. Jumlah Pengurus Aktif"] || 0;
-            document.getElementById('p_kurang_aktif').value = rowData["2. Jumlah Pengurus Kurang Aktif"] || 0;
-            document.getElementById('layanan_sosial').value = rowData["3. Layanan Sosial & Kesehatan (Klinik)"] || "Tidak";
+            document.getElementById('p_aktif').value = rowData["1. Jumlah Pengurus Aktif"] || rowData["1. Jumlah pengurus yg aktif"] || 0;
+            document.getElementById('p_kurang_aktif').value = rowData["2. Jumlah Pengurus Kurang Aktif"] || rowData["2. Jumlah pengurus yang kurang aktif"] || 0;
+            document.getElementById('layanan_sosial').value = rowData["3. Layanan Sosial & Kesehatan (Klinik)"] || rowData["3. Memiliki Layanan sosial dan Kesehatan (klinik)"] || "Tidak";
             document.getElementById('jml_daiyah').value = rowData["4. Jumlah Daiyah"] || 0;
-            document.getElementById('kader_tarif').value = rowData["5. Jumlah Kader Ta'rif"] || 0;
-            document.getElementById('kader_takwin').value = rowData["6. Jumlah Kader Takwin"] || 0;
+            document.getElementById('kader_tarif').value = rowData["5. Jumlah Kader Ta'rif"] || rowData["5. Jumlah kader Ta’rif"] || 0;
+            document.getElementById('kader_takwin').value = rowData["6. Jumlah Kader Takwin"] || rowData["6. Jumlah kader Takwin"] || 0;
             document.getElementById('kader_tanfidz').value = rowData["7. Jumlah Kader Tanfidz"] || 0;
-            document.getElementById('jml_nakes').value = rowData["8. Jumlah Tenaga Kesehatan"] || 0;
+            document.getElementById('jml_nakes').value = rowData["8. Jumlah Tenaga Kesehatan"] || rowData["8. Jumlah tenaga kesehatan"] || 0;
             document.getElementById('alumni_stiba').value = rowData["9. Jumlah Alumni Stiba"] || 0;
             document.getElementById('jml_muhaffidzah').value = rowData["10. Jumlah Muhaffidzah"] || 0;
-            document.getElementById('jml_mt').value = rowData["11. Jumlah Majelis Taklim (MT)"] || 0;
+            document.getElementById('jml_mt').value = rowData["11. Jumlah Majelis Taklim (MT)"] || rowData["11. Jumlah MT"] || 0;
             document.getElementById('jml_dirosa').value = rowData["12. Jumlah Dirosa"] || 0;
-            document.getElementById('status_kantor').value = rowData["13. Status Kantor / PDM / Sekretariat"] || "";
-            document.getElementById('unit_usaha').value = rowData["14. Memiliki Unit Usaha MWC"] || "";
-            document.getElementById('media_online').value = rowData["15. Memiliki Media Dakwah Online"] || "Tidak";
-            document.getElementById('jenis_media').value = rowData["16. Jenis Media Dakwah"] || "";
-            document.getElementById('hardware').value = rowData["17. Hardware Memadai"] || "Tidak";
-            document.getElementById('m_tarif').value = rowData["18. Jumlah Murabbiyah Ta'rif 1 & 2"] || 0;
-            document.getElementById('m_takwin').value = rowData["19. Jumlah Murabbiyah Takwin"] || 0;
-            document.getElementById('donatur').value = rowData["20. Jumlah Donatur"] || 0;
+            document.getElementById('status_kantor').value = rowData["13. Status Kantor / PDM / Sekretariat"] || rowData["13. Status Kantor / Sekretariat"] || "";
+            document.getElementById('unit_usaha').value = rowData["14. Memiliki Unit Usaha MWC"] || rowData["14. Unit Usaha MWC"] || "";
+            document.getElementById('media_online').value = rowData["15. Memiliki Media Dakwah Online"] || rowData["15. Media dakwah online"] || "Tidak";
+            document.getElementById('jenis_media').value = rowData["16. Jenis Media Dakwah"] || rowData["16. Jenis media dakwah"] || "";
+            document.getElementById('hardware').value = rowData["17. Hardware Memadai"] || rowData["17. Hardware memadai"] || "Tidak";
+            document.getElementById('m_tarif').value = rowData["18. Jumlah Murabbiyah Ta'rif 1 & 2"] || rowData["18. Murabbiyah tarif 1 & 2"] || 0;
+            document.getElementById('m_takwin').value = rowData["19. Jumlah Murabbiyah Takwin"] || rowData["19. Murabbiyah takwin"] || 0;
+            document.getElementById('donatur').value = rowData["20. Jumlah Donatur"] || rowData["20. Jumlah donatur"] || 0;
             document.getElementById('trainer_murabbiyah').value = rowData["Trainer Diklat Murabbiyah"] || 0;
-            document.getElementById('kader_dirosa').value = rowData["21. Kader Mengikuti Pelatihan Dirosa"] || 0;
-            document.getElementById('mudarrisah').value = rowData["22. Pengajar Qur'an (Mudarrisah)"] || 0;
+            document.getElementById('kader_dirosa').value = rowData["21. Kader Mengikuti Pelatihan Dirosa"] || rowData["21. Kader ikuti pelatihan Dirosa"] || 0;
+            document.getElementById('mudarrisah').value = rowData["22. Pengajar Qur'an (Mudarrisah)"] || rowData["22. Pengajar qur'an (mudarrisah)"] || 0;
             document.getElementById('diklat_manajemen').value = rowData["23. Diklat Manajemen Pengurus"] || 0;
             document.getElementById('diklat_kepemimpinan').value = rowData["24. Diklat Kepemimpinan"] || 0;
             document.getElementById('tim_sosial').value = rowData["25. Tim Tanggap Sosial"] || 0;
