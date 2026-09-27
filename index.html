@@ -809,23 +809,34 @@
         }
 
         function printSingleMWC(mwcName) {
+            // 1. Tambahkan kelas print-single pada body terlebih dahulu
+            document.body.classList.add('print-single-mwc');
+            document.getElementById('printHeaderTitle').innerText = `LAPORAN DATA INPUT LEVELISASI - ${mwcName.toUpperCase()}`;
+
+            // 2. Sembunyikan semua kartu secara manual via DOM untuk keamanan render mobile
             const cards = document.querySelectorAll('.mwc-vertical-card');
             cards.forEach(card => {
-                card.classList.remove('target-print-mwc');
                 if (card.getAttribute('data-mwc') === mwcName) {
-                    card.classList.add('target-print-mwc');
+                    card.style.display = "block";
+                    card.style.pageBreakBefore = "always";
+                } else {
+                    card.style.display = "none";
                 }
             });
 
-            document.body.classList.add('print-single-mwc');
-            document.getElementById('printHeaderTitle').innerText = `LAPORAN DATA INPUT LEVELISASI - ${mwcName.toUpperCase()}`;
-            
-            window.print();
-
+            // 3. Berikan jeda sejenak (delay) agar sistem HP selesai merender elemen sebelum memanggil dialog Save PDF
             setTimeout(() => {
-                document.body.classList.remove('print-single-mwc');
-                document.getElementById('printHeaderTitle').innerText = `LAPORAN DATA INPUT LEVELISASI MWC`;
-            }, 500);
+                window.print();
+
+                // 4. Kembalikan kondisi normal setelah dialog cetak ditutup
+                setTimeout(() => {
+                    document.body.classList.remove('print-single-mwc');
+                    document.getElementById('printHeaderTitle').innerText = `LAPORAN DATA INPUT LEVELISASI MWC`;
+                    cards.forEach(card => {
+                        card.style.display = "block";
+                    });
+                }, 500);
+            }, 300);
         }
 
         function populateFormWithData(rowData) {
@@ -884,7 +895,7 @@
                         <p class="font-medium">Panduan operasional sistem <b>Matrix Transparansi Levelisasi MWC</b> Unit UCR Muslimah Wahdah Islamiyah Kota Palu:</p>
                         <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
                             <strong class="text-[#0a7c6e] block mb-1 font-bold"><i class="fa-solid fa-circle-1 mr-1.5"></i> Navigasi & Pemilihan Wilayah</strong>
-                            Gunakan panel menu samping (*sidebar*) untuk melihat ringkasan global, total agregat kader, atau memilih wilayah MWC yang dikelola.
+                            Gunakan menu samping (*sidebar*) untuk melihat ringkasan global, total agregat kader, atau memilih wilayah MWC yang dikelola.
                         </div>
                         <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
                             <strong class="text-[#0a7c6e] block mb-1 font-bold"><i class="fa-solid fa-circle-2 mr-1.5"></i> Autentikasi Pengurus</strong>
