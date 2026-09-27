@@ -24,64 +24,108 @@
                     color: #555;
                 }
             }
-            
-            /* 1. Paksa HTML & Body bebas dari kunci tinggi layar (h-screen) */
-            html, body {
-                height: auto !important;
-                overflow: visible !important;
+            body { 
                 background: white !important; 
                 color: #111 !important; 
                 font-size: 9pt;
                 font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             }
-
-            /* 2. Sembunyikan elemen navigasi yang tidak perlu saat dicetak */
-            aside, header, nav, button, .no-print, .summary-boxes, #matrixSection, #inputSection, #viewSection { 
+            aside, header, nav, button, .no-print, .summary-boxes { 
                 display: none !important; 
             }
-
-            /* 3. Atur main agar mengalir secara vertikal penuh */
             main { 
                 padding: 0 !important; 
                 overflow: visible !important; 
                 width: 100% !important; 
                 max-width: 100% !important;
-                display: block !important;
-                height: auto !important;
             }
-
             .print-header { 
-                display: none !important; 
+                display: block !important; 
+                text-align: center; 
+                margin-bottom: 12px; 
+                border-bottom: 2px solid #0a7c6e;
+                padding-bottom: 6px;
             }
-
-            /* Cetak hanya untuk single MWC card yang dipilih */
-            body.print-single-mwc .mwc-vertical-card {
+            .mwc-vertical-card { 
+                border: none !important; 
+                box-shadow: none !important; 
+                margin: 0 !important; 
+                background: #ffffff !important;
+            }
+            body.print-single-mwc .mwc-vertical-card:not(.target-print-mwc) {
                 display: none !important;
             }
-            body.print-single-mwc .mwc-vertical-card.target-print-mwc {
+            body.print-single-mwc .target-print-mwc {
                 display: block !important;
-                border: none !important;
-                box-shadow: none !important;
-                margin: 0 !important;
-                width: 100% !important;
             }
-            body.print-single-mwc .target-print-mwc .no-print {
+            body.print-aggregate-report .print-hide-on-aggregate {
                 display: none !important;
             }
-            body.print-single-mwc .target-print-mwc .print-grid-container {
+            body.print-aggregate-report .print-show-on-aggregate {
+                display: block !important;
+            }
+            .mwc-card-header {
+                background: #0a7c6e !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                padding: 6px 10px !important;
+                margin-bottom: 8px;
+                border-radius: 4px;
+            }
+            .print-grid-container {
                 display: grid !important;
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 6mm !important;
+                gap: 4px 8px !important;
+                padding: 0 !important;
             }
-            body.print-single-mwc .target-print-mwc .print-grid-item {
+            .print-grid-item {
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                background: #f8fafc !important;
+                border: 1px solid #e2e8f0 !important;
+                padding: 4px 8px !important;
+                border-radius: 4px !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            /* Styling Khusus Cetak Agregat Parsial Terstruktur per Halaman */
+            #aggregateSummaryGrid {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 12px !important;
+            }
+            .aggregate-print-card {
+                background: #ffffff !important;
+                border: 1px solid #cbd5e1 !important;
+                border-radius: 6px !important;
+                padding: 10px 14px !important;
                 break-inside: avoid !important;
                 page-break-inside: avoid !important;
-                border: 1px solid #cbd5e1 !important;
-                background: #fff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* Pengaturan Pemecahan Halaman Eksak Berdasarkan Nomor Item hingga 25 Poin */
+            .aggregate-print-card:nth-of-type(5) {
+                page-break-before: always !important;
+                break-before: page !important;
+            }
+            .aggregate-print-card:nth-of-type(11) {
+                page-break-before: always !important;
+                break-before: page !important;
+            }
+            .aggregate-print-card:nth-of-type(18) {
+                page-break-before: always !important;
+                break-before: page !important;
             }
         }
-
         .print-header { display: none; }
+        .print-show-on-aggregate { display: none; }
     </style>
 </head>
 <body class="bg-custom-base font-sans antialiased text-gray-800">
@@ -158,7 +202,7 @@
             <div class="p-4 sm:p-8 max-w-6xl mx-auto w-full flex-1">
                 
                 <div class="print-header">
-                    <h1 id="printHeaderTitle" class="text-base font-bold uppercase tracking-wider text-gray-900">REKAPITULASI TOTAL AGREGAT & RINCIAN PER MWC (25 POIN LENGKAP)</h1>
+                    <h1 id="printHeaderTitle" class="text-base font-bold uppercase tracking-wider text-gray-900">LAPORAN DATA INPUT LEVELISASI MWC</h1>
                     <h2 class="text-xs font-semibold text-[#0a7c6e] mt-0.5">UNIT UCR - MUSLIMAH WAHDAH ISLAMIYAH KOTA PALU</h2>
                     <p class="text-[9px] text-gray-500 mt-0.5">Dicetak pada: <span id="printDateStr"></span></p>
                 </div>
@@ -232,7 +276,7 @@
                         <div>
                             <span class="bg-[#f59e0b] text-[#086358] text-[10px] font-black px-2.5 py-1 rounded-full uppercase">Rekapitulasi Agregat Kota Palu</span>
                             <h3 class="text-xl sm:text-2xl font-black mt-2">Menu Total Kader & Agregat Parsial</h3>
-                            <p class="text-emerald-100 text-xs sm:text-sm mt-1">Akumulasi parsial seluruh 25 indikator dari seluruh wilayah MWC.</p>
+                            <p class="text-emerald-100 text-xs sm:text-sm mt-1">Akumulasi parsial seluruh item formulir dari seluruh wilayah MWC lengkap dengan rincian per wilayah.</p>
                         </div>
                         <div class="flex gap-2">
                             <button onclick="showMatrixDashboard()" class="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition">
