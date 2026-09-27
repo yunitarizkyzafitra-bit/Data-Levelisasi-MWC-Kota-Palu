@@ -17,12 +17,6 @@
             @page {
                 size: A4 portrait;
                 margin: 10mm;
-                @top-right {
-                    content: "Halaman " counter(page) " dari " counter(pages);
-                    font-size: 8pt;
-                    font-weight: bold;
-                    color: #555;
-                }
             }
             body { 
                 background: white !important; 
@@ -30,7 +24,7 @@
                 font-size: 9pt;
                 font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             }
-            /* Menghilangkan header, nav, tombol, kop laporan, filter, dan sidebar utama saat cetak */
+            /* Menghilangkan elemen navigasi, header, dan sidebar saat Save PDF */
             header, nav, button, .no-print, .summary-boxes, .print-header, #mwcFilterDropdownContainer, aside { 
                 display: none !important; 
             }
@@ -43,23 +37,19 @@
             .matrix-banner-header {
                 display: none !important;
             }
-            .mwc-vertical-card { 
-                border: none !important; 
-                box-shadow: none !important; 
-                margin: 0 !important; 
-                background: #ffffff !important;
-            }
-            body.print-single-mwc .mwc-vertical-card:not(.target-print-mwc) {
+            
+            /* Sembunyikan semua kartu MWC secara default saat mode single MWC */
+            body.print-single-mwc .mwc-vertical-card {
                 display: none !important;
             }
-            body.print-single-mwc .target-print-mwc {
+            /* Tampilkan hanya kartu MWC yang dipilih dan paksa halaman baru */
+            body.print-single-mwc .mwc-vertical-card.target-print-mwc {
                 display: block !important;
-            }
-            body.print-aggregate-report .print-hide-on-aggregate {
-                display: none !important;
-            }
-            body.print-aggregate-report .print-show-on-aggregate {
-                display: block !important;
+                page-break-before: always !important;
+                break-before: page !important;
+                margin: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
             }
 
             .mwc-card-header {
@@ -110,22 +100,6 @@
                 print-color-adjust: exact !important;
                 break-inside: avoid;
                 page-break-inside: avoid;
-            }
-
-            #aggregateSummaryGrid {
-                display: flex !important;
-                flex-direction: column !important;
-                gap: 12px !important;
-            }
-            .aggregate-print-card {
-                background: #ffffff !important;
-                border: 1px solid #cbd5e1 !important;
-                border-radius: 6px !important;
-                padding: 10px 14px !important;
-                break-inside: avoid !important;
-                page-break-inside: avoid !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
             }
         }
         .print-header { display: none; }
@@ -507,9 +481,7 @@
             document.getElementById('actionTabs').classList.add('hidden');
             document.getElementById('currentTitle').innerHTML = `<i class="fa-solid fa-table-cells text-[#0a7c6e] mr-2"></i> Matrix Transparansi Data Levelisasi MWC (26 Item Lengkap)`;
             
-            // Set dropdown ke posisi ALL
             document.getElementById('mwcFilterDropdown').value = "ALL";
-
             loadMatrixData(false);
         }
 
@@ -563,14 +535,12 @@
 
         function onMWCFilterChange(selectedValue) {
             if (selectedValue === "ALL") {
-                // Tampilkan total keseluruhan kota
                 document.getElementById('labelStatDaiyah').innerText = "Total Daiyah";
                 document.getElementById('labelStatTarif').innerText = "Total Kader Ta'rif";
                 document.getElementById('labelStatTakwin').innerText = "Total Kader Takwin";
                 document.getElementById('labelStatTanfidz').innerText = "Total Kader Tanfidz";
                 renderMatrixCards(cachedSpreadsheetData);
             } else {
-                // Tampilkan data spesifik MWC yang dipilih dari data input
                 document.getElementById('labelStatDaiyah').innerText = `Daiyah (${selectedValue})`;
                 document.getElementById('labelStatTarif').innerText = `Kader Ta'rif (${selectedValue})`;
                 document.getElementById('labelStatTakwin').innerText = `Kader Takwin (${selectedValue})`;
@@ -604,7 +574,6 @@
                 }
             }
 
-            // Update Kartu Tampilan Dashboard Utama
             document.getElementById('statDaiyah').innerText = valDaiyah.toLocaleString('id-ID');
             document.getElementById('statKaderTarif').innerText = valTarif.toLocaleString('id-ID');
             document.getElementById('statKaderTakwin').innerText = valTakwin.toLocaleString('id-ID');
@@ -704,7 +673,7 @@
                             <h4 class="text-lg font-black mt-0.5">${mwcName}</h4>
                         </div>
                         <button onclick="printSingleMWC('${mwcName}')" class="no-print bg-[#f59e0b] hover:bg-[#d98b04] text-[#086358] font-bold text-xs px-3.5 py-1.5 rounded-lg shadow transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-file-pdf"></i><span>Cetak PDF MWC</span>
+                            <i class="fa-solid fa-file-pdf"></i><span>Save PDF MWC</span>
                         </button>
                     </div>
                 `;
@@ -729,7 +698,6 @@
                 container.appendChild(card);
             });
 
-            // Jika filter sedang di posisi ALL, perbarui kartu statistik dengan total kota
             if (document.getElementById('mwcFilterDropdown').value === "ALL") {
                 document.getElementById('statDaiyah').innerText = totalDaiyah.toLocaleString('id-ID');
                 document.getElementById('statKaderTarif').innerText = totalKaderTarif.toLocaleString('id-ID');
@@ -924,7 +892,7 @@
                         </div>
                         <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
                             <strong class="text-[#0a7c6e] block mb-1 font-bold"><i class="fa-solid fa-circle-3 mr-1.5"></i> Input & Laporan</strong>
-                            Lengkapi seluruh 26 indikator data pada formulir, kirim untuk memperbarui database pusat, atau cetak laporan resmi dalam bentuk PDF dan Excel.
+                            Lengkapi seluruh 26 indikator data pada formulir, kirim untuk memperbarui database pusat, atau gunakan tombol <b>Save PDF</b> untuk menyimpan laporan resmi per wilayah.
                         </div>
                     </div>
                 `,
